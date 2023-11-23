@@ -36,6 +36,7 @@ jobs:
 
       - name: Convert sarif for uploading to GitHub
         uses: security-code-scan/security-code-scan-results-action@cdb3d5e639054395e45bf401cba8688fcaf7a687
-
+        with:
+          dotnet-version: 3.1.x
       - name: Upload sarif
         uses: github/codeql-action/upload-sarif@v2
