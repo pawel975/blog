@@ -4,6 +4,7 @@ namespace Blog.Entities
 {
     public class BlogDbContext : DbContext
     {
+        //TODO: PLace ConnectionString to database
         private string _connectionString = string.Empty;
         public DbSet<BlogPost> BlogPosts { get; set; }
         public DbSet<Role> Roles { get; set; }
