@@ -232,4 +232,4 @@ _Pvt_Extensions
 .fake/
 
 # Personal ignored files
-.appsettings.json
+appsettings.json
