@@ -4,8 +4,10 @@ namespace Blog.Entities
 {
     public class BlogDbContext : DbContext
     {
-        //TODO: PLace ConnectionString to database
-        private string _connectionString = string.Empty;
+        public BlogDbContext(DbContextOptions options) : base(options)
+        {
+        }
+
         public DbSet<BlogPost> BlogPosts { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
@@ -34,9 +36,5 @@ namespace Blog.Entities
 
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(_connectionString);
-        }
     }
 }
