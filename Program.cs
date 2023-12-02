@@ -1,4 +1,6 @@
+using Blog;
 using Blog.Entities;
+using Blog.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,11 +8,23 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<BlogSeeder>();
 builder.Services.AddDbContext<BlogDbContext>(options =>
+{
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-);
+           .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
+});
+
+builder.Services.AddScoped<IBlogPostService, BlogPostService>();
 
 var app = builder.Build();
+
+// Seed data
+var scope = app.Services.CreateScope();
+var seeder = scope.ServiceProvider.GetRequiredService<BlogSeeder>();
+
+app.UseResponseCaching();
+seeder.Seed();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

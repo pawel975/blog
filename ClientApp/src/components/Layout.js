@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Container } from 'reactstrap';
-import { NavMenu } from './NavMenu';
+import NavMenu from './NavMenu';
 
-const Layout = () => {
+const Layout = ({children }) => {
 
     return (
         <div>
