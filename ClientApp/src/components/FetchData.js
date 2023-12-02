@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const FetchData = () => {
 
     const [forecasts, setForecasts] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
+    useEffect(async () => {
         const response = await fetch('weatherforecast');
         const data = await response.json();
         setForecasts(data);
