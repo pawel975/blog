@@ -35,69 +35,69 @@ namespace Blog
         private IEnumerable<BlogPost> GetBlogPosts()
         {
             var blogPosts = new List<BlogPost>()
-    {
-        new BlogPost
-        {
-            Title = "First Post",
-            ShortDescription = "This is the short description of my first post",
-            PrimaryImageSrc = "",
-            BlogPostContent = "This is the content of my first post",
-            BlogContentImages = new List<BlogContentImage>()
             {
-                new BlogContentImage
+                new BlogPost
                 {
-                    ImageSrc = "",
-                    AltTitle = "Alt title for image"
-                }
-            }
-        },
-        new BlogPost
-        {
-            Title = "Second Post",
-            ShortDescription = "This is the short description of my second post",
-            PrimaryImageSrc = "",
-            BlogPostContent = "This is the content of my second post",
-            BlogContentImages = new List<BlogContentImage>()
-            {
-                new BlogContentImage
+                    Title = "First Post",
+                    ShortDescription = "This is the short description of my first post",
+                    PrimaryImageSrc = "",
+                    BlogPostContent = "This is the content of my first post",
+                    BlogContentImages = new List<BlogContentImage>()
+                    {
+                        new BlogContentImage
+                        {
+                            ImageSrc = "",
+                            AltTitle = "Alt title for image"
+                        }
+                    }
+                },
+                new BlogPost
                 {
-                    ImageSrc = "",
-                    AltTitle = "Alt title for image"
-                }
-            }
-        },
-        new BlogPost
-        {
-            Title = "Third Post",
-            ShortDescription = "This is the short description of my third post",
-            PrimaryImageSrc = "",
-            BlogPostContent = "This is the content of my third post",
-            BlogContentImages = new List<BlogContentImage>()
-            {
-                new BlogContentImage
+                    Title = "Second Post",
+                    ShortDescription = "This is the short description of my second post",
+                    PrimaryImageSrc = "",
+                    BlogPostContent = "This is the content of my second post",
+                    BlogContentImages = new List<BlogContentImage>()
+                    {
+                        new BlogContentImage
+                        {
+                            ImageSrc = "",
+                            AltTitle = "Alt title for image"
+                        }
+                    }
+                },
+                new BlogPost
                 {
-                    ImageSrc = "",
-                    AltTitle = "Alt title for image"
-                }
-            }
-        },
-        new BlogPost
-        {
-            Title = "Fourth Post",
-            ShortDescription = "This is the short description of my fourth post",
-            PrimaryImageSrc = "",
-            BlogPostContent = "This is the content of my fourth post",
-            BlogContentImages = new List<BlogContentImage>()
-            {
-                new BlogContentImage
+                    Title = "Third Post",
+                    ShortDescription = "This is the short description of my third post",
+                    PrimaryImageSrc = "",
+                    BlogPostContent = "This is the content of my third post",
+                    BlogContentImages = new List<BlogContentImage>()
+                    {
+                        new BlogContentImage
+                        {
+                            ImageSrc = "",
+                            AltTitle = "Alt title for image"
+                        }
+                    }
+                },
+                new BlogPost
                 {
-                    ImageSrc = "",
-                    AltTitle = "Alt title for image"
-                }
-            }
-        },
-        // Add more instances as needed
-    };
+                    Title = "Fourth Post",
+                    ShortDescription = "This is the short description of my fourth post",
+                    PrimaryImageSrc = "",
+                    BlogPostContent = "This is the content of my fourth post",
+                    BlogContentImages = new List<BlogContentImage>()
+                    {
+                        new BlogContentImage
+                        {
+                            ImageSrc = "",
+                            AltTitle = "Alt title for image"
+                        }
+                    }
+                },
+                // Add more instances as needed
+            };
 
             return blogPosts;
         }
