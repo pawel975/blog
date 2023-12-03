@@ -2,11 +2,12 @@ using Blog;
 using Blog.Entities;
 using Blog.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<BlogSeeder>();
 builder.Services.AddDbContext<BlogDbContext>(options =>

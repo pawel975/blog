@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Blog.Entities;
 using Blog.Services;
+using Blog.Models;
 
 namespace Blog.Controllers
 {
@@ -37,5 +38,12 @@ namespace Blog.Controllers
             return Ok(blogPost);
         }
 
+        [HttpPost]
+        public ActionResult CreateBlogPost([FromBody] CreateBlogPostDto dto) 
+        {
+            int id = _blogPostService.Create(dto);
+
+            return Created($"/api/blogPosts/{id}", null);
+        } 
     }
 }
