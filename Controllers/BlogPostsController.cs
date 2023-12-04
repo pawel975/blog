@@ -23,7 +23,7 @@ namespace Blog.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<BlogPost>> GetAll() 
+        public ActionResult<IEnumerable<BlogPost>> GetAll()
         {
             var blogPosts = _blogPostService.GetAllBlogPosts();
 
@@ -31,7 +31,7 @@ namespace Blog.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<BlogPost> Get([FromRoute] int id) 
+        public ActionResult<BlogPost> Get([FromRoute] int id)
         {
             var blogPost = _blogPostService.GetBlogPostById(id);
 
@@ -39,11 +39,19 @@ namespace Blog.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateBlogPost([FromBody] CreateBlogPostDto dto) 
+        public ActionResult CreateBlogPost([FromBody] CreateBlogPostDto dto)
         {
             int id = _blogPostService.Create(dto);
 
             return Created($"/api/blogPosts/{id}", null);
-        } 
+        }
+
+        [HttpPut("{id}")]
+        public ActionResult UpdatePost([FromRoute] int id, [FromBody] UpdateBlogPostDto dto)
+        {
+            _blogPostService.Update(id, dto);
+
+            return Ok();
+        }
     }
 }
