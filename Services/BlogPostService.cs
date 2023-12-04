@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Blog.Entities;
+using Blog.Exceptions;
 using Blog.Models;
 using System.Reflection;
 
@@ -35,7 +36,7 @@ namespace Blog.Services
         {
             BlogPost blogPost = _dbContext.BlogPosts.FirstOrDefault(bp => bp.Id == id);
 
-            return blogPost;
+            return blogPost is null ? throw new NotFoundException("Blog post not found") : blogPost;
         }
 
         public int Create(CreateBlogPostDto dto)
@@ -46,18 +47,14 @@ namespace Blog.Services
             _dbContext.SaveChanges();
 
             return blogPost.Id;
-
         }
 
         public void Update(int blogPostId, UpdateBlogPostDto dto)
         {
             var blogPost = _dbContext.BlogPosts.FirstOrDefault(bp => bp.Id == blogPostId);
 
-            if (blogPost is null)
-            {
-                throw new Exception();
-            }
-
+            if (blogPost is null) throw new NotFoundException("Blog post not found");
+            
             Type dtoType = dto.GetType();
             
             foreach (PropertyInfo dtoProp in dtoType.GetProperties())
