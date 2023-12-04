@@ -9,6 +9,7 @@ namespace Blog.Services
         int Create(CreateBlogPostDto dto);
         List<BlogPost> GetAllBlogPosts();
         BlogPost GetBlogPostById(int id);
+        void Update(int blogPostId, UpdateBlogPostDto dto);
     }
 
     public class BlogPostService : IBlogPostService
@@ -29,7 +30,7 @@ namespace Blog.Services
             return blogPosts;
         }
 
-        public BlogPost GetBlogPostById(int id) 
+        public BlogPost GetBlogPostById(int id)
         {
             BlogPost blogPost = _dbContext.BlogPosts.FirstOrDefault(bp => bp.Id == id);
 
@@ -45,6 +46,19 @@ namespace Blog.Services
 
             return blogPost.Id;
 
+        }
+
+        public void Update(int blogPostId, UpdateBlogPostDto dto)
+        {
+            var blogPost = _dbContext.BlogPosts.FirstOrDefault(bp => bp.Id == blogPostId);
+
+            blogPost.Title = dto.Title != null ? dto.Title : blogPost.Title;
+            blogPost.ShortDescription = dto.ShortDescription != null ? dto.ShortDescription : blogPost.ShortDescription;
+            blogPost.BlogPostContent = dto.BlogPostContent != null ? dto.BlogPostContent : blogPost.BlogPostContent;
+            blogPost.PrimaryImageSrc = dto.PrimaryImageSrc != null ? dto.PrimaryImageSrc : blogPost.PrimaryImageSrc;
+            blogPost.BlogContentImages = dto.BlogContentImages != null ? dto.BlogContentImages : blogPost.BlogContentImages;
+
+            _dbContext.SaveChanges();
         }
     }
 }
