@@ -14,8 +14,7 @@ builder.Services.AddScoped<BlogSeeder>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddDbContext<BlogDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-           .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 builder.Services.AddScoped<IBlogPostService, BlogPostService>();
