@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Blog.Entities;
 using Blog.Services;
 using Blog.Models;
+using Blog.Exceptions;
 
 namespace Blog.Controllers
 {
@@ -34,11 +35,6 @@ namespace Blog.Controllers
         public ActionResult<BlogPost> Get([FromRoute] int id)
         {
             var blogPost = _blogPostService.GetBlogPostById(id);
-
-            if (blogPost is null) 
-            {
-                throw new Exception();
-            }
 
             return Ok(blogPost);
         }
