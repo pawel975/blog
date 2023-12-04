@@ -1,5 +1,6 @@
 using Blog;
 using Blog.Entities;
+using Blog.Middleware;
 using Blog.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<BlogSeeder>();
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddDbContext<BlogDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
@@ -33,6 +35,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

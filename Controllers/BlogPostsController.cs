@@ -35,6 +35,11 @@ namespace Blog.Controllers
         {
             var blogPost = _blogPostService.GetBlogPostById(id);
 
+            if (blogPost is null) 
+            {
+                throw new Exception();
+            }
+
             return Ok(blogPost);
         }
 
