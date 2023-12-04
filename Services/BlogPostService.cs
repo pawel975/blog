@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Blog.Entities;
 using Blog.Models;
+using System.Reflection;
 
 namespace Blog.Services
 {
@@ -52,11 +53,28 @@ namespace Blog.Services
         {
             var blogPost = _dbContext.BlogPosts.FirstOrDefault(bp => bp.Id == blogPostId);
 
-            blogPost.Title = dto.Title != null ? dto.Title : blogPost.Title;
-            blogPost.ShortDescription = dto.ShortDescription != null ? dto.ShortDescription : blogPost.ShortDescription;
-            blogPost.BlogPostContent = dto.BlogPostContent != null ? dto.BlogPostContent : blogPost.BlogPostContent;
-            blogPost.PrimaryImageSrc = dto.PrimaryImageSrc != null ? dto.PrimaryImageSrc : blogPost.PrimaryImageSrc;
-            blogPost.BlogContentImages = dto.BlogContentImages != null ? dto.BlogContentImages : blogPost.BlogContentImages;
+            if (blogPost is null)
+            {
+                throw new Exception();
+            }
+
+            Type dtoType = dto.GetType();
+            
+            foreach (PropertyInfo dtoProp in dtoType.GetProperties())
+            {
+                // Check if the property exists in the BlogPost entity
+                PropertyInfo? blogPostProp = blogPost.GetType().GetProperty(dtoProp.Name);
+                if (blogPostProp != null && blogPostProp.CanWrite)
+                {
+                    // Get the value from the dto and update the corresponding property in blogPost if value is not null 
+                    // otherwise leave blogPostprop value as it is
+                    var value = dtoProp.GetValue(dto);
+                    if (value is not null)
+                    {
+                        blogPostProp.SetValue(blogPost, value);
+                    }
+                }
+            }
 
             _dbContext.SaveChanges();
         }
