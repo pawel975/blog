@@ -1,19 +1,15 @@
-import Counter from "./components/Counter";
-import FetchData from "./components/FetchData";
-import Home from "./components/Home";
+import AdminPanel from "./Pages/AdminPanel/AdminPanel";
+import Home from "./Pages/Home/Home";
+
 const AppRoutes = [
-  {
-    index: true,
-    element: <Home/>
-  },
-  {
-    path: '/counter',
-    element: <Counter />
-  },
-  {
-    path: '/fetch-data',
-    element: <FetchData />
-  }
+    {
+        index: true,
+        element: <Home />
+    },
+    {
+        path: '/admin-panel',
+        element: <AdminPanel />
+    }
 ];
 
 export default AppRoutes;

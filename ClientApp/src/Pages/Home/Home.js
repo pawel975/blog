@@ -7,7 +7,6 @@ const Home = () => {
     useEffect(() => {
         fetch("api/blogPosts").then(res => res.json()).then(res =>
         {
-            console.log(res);
             setData(res);
         });
     }, [])

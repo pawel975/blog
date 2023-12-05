@@ -20,12 +20,6 @@ const NavMenu = () => {
                     <ul className="navbar-nav flex-grow">
                         <NavItem>
                             <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
-                        </NavItem>s
-                        <NavItem>
-                            <NavLink tag={Link} className="text-dark" to="/counter">Counter</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
                         </NavItem>
                     </ul>
                 </Collapse>
