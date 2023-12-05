@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import './NavMenu.css';
+import './BlogNavMenu.css';
 
-const NavMenu = () => {
+const BlogNavMenu = () => {
 
     const [collapsed, setCollapsed] = useState(true);
 
@@ -29,4 +29,4 @@ const NavMenu = () => {
 
 }
 
-export default NavMenu;
+export default BlogNavMenu;
