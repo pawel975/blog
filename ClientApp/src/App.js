@@ -10,7 +10,7 @@ const App = () => {
   return (
     //Main Routes for app /blog /admin-panel
     <Routes>
-      <Route path="*" element={<NotFoundPage />} />
+      {/* <Route path="*" element={<NotFoundPage />} /> */}
 
       <Route index path="/" element={<Navigate to="/blog" />}></Route>
 
