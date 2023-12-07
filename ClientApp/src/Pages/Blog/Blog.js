@@ -5,6 +5,7 @@ const Blog = () => {
   console.log("Blog component rendered");
 
   const [data, setData] = useState([]);
+  const [isDataLoading, setIsDataLoading] = useState(true);
 
   useEffect(() => {
     fetch("api/blogPosts")
@@ -12,6 +13,7 @@ const Blog = () => {
       .then((res) => {
         setData(res);
       });
+    setIsDataLoading(false);
   }, []);
 
   return (
@@ -20,6 +22,16 @@ const Blog = () => {
         <h1>Hello, world!</h1>
         <p>Welcome to your new single-page application, built with:</p>
       </div>
+      {isDataLoading ? (
+        <h3>Loading...</h3>
+      ) : (
+        data.map((item) => (
+          <div>
+            <h3>{item.title}</h3>
+            <p>{item.shortDescription}</p>
+          </div>
+        ))
+      )}
     </Layout>
   );
 };
