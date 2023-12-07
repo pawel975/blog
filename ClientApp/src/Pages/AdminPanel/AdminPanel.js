@@ -1,13 +1,13 @@
+import Layout from "./Layout/Layout";
 
-
-// TODO: Use authentication to hide this panel without authorized access
 const AdminPanel = () => {
-
-    return (
-        <section className="admin-panel">
-            
-        </section>
-    )
-}
+  return (
+    <Layout>
+      <section className="admin-panel">
+        <h1>Admin panel</h1>
+      </section>
+    </Layout>
+  );
+};
 
 export default AdminPanel;
