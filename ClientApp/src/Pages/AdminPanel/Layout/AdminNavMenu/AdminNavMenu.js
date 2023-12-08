@@ -11,6 +11,16 @@ import { Link } from "react-router-dom";
 import "./AdminNavMenu.css";
 
 const AdminNavMenu = () => {
+  /**
+   *
+   * @param {string} subPath
+   * @returns combined path with root path of /admin-panel/{subpath}
+   */
+  const combinePathWithAdminRoot = (subPath) => {
+    const ADMIN_ROOT_ROUTE = "/admin-panel/";
+    return ADMIN_ROOT_ROUTE + subPath;
+  };
+
   const [collapsed, setCollapsed] = useState(true);
 
   const toggleNavbar = () => {
@@ -24,7 +34,7 @@ const AdminNavMenu = () => {
         container
         light
       >
-        <NavbarBrand tag={Link} to="/">
+        <NavbarBrand tag={Link} to={combinePathWithAdminRoot("dashboard")}>
           Admin Panel
         </NavbarBrand>
         <NavbarToggler onClick={toggleNavbar} className="mr-2" />
@@ -35,8 +45,12 @@ const AdminNavMenu = () => {
         >
           <ul className="navbar-nav flex-grow">
             <NavItem>
-              <NavLink tag={Link} className="text-dark" to="/">
-                Home
+              <NavLink
+                tag={Link}
+                className="text-dark"
+                to={combinePathWithAdminRoot("dashboard")}
+              >
+                Dashboard
               </NavLink>
             </NavItem>
           </ul>
