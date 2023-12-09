@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 
 interface ApiReturnedElementsInterface {
-  data: object | null;
+  data: any;
   loading: boolean;
   error: Error | null;
 }
 
 const useApiData = (url: string): ApiReturnedElementsInterface => {
-  const [data, setData] = useState<object | null>(null);
+  const [data, setData] = useState<object | object[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 

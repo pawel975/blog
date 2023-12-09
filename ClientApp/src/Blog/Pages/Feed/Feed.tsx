@@ -1,36 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Layout from "../../Layout/Layout";
+import useApiData from "../../../hooks/useApiData";
+import { Spinner } from "reactstrap";
+import ErrorMessage from "../../../AdminPanel/Components/ErrorMessage/ErrorMessage";
 
 const Feed: React.FC = () => {
   console.log("Blog component rendered");
 
-  const [data, setData] = useState<any[]>([]);
-  const [isDataLoading, setIsDataLoading] = useState(true);
+  const { data, loading, error } = useApiData("api/blogPosts");
 
-  useEffect(() => {
-    fetch("api/blogPosts")
-      .then((res) => res.json())
-      .then((res) => {
-        setData(res);
-      });
-    setIsDataLoading(false);
-  }, []);
+  const allPosts = data
+    ? data.map((item: any) => (
+        <div>
+          <h3>{item.title}</h3>
+          <p>{item.shortDescription}</p>
+        </div>
+      ))
+    : "x";
 
   return (
     <Layout>
-      <div>
-        <h1>Hello, world!</h1>
-        <p>Welcome to your new single-page application, built with:</p>
-      </div>
-      {isDataLoading ? (
-        <h3>Loading...</h3>
+      <header>
+        <h1>Posts</h1>
+      </header>
+      <hr />
+
+      {loading ? (
+        <Spinner color="secondary">Loading...</Spinner>
+      ) : error ? (
+        <ErrorMessage message={error.message} />
       ) : (
-        data.map((item) => (
-          <div>
-            <h3>{item.title}</h3>
-            <p>{item.shortDescription}</p>
-          </div>
-        ))
+        allPosts
       )}
     </Layout>
   );
