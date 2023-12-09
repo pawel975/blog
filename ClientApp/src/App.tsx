@@ -12,9 +12,17 @@ const App = () => {
     <Routes>
       <Route path="*" element={<NotFoundPage />} />
 
-      <Route index path="/" element={<Navigate to="/blog" />}></Route>
+      <Route index={true} path="/" element={<Navigate to="/blog" />}></Route>
 
       <Route path="blog">
+        <Route path="*" element={<NotFoundPage homePage="/blog" />} />
+
+        <Route
+          index={true}
+          path="/blog"
+          element={<Navigate to="/blog/feed" />}
+        ></Route>
+
         <Route index={true} element={<Blog />} />
         <Route path="feed">
           <Route index={true} element={<Feed />}></Route>
@@ -22,7 +30,12 @@ const App = () => {
       </Route>
 
       <Route path="admin-panel">
-        <Route path="*" element={<NotFoundPage homePage={"/admin-panel"} />} />
+        <Route path="*" element={<NotFoundPage homePage="/admin-panel" />} />
+        <Route
+          index={true}
+          path="/admin-panel"
+          element={<Navigate to="/admin-panel/dashboard" />}
+        ></Route>
 
         <Route index={true} element={<AdminPanel />} />
       </Route>
