@@ -2,27 +2,42 @@ import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import "./custom.css";
 import NotFoundPage from "./components/NotFoundPage/NotFoundPage";
-import Blog from "./Pages/Blog/Blog";
-import Feed from "./Pages/Blog/Pages/Feed/Feed";
-import AdminPanel from "./Pages/AdminPanel/AdminPanel";
+import Feed from "./Blog/Pages/Feed/Feed";
+import Dashboard from "./AdminPanel/Pages/Dashboard/Dashboard";
 
 const App = () => {
   return (
     //Main Routes for app /blog /admin-panel
     <Routes>
       <Route path="*" element={<NotFoundPage />} />
+      <Route index={true} path="/" element={<Navigate to="/blog" />}></Route>
 
-      <Route index path="/" element={<Navigate to="/blog" />}></Route>
-
+      {/* Routes for blog */}
       <Route path="blog">
-        <Route index={true} element={<Blog />} />
+        <Route path="*" element={<NotFoundPage homePage="/blog" />} />
+        <Route
+          index={true}
+          path="/blog"
+          element={<Navigate to="/blog/feed" />}
+        ></Route>
+
         <Route path="feed">
           <Route index={true} element={<Feed />}></Route>
         </Route>
       </Route>
 
+      {/* Routes for admin panel */}
       <Route path="admin-panel">
-        <Route index={true} element={<AdminPanel />} />
+        <Route path="*" element={<NotFoundPage homePage="/admin-panel" />} />
+        <Route
+          index={true}
+          path="/admin-panel"
+          element={<Navigate to="/admin-panel/dashboard" />}
+        ></Route>
+
+        <Route path="dashboard">
+          <Route index={true} element={<Dashboard />}></Route>
+        </Route>
       </Route>
     </Routes>
   );
