@@ -1,16 +1,16 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import "./custom.css";
-import NotFoundPage from "../src/components/NotFoundPage/NotFoundPage";
-import Blog from "../src/Pages/Blog/Blog";
-import Feed from "../src/Pages/Blog/Pages/Feed/Feed";
-import AdminPanel from "../src/Pages/AdminPanel/AdminPanel";
+import NotFoundPage from "./components/NotFoundPage/NotFoundPage";
+import Blog from "./Pages/Blog/Blog";
+import Feed from "./Pages/Blog/Pages/Feed/Feed";
+import AdminPanel from "./Pages/AdminPanel/AdminPanel";
 
 const App = () => {
   return (
     //Main Routes for app /blog /admin-panel
     <Routes>
-      {/* <Route path="*" element={<NotFoundPage />} /> */}
+      <Route path="*" element={<NotFoundPage />} />
 
       <Route index path="/" element={<Navigate to="/blog" />}></Route>
 
