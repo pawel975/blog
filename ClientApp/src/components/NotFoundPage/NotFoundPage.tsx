@@ -1,6 +1,10 @@
 import "./NotFoundPage.css";
 
-const NotFoundPage: React.FC = () => {
+interface NotFoundPageInterface {
+  homePage?: string;
+}
+
+const NotFoundPage: React.FC<NotFoundPageInterface> = ({ homePage = "/" }) => {
   return (
     <section className="not-found-page">
       <header>
@@ -8,7 +12,7 @@ const NotFoundPage: React.FC = () => {
       </header>
       <p>
         Go to{" "}
-        <a className="text-dark" href="/">
+        <a className="text-dark" href={homePage}>
           home page
         </a>
       </p>

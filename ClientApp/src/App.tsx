@@ -2,9 +2,9 @@ import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import "./custom.css";
 import NotFoundPage from "./components/NotFoundPage/NotFoundPage";
-import Blog from "./Pages/Blog/Blog";
-import Feed from "./Pages/Blog/Pages/Feed/Feed";
-import AdminPanel from "./Pages/AdminPanel/AdminPanel";
+import Blog from "./Blog/Blog";
+import Feed from "./Blog/Pages/Feed/Feed";
+import AdminPanel from "./AdminPanel/AdminPanel";
 
 const App = () => {
   return (
@@ -22,6 +22,8 @@ const App = () => {
       </Route>
 
       <Route path="admin-panel">
+        <Route path="*" element={<NotFoundPage homePage={"/admin-panel"} />} />
+
         <Route index={true} element={<AdminPanel />} />
       </Route>
     </Routes>
