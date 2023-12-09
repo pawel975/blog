@@ -1,8 +1,12 @@
-import React from "react";
 import { Container } from "reactstrap";
 import BlogNavMenu from "./BlogNavMenu/BlogNavMenu";
+import { ReactNode } from "react";
 
-const Layout = ({ children }) => {
+interface LayoutProps {
+  children: ReactNode;
+}
+
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div>
       <BlogNavMenu />

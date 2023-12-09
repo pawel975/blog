@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Layout from "./Layout/Layout";
 
-const Blog = () => {
+const Blog: React.FC = () => {
   console.log("Blog component rendered");
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any[]>([]);
   const [isDataLoading, setIsDataLoading] = useState(true);
 
   useEffect(() => {

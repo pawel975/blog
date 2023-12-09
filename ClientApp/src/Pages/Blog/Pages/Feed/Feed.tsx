@@ -1,6 +1,6 @@
 import React from "react";
 
-const Feed = () => {
+const Feed: React.FC = () => {
   console.log("Feed component rendered");
   return (
     <section style={{ color: "red" }} className="feed">
