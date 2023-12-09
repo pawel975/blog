@@ -1,22 +1,14 @@
 import React from "react";
 import Layout from "../../Layout/Layout";
 import useApiData from "../../../hooks/useApiData";
-import { Spinner } from "reactstrap";
+import { Spinner, Table } from "reactstrap";
 import ErrorMessage from "../../../AdminPanel/Components/ErrorMessage/ErrorMessage";
+import PostsTable from "../../../AdminPanel/Components/PostsTable/PostsTable";
 
 const Feed: React.FC = () => {
   console.log("Blog component rendered");
 
   const { data, loading, error } = useApiData("api/blogPosts");
-
-  const allPosts = data
-    ? data.map((item: any) => (
-        <div>
-          <h3>{item.title}</h3>
-          <p>{item.shortDescription}</p>
-        </div>
-      ))
-    : "x";
 
   return (
     <Layout>
@@ -30,7 +22,7 @@ const Feed: React.FC = () => {
       ) : error ? (
         <ErrorMessage message={error.message} />
       ) : (
-        allPosts
+        <PostsTable posts={data} />
       )}
     </Layout>
   );
