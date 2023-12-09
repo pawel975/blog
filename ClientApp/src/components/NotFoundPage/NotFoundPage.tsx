@@ -1,6 +1,8 @@
+import "./NotFoundPage.css";
+
 const NotFoundPage: React.FC = () => {
   return (
-    <section>
+    <section className="not-found-page">
       <header>
         <h1>Page not found</h1>
       </header>

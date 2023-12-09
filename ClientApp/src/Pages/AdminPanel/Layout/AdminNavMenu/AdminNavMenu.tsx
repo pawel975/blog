@@ -9,23 +9,28 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import "./AdminNavMenu.css";
+import combinePathWithAdminRoot from "./utils";
+import { adminNavMenuRoutes } from "./AdminNavMenuRoutes";
 
-const AdminNavMenu = () => {
-  /**
-   *
-   * @param {string} subPath
-   * @returns combined path with root path of /admin-panel/{subpath}
-   */
-  const combinePathWithAdminRoot = (subPath) => {
-    const ADMIN_ROOT_ROUTE = "/admin-panel/";
-    return ADMIN_ROOT_ROUTE + subPath;
-  };
-
+const AdminNavMenu: React.FC = () => {
   const [collapsed, setCollapsed] = useState(true);
 
   const toggleNavbar = () => {
     setCollapsed(!collapsed);
   };
+
+  const NavLinks = adminNavMenuRoutes.map((route) => (
+    <NavItem>
+      <NavLink
+        tag={Link}
+        className="text-dark"
+        to={combinePathWithAdminRoot(route)}
+      >
+        {/* Capitalized name of route */}
+        {route.slice(0, 1).toUpperCase() + route.slice(1)}
+      </NavLink>
+    </NavItem>
+  ));
 
   return (
     <header>
@@ -43,17 +48,7 @@ const AdminNavMenu = () => {
           isOpen={!collapsed}
           navbar
         >
-          <ul className="navbar-nav flex-grow">
-            <NavItem>
-              <NavLink
-                tag={Link}
-                className="text-dark"
-                to={combinePathWithAdminRoot("dashboard")}
-              >
-                Dashboard
-              </NavLink>
-            </NavItem>
-          </ul>
+          <ul className="navbar-nav flex-grow">{NavLinks}</ul>
         </Collapse>
       </Navbar>
     </header>
