@@ -54,5 +54,13 @@ namespace Blog.Controllers
 
             return Ok();
         }
+
+        [HttpDelete("{id}")]
+        public ActionResult DeletePost([FromRoute] int id)
+        {
+            _blogPostService.Delete(id);
+
+            return NoContent();
+        }
     }
 }

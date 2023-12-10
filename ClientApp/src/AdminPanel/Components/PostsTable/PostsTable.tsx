@@ -8,11 +8,11 @@ interface PostsTableInterface {
 const PostsTable: React.FC<PostsTableInterface> = ({ posts }) => {
   const TableHeadings = Object.keys(posts[0]);
 
-  function handleDeletePostWithID(id: number): (id: number) => void {
-    return () => void fetch(`api/blogPosts/${id}`, { method: "DELETE" });
+  function handleDeletePostWithID(id: number): void {
+    fetch(`api/blogPosts/${id}`, { method: "DELETE" });
   }
 
-  function handleModifyPostWithID(id: any): (id: number) => Promise<void> {
+  function handleModifyPostWithID(id: number): void {
     throw new Error("Function not implemented.");
   }
 

@@ -9,6 +9,7 @@ namespace Blog.Services
     public interface IBlogPostService
     {
         int Create(CreateBlogPostDto dto);
+        void Delete(int blogPostId);
         List<BlogPost> GetAllBlogPosts();
         BlogPost GetBlogPostById(int id);
         void Update(int blogPostId, UpdateBlogPostDto dto);
@@ -73,6 +74,16 @@ namespace Blog.Services
                 }
             }
 
+            _dbContext.SaveChanges();
+        }
+
+        public void Delete(int blogPostId)
+        {
+            var blogPost = _dbContext.BlogPosts.FirstOrDefault(bp => bp.Id == blogPostId);
+
+            if (blogPost is null) throw new NotFoundException("Blog post not found");
+
+            _dbContext.BlogPosts.Remove(blogPost);
             _dbContext.SaveChanges();
         }
     }
