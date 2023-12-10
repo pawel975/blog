@@ -2,8 +2,8 @@ import { Button } from "reactstrap";
 
 interface ActionButtonsInterface {
   postId: number;
-  deleteHandler: (id: number) => Promise<void>;
-  modifyHandler: (id: number) => Promise<void>;
+  deleteHandler: (id: number) => void;
+  modifyHandler: (id: number) => void;
 }
 
 const ActionButtons: React.FC<ActionButtonsInterface> = ({
