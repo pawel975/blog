@@ -4,6 +4,7 @@ import "./custom.css";
 import NotFoundPage from "./components/NotFoundPage/NotFoundPage";
 import Feed from "./Blog/Pages/Feed/Feed";
 import Dashboard from "./AdminPanel/Pages/Dashboard/Dashboard";
+import Posts from "./AdminPanel/Pages/Posts/Posts";
 
 const App = () => {
   return (
@@ -37,6 +38,10 @@ const App = () => {
 
         <Route path="dashboard">
           <Route index={true} element={<Dashboard />}></Route>
+        </Route>
+
+        <Route path="posts">
+          <Route index={true} element={<Posts />}></Route>
         </Route>
       </Route>
     </Routes>

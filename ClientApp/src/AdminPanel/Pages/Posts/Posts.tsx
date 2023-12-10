@@ -1,5 +1,28 @@
+import { Spinner } from "reactstrap";
+import Layout from "../../Layout/Layout";
+import PostsTable from "../../Components/PostsTable/PostsTable";
+import ErrorMessage from "../../Components/ErrorMessage/ErrorMessage";
+import useApiData from "../../../hooks/useApiData";
+
 const Posts: React.FC = () => {
-  return <section className="posts"></section>;
+  const { data, loading, error } = useApiData("api/blogPosts");
+
+  return (
+    <Layout>
+      <header>
+        <h1>Posts</h1>
+      </header>
+      <hr />
+
+      {loading ? (
+        <Spinner color="secondary">Loading...</Spinner>
+      ) : error ? (
+        <ErrorMessage message={error.message} />
+      ) : (
+        <PostsTable posts={data} />
+      )}
+    </Layout>
+  );
 };
 
 export default Posts;
