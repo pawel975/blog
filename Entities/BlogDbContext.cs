@@ -7,6 +7,7 @@ namespace Blog.Entities
         public BlogDbContext(DbContextOptions options) : base(options)
         {
         }
+        public DbSet<BlogContentImage> BlogContentImages { get; set; }
 
         public DbSet<BlogPost> BlogPosts { get; set; }
         public DbSet<Role> Roles { get; set; }
