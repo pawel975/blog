@@ -2,6 +2,7 @@
 using Blog.Entities;
 using Blog.Exceptions;
 using Blog.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace Blog.Services
@@ -29,6 +30,8 @@ namespace Blog.Services
         public List<BlogPost> GetAllBlogPosts()
         {
             List<BlogPost> blogPosts = _dbContext.BlogPosts.ToList();
+
+            Console.WriteLine(blogPosts);
 
             return blogPosts;
         }
@@ -82,11 +85,6 @@ namespace Blog.Services
             var blogPost = _dbContext.BlogPosts.FirstOrDefault(bp => bp.Id == blogPostId);
 
             if (blogPost is null) throw new NotFoundException("Blog post not found");
-
-            if (_dbContext.BlogContentImages.Any())
-            {
-                _dbContext.BlogContentImages.RemoveRange(blogPost.BlogContentImages);
-            }
 
             _dbContext.BlogPosts.Remove(blogPost);
             _dbContext.SaveChanges();

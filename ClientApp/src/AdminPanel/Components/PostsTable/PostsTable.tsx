@@ -28,20 +28,23 @@ const PostsTable: React.FC<PostsTableInterface> = ({ posts }) => {
         </tr>
       </thead>
       <tbody>
-        {posts.map((post: any) => (
-          <tr key={post.id}>
-            {Object.keys(post).map((heading) => (
-              <td>{post[heading]}</td>
-            ))}
-            <td>
-              <ActionButtons
-                postId={post.id}
-                deleteHandler={handleDeletePostWithID}
-                modifyHandler={handleModifyPostWithID}
-              />
-            </td>
-          </tr>
-        ))}
+        {posts.map((post: any) => {
+          console.log(post);
+          return (
+            <tr key={post.id}>
+              {Object.keys(post).map((heading) => (
+                <td>{post[heading]}</td>
+              ))}
+              <td>
+                <ActionButtons
+                  postId={post.id}
+                  deleteHandler={handleDeletePostWithID}
+                  modifyHandler={handleModifyPostWithID}
+                />
+              </td>
+            </tr>
+          );
+        })}
       </tbody>
     </Table>
   );
