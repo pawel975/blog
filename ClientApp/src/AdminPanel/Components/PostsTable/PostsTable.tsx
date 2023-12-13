@@ -8,15 +8,13 @@ interface PostsTableInterface {
 const PostsTable: React.FC<PostsTableInterface> = ({ posts }) => {
   const TableHeadings = Object.keys(posts[0]);
 
-  // function handleDeletePostWithID(
-  //   id: any
-  // ): (id: number) => Promise<Response> {
-  //   return fetch(`api/blogPosts/${id}`, { method: "DELETE" });
-  // }
+  function handleDeletePostWithID(id: number): void {
+    fetch(`api/blogPosts/${id}`, { method: "DELETE" });
+  }
 
-  // function handleModifyPostWithID(id: any): (id: number) => Promise<void> {
-  //   throw new Error("Function not implemented.");
-  // }
+  function handleModifyPostWithID(id: number): void {
+    throw new Error("Function not implemented.");
+  }
 
   // TODO: Refactor this to be more readable
   return (
@@ -38,8 +36,8 @@ const PostsTable: React.FC<PostsTableInterface> = ({ posts }) => {
             <td>
               <ActionButtons
                 postId={post.id}
-                deleteHandler={handleDeletePostWithID(post.id)}
-                modifyHandler={handleModifyPostWithID(post.id)}
+                deleteHandler={handleDeletePostWithID}
+                modifyHandler={handleModifyPostWithID}
               />
             </td>
           </tr>

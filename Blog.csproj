@@ -34,8 +34,9 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\src\components\NotFoundPage\" />
-    <Folder Include="ClientApp\src\Pages\AdminPanel\Components\" />
-    <Folder Include="ClientApp\src\Pages\Blog\Components\" />
+    <Folder Include="ClientApp\src\AdminPanel\Components\" />
+    <Folder Include="ClientApp\src\Blog\Components\" />
+    <Folder Include="ClientApp\src\Pages\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

@@ -40,23 +40,24 @@ namespace Blog.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BlogContentImage",
+                name: "BlogContentImages",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ImageSrc = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AltTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BlogPostId = table.Column<int>(type: "int", nullable: true)
+                    BlogPostId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BlogContentImage", x => x.Id);
+                    table.PrimaryKey("PK_BlogContentImages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BlogContentImage_BlogPosts_BlogPostId",
+                        name: "FK_BlogContentImages_BlogPosts_BlogPostId",
                         column: x => x.BlogPostId,
                         principalTable: "BlogPosts",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -82,8 +83,8 @@ namespace Blog.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_BlogContentImage_BlogPostId",
-                table: "BlogContentImage",
+                name: "IX_BlogContentImages_BlogPostId",
+                table: "BlogContentImages",
                 column: "BlogPostId");
 
             migrationBuilder.CreateIndex(
@@ -96,7 +97,7 @@ namespace Blog.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "BlogContentImage");
+                name: "BlogContentImages");
 
             migrationBuilder.DropTable(
                 name: "Users");
