@@ -4,13 +4,21 @@ import AdminNavMenu from "./AdminNavMenu/AdminNavMenu";
 
 interface LayoutProps {
   children: ReactNode;
+  header: string;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = ({ children, header }) => {
   return (
     <div>
       <AdminNavMenu />
-      <Container tag="main">{children}</Container>
+
+      <Container tag="main">
+        <header>
+          <h1>{header}</h1>
+        </header>
+        <hr></hr>
+        {children}
+      </Container>
     </div>
   );
 };

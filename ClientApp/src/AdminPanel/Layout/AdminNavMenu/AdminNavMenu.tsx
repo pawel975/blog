@@ -19,6 +19,10 @@ const AdminNavMenu: React.FC = () => {
     setCollapsed(!collapsed);
   };
 
+  /**
+   * Update possible routes inside this component
+   * {@link adminNavMenuRoutes}
+   */
   const NavLinks = adminNavMenuRoutes.map((route) => (
     <NavItem>
       <NavLink

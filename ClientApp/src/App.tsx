@@ -5,6 +5,7 @@ import NotFoundPage from "./components/NotFoundPage/NotFoundPage";
 import Feed from "./Blog/Pages/Feed/Feed";
 import Dashboard from "./AdminPanel/Pages/Dashboard/Dashboard";
 import Posts from "./AdminPanel/Pages/Posts/Posts";
+import CreatePost from "./AdminPanel/Pages/CreatePost/CreatePost";
 
 const App = () => {
   return (
@@ -42,6 +43,10 @@ const App = () => {
 
         <Route path="posts">
           <Route index={true} element={<Posts />}></Route>
+        </Route>
+
+        <Route path="create">
+          <Route index={true} element={<CreatePost />}></Route>
         </Route>
       </Route>
     </Routes>
