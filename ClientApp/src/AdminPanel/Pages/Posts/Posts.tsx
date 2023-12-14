@@ -8,12 +8,7 @@ const Posts: React.FC = () => {
   const { data, loading, error } = useApiData("api/blogPosts");
 
   return (
-    <Layout>
-      <header>
-        <h1>Posts</h1>
-      </header>
-      <hr />
-
+    <Layout header="Posts">
       {loading ? (
         <Spinner color="secondary">Loading...</Spinner>
       ) : error ? (
