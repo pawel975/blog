@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Layout from "../../Layout/Layout";
+import { Form, FormGroup, Input, Label } from "reactstrap";
 
 const CreatePost: React.FC = () => {
   const [title, setTitle] = useState("");
@@ -33,44 +34,49 @@ const CreatePost: React.FC = () => {
 
   return (
     <Layout header="Create Post">
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Title</label>
-          <input
+      <Form onSubmit={handleSubmit}>
+        <FormGroup>
+          <Label for="title">Title</Label>
+          <Input
+            id="title"
             type="text"
             name="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
-        </div>
-        <div>
-          <label>Short Description</label>
-          <input
+        </FormGroup>
+        <FormGroup>
+          <Label for="shortDescription">Short Description</Label>
+          <Input
             type="text"
+            id="shortDescription"
             name="shortDescription"
             value={shortDescription}
             onChange={(e) => setShortDescription(e.target.value)}
           />
-        </div>
-        <div>
-          <label>Primary Image Source</label>
-          <input
+        </FormGroup>
+        <FormGroup>
+          <Label for="primaryImageSrc">Primary Image Source</Label>
+          <Input
+            id="primaryImageSrc"
             type="text"
             name="primaryImageSrc"
             value={primaryImageSrc}
             onChange={(e) => setPrimaryImageSrc(e.target.value)}
           />
-        </div>
-        <div>
-          <label>Blog post content</label>
-          <textarea
+        </FormGroup>
+        <FormGroup>
+          <Label for="blogPostContent">Blog post content</Label>
+          <Input
+            id="blogPostContent"
+            type="textarea"
             name="blogPostContent"
             value={blogPostContent}
             onChange={(e) => setBlogPostContent(e.target.value)}
           />
-        </div>
+        </FormGroup>
         <input type="submit" value="Create" />
-      </form>
+      </Form>
     </Layout>
   );
 };
