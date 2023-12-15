@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Layout from "../../Layout/Layout";
-import { Form, FormGroup, Input, Label } from "reactstrap";
+import { Button, Form, FormGroup, Input, Label } from "reactstrap";
 
 const CreatePost: React.FC = () => {
   const [title, setTitle] = useState("");
@@ -75,7 +75,7 @@ const CreatePost: React.FC = () => {
             onChange={(e) => setBlogPostContent(e.target.value)}
           />
         </FormGroup>
-        <input type="submit" value="Create" />
+        <Button color="primary">Create</Button>
       </Form>
     </Layout>
   );
