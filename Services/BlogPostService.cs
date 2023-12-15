@@ -9,11 +9,11 @@ namespace Blog.Services
 {
     public interface IBlogPostService
     {
-        int Create(CreateBlogPostDto dto);
-        void Delete(int blogPostId);
+        Guid Create(CreateBlogPostDto dto);
+        void Delete(Guid blogPostId);
         List<BlogPost> GetAllBlogPosts();
-        BlogPost GetBlogPostById(int id);
-        void Update(int blogPostId, UpdateBlogPostDto dto);
+        BlogPost GetBlogPostById(Guid id);
+        void Update(Guid blogPostId, UpdateBlogPostDto dto);
     }
 
     public class BlogPostService : IBlogPostService
@@ -36,14 +36,14 @@ namespace Blog.Services
             return blogPosts;
         }
 
-        public BlogPost GetBlogPostById(int id)
+        public BlogPost GetBlogPostById(Guid id)
         {
             BlogPost blogPost = _dbContext.BlogPosts.FirstOrDefault(bp => bp.Id == id);
 
             return blogPost is null ? throw new NotFoundException("Blog post not found") : blogPost;
         }
 
-        public int Create(CreateBlogPostDto dto)
+        public Guid Create(CreateBlogPostDto dto)
         {
             var blogPost = _mapper.Map<BlogPost>(dto);
 
@@ -53,7 +53,7 @@ namespace Blog.Services
             return blogPost.Id;
         }
 
-        public void Update(int blogPostId, UpdateBlogPostDto dto)
+        public void Update(Guid blogPostId, UpdateBlogPostDto dto)
         {
             var blogPost = _dbContext.BlogPosts.FirstOrDefault(bp => bp.Id == blogPostId);
 
@@ -80,7 +80,7 @@ namespace Blog.Services
             _dbContext.SaveChanges();
         }
 
-        public void Delete(int blogPostId)
+        public void Delete(Guid blogPostId)
         {
             var blogPost = _dbContext.BlogPosts.FirstOrDefault(bp => bp.Id == blogPostId);
 

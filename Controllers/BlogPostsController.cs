@@ -32,7 +32,7 @@ namespace Blog.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<BlogPost> Get([FromRoute] int id)
+        public ActionResult<BlogPost> Get([FromRoute] Guid id)
         {
             var blogPost = _blogPostService.GetBlogPostById(id);
 
@@ -42,13 +42,13 @@ namespace Blog.Controllers
         [HttpPost]
         public ActionResult CreateBlogPost([FromBody] CreateBlogPostDto dto)
         {
-            int id = _blogPostService.Create(dto);
+            Guid id = _blogPostService.Create(dto);
 
             return Created($"/api/blogPosts/{id}", null);
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdatePost([FromRoute] int id, [FromBody] UpdateBlogPostDto dto)
+        public ActionResult UpdatePost([FromRoute] Guid id, [FromBody] UpdateBlogPostDto dto)
         {
             _blogPostService.Update(id, dto);
 
@@ -56,7 +56,7 @@ namespace Blog.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeletePost([FromRoute] int id)
+        public ActionResult DeletePost([FromRoute] Guid id)
         {
             _blogPostService.Delete(id);
 
