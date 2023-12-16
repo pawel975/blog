@@ -1,7 +1,11 @@
 using Blog;
 using Blog.Entities;
 using Blog.Middleware;
+using Blog.Models;
+using Blog.Models.Validators;
 using Blog.Services;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -18,6 +22,10 @@ builder.Services.AddDbContext<BlogDbContext>(options =>
 });
 
 builder.Services.AddScoped<IBlogPostService, BlogPostService>();
+
+// Validators
+builder.Services.AddControllers().AddFluentValidation();
+builder.Services.AddScoped<IValidator<CreateBlogPostDto>, CreateBlogPostDtoValidator>();
 
 var app = builder.Build();
 
