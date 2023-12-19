@@ -13,7 +13,15 @@ const PostsTable: React.FC<PostsTableInterface> = ({ posts }) => {
   }
 
   function handleModifyPostWithID(id: number): void {
-    throw new Error("Function not implemented.");
+    // TODO: Open Modify handler / Redirect to Modify page
+
+    // TODO: Get Data from form
+    const data = {
+      name: undefined,
+    };
+
+    // TODO: Pass data into fetch
+    fetch(`api/blogPosts/${id}`, { method: "PUT", body: data });
   }
 
   // TODO: Refactor this to be more readable
