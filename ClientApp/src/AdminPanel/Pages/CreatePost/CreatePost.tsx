@@ -71,8 +71,6 @@ const CreatePost: React.FC = () => {
         setPrimaryImageSrcErrors(errors[field]);
       } else if (field === "BlogPostContent") {
         setBlogPostContentErrors(errors[field]);
-      } else {
-        console.log("no errors");
       }
     });
   }, [errors]);
