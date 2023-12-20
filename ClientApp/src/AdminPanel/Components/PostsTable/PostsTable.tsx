@@ -1,5 +1,6 @@
 import { Table } from "reactstrap";
 import ActionButtons from "../ActionButtons/ActionButtons";
+import { redirect } from "react-router-dom";
 
 interface PostsTableInterface {
   posts: object[];
@@ -16,12 +17,13 @@ const PostsTable: React.FC<PostsTableInterface> = ({ posts }) => {
     // TODO: Open Modify handler / Redirect to Modify page
 
     // TODO: Get Data from form
-    const data = {
-      name: undefined,
-    };
+    let data;
+    // TODO: Redirect to particular post to /admin-panel/posts/{id}/update
+    redirect("/admin-panel/posts/update");
+    console.log("XD");
 
     // TODO: Pass data into fetch
-    fetch(`api/blogPosts/${id}`, { method: "PUT", body: data });
+    // fetch(`api/blogPosts/${id}`, { method: "PUT", body: data });
   }
 
   // TODO: Refactor this to be more readable
