@@ -3,12 +3,12 @@ import { Button } from "reactstrap";
 interface ActionButtonsInterface {
   postId: number;
   deleteHandler: (id: number) => void;
-  modifyHandler: (id: number) => void;
+  editHandler: (id: number) => void;
 }
 
 const ActionButtons: React.FC<ActionButtonsInterface> = ({
   deleteHandler,
-  modifyHandler,
+  editHandler,
   postId,
 }) => {
   return (
@@ -16,8 +16,8 @@ const ActionButtons: React.FC<ActionButtonsInterface> = ({
       <Button onClick={() => deleteHandler(postId)} size="sm" color="danger">
         Delete
       </Button>
-      <Button onClick={() => modifyHandler(postId)} size="sm" color="primary">
-        Modify
+      <Button onClick={() => editHandler(postId)} size="sm" color="primary">
+        Edit
       </Button>
     </div>
   );

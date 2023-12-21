@@ -9,13 +9,14 @@ import {
   Input,
   Label,
 } from "reactstrap";
+import { useNavigate, useParams } from "react-router-dom";
 
-interface UpdatePostInterface {
-  postId: string | number;
-}
+// interface EditPostInterface {
+//   postId: string | number;
+// }
 
 // TODO: Copied from Create Post page, check if it's right to update
-const UpdatePost: React.FC<UpdatePostInterface> = ({ postId }) => {
+const EditPost: React.FC = () => {
   const [title, setTitle] = useState<string | undefined>("");
   const [titleErrors, setTitleErrors] = useState<string[]>([]);
 
@@ -35,6 +36,9 @@ const UpdatePost: React.FC<UpdatePostInterface> = ({ postId }) => {
   const [blogPostContentErrors, setBlogPostContentErrors] = useState<string[]>(
     []
   );
+
+  const navigate = useNavigate();
+  const { postId } = useParams();
 
   // TODO: change any
   const [errors, setErrors] = useState<any>({});
@@ -57,10 +61,11 @@ const UpdatePost: React.FC<UpdatePostInterface> = ({ postId }) => {
       })
       .then((response) => {
         console.log("Post created successfully");
+        navigate("/admin-panel/posts");
       })
       .catch((error) => {
         setErrors(error.response.data.errors);
-        console.error("Failed to create post:", error);
+        console.error("Failed to edit post:", error);
       });
   };
 
@@ -81,7 +86,7 @@ const UpdatePost: React.FC<UpdatePostInterface> = ({ postId }) => {
   }, [errors]);
 
   return (
-    <Layout header="Create Post">
+    <Layout header="Edit Post">
       <Form onSubmit={handleSubmit}>
         <FormGroup>
           <Label for="title">Title</Label>
@@ -142,10 +147,10 @@ const UpdatePost: React.FC<UpdatePostInterface> = ({ postId }) => {
             <FormFeedback>{errorMsg}</FormFeedback>
           ))}
         </FormGroup>
-        <Button color="primary">Update</Button>
+        <Button color="primary">Edit</Button>
       </Form>
     </Layout>
   );
 };
 
-export default UpdatePost;
+export default EditPost;
