@@ -9,8 +9,11 @@ import {
   Input,
   Label,
 } from "reactstrap";
+import { useNavigate } from "react-router-dom";
 
 const CreatePost: React.FC = () => {
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState<string>("");
   const [titleErrors, setTitleErrors] = useState<string[]>([]);
 
@@ -50,6 +53,7 @@ const CreatePost: React.FC = () => {
       })
       .then((response) => {
         console.log("Post created successfully");
+        navigate("/admin-panel/posts");
       })
       .catch((error) => {
         setErrors(error.response.data.errors);

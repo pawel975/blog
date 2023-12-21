@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import "./custom.css";
 import NotFoundPage from "./components/NotFoundPage/NotFoundPage";
@@ -6,6 +6,7 @@ import Feed from "./Blog/Pages/Feed/Feed";
 import Dashboard from "./AdminPanel/Pages/Dashboard/Dashboard";
 import Posts from "./AdminPanel/Pages/Posts/Posts";
 import CreatePost from "./AdminPanel/Pages/CreatePost/CreatePost";
+import EditPost from "./AdminPanel/Pages/EditPost/EditPost";
 
 const App = () => {
   return (
@@ -43,6 +44,11 @@ const App = () => {
 
         <Route path="posts">
           <Route index={true} element={<Posts />}></Route>
+          <Route path=":postId">
+            <Route path="edit">
+              <Route index={true} element={<EditPost />}></Route>
+            </Route>
+          </Route>
         </Route>
 
         <Route path="create">

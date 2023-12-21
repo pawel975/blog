@@ -1,29 +1,21 @@
 import { Table } from "reactstrap";
 import ActionButtons from "../ActionButtons/ActionButtons";
-import { redirect } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 
 interface PostsTableInterface {
   posts: object[];
 }
 
 const PostsTable: React.FC<PostsTableInterface> = ({ posts }) => {
+  const navigate = useNavigate();
   const TableHeadings = Object.keys(posts[0]);
 
   function handleDeletePostWithID(id: number): void {
     fetch(`api/blogPosts/${id}`, { method: "DELETE" });
   }
 
-  function handleModifyPostWithID(id: number): void {
-    // TODO: Open Modify handler / Redirect to Modify page
-
-    // TODO: Get Data from form
-    let data;
-    // TODO: Redirect to particular post to /admin-panel/posts/{id}/update
-    redirect("/admin-panel/posts/update");
-    console.log("XD");
-
-    // TODO: Pass data into fetch
-    // fetch(`api/blogPosts/${id}`, { method: "PUT", body: data });
+  function handleEditPostWithID(id: number): void {
+    navigate(`/admin-panel/posts/${id}/edit`);
   }
 
   // TODO: Refactor this to be more readable
@@ -49,7 +41,7 @@ const PostsTable: React.FC<PostsTableInterface> = ({ posts }) => {
                 <ActionButtons
                   postId={post.id}
                   deleteHandler={handleDeletePostWithID}
-                  modifyHandler={handleModifyPostWithID}
+                  editHandler={handleEditPostWithID}
                 />
               </td>
             </tr>
