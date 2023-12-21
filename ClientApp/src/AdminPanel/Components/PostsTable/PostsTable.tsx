@@ -1,6 +1,6 @@
 import { Table } from "reactstrap";
 import ActionButtons from "../ActionButtons/ActionButtons";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface PostsTableInterface {
   posts: object[];
