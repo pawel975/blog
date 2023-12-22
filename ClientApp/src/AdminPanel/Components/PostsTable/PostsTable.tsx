@@ -1,6 +1,6 @@
 import { Table } from "reactstrap";
 import ActionButtons from "../ActionButtons/ActionButtons";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface PostsTableInterface {
   posts: object[];
@@ -30,23 +30,20 @@ const PostsTable: React.FC<PostsTableInterface> = ({ posts }) => {
         </tr>
       </thead>
       <tbody>
-        {posts.map((post: any) => {
-          console.log(post);
-          return (
-            <tr key={post.id}>
-              {Object.keys(post).map((heading) => (
-                <td>{post[heading]}</td>
-              ))}
-              <td>
-                <ActionButtons
-                  postId={post.id}
-                  deleteHandler={handleDeletePostWithID}
-                  editHandler={handleEditPostWithID}
-                />
-              </td>
-            </tr>
-          );
-        })}
+        {posts.map((post: any) => (
+          <tr key={post.id}>
+            {Object.keys(post).map((heading) => (
+              <td>{post[heading]}</td>
+            ))}
+            <td>
+              <ActionButtons
+                postId={post.id}
+                deleteHandler={handleDeletePostWithID}
+                editHandler={handleEditPostWithID}
+              />
+            </td>
+          </tr>
+        ))}
       </tbody>
     </Table>
   );

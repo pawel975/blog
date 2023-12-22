@@ -6,7 +6,10 @@ interface ApiReturnedElementsInterface {
   error: Error | null;
 }
 
-const useApiData = (url: string): ApiReturnedElementsInterface => {
+const useApiData = (
+  url: string,
+  params?: RequestInit
+): ApiReturnedElementsInterface => {
   const [data, setData] = useState<object | object[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
@@ -14,7 +17,7 @@ const useApiData = (url: string): ApiReturnedElementsInterface => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(url);
+        const response = await fetch(url, params);
         const result = await response.json();
         setData(result);
       } catch (error) {
@@ -27,7 +30,7 @@ const useApiData = (url: string): ApiReturnedElementsInterface => {
     };
 
     fetchData();
-  }, [url]);
+  }, [params, url]);
 
   return { data, loading, error };
 };
