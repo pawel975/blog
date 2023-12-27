@@ -3,9 +3,16 @@ import Layout from "../../Layout/Layout";
 import PostsTable from "../../Components/PostsTable/PostsTable";
 import ErrorMessage from "../../Components/ErrorMessage/ErrorMessage";
 import useApiData from "../../../hooks/useApiData";
+import { useEffect, useState } from "react";
 
 const Posts: React.FC = () => {
   const { data, loading, error } = useApiData("api/blogPosts");
+
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    if (!loading && !error) setPosts(data);
+  }, [data, loading, error]);
 
   return (
     <Layout header="Posts">
@@ -14,7 +21,7 @@ const Posts: React.FC = () => {
       ) : error ? (
         <ErrorMessage message={error.message} />
       ) : (
-        <PostsTable posts={data} />
+        <PostsTable posts={posts} setPosts={setPosts} />
       )}
     </Layout>
   );
