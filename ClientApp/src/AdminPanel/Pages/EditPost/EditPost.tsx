@@ -10,6 +10,7 @@ import {
   Label,
 } from "reactstrap";
 import { useNavigate, useParams } from "react-router-dom";
+import useApiData from "../../../hooks/useApiData";
 
 // interface EditPostInterface {
 //   postId: string | number;
@@ -28,7 +29,7 @@ const EditPost: React.FC = () => {
   >([]);
 
   const [primaryImageSrc, setPrimaryImageSrc] = useState<string>("");
-  const [primaryImageSrcErrors, setPrimaryImageSrcErrors] = useState<string[]>(
+  const [primaryImageSrcErrors, setPrimaryImageSrcErrors] = useState<String[]>(
     []
   );
 
@@ -39,6 +40,8 @@ const EditPost: React.FC = () => {
 
   const navigate = useNavigate();
   const { postId } = useParams();
+  // Get value of edit post
+  const { data, loading, error } = useApiData(`api/blogPosts/${postId}`);
 
   // TODO: change any
   const [errors, setErrors] = useState<any>({});
@@ -84,6 +87,32 @@ const EditPost: React.FC = () => {
       }
     });
   }, [errors]);
+
+  // TODO: Set init value for edit, download those from API based on id
+  // TODO: Refactor this
+  useEffect(() => {
+    if (!loading && !error) {
+      for (const key in data) {
+        switch (key) {
+          case "title":
+            setTitle(data[key]);
+            break;
+          case "shortDescription":
+            setShortDescription(data[key]);
+            break;
+          case "primaryImageSrc":
+            setPrimaryImageSrc(data[key]);
+            break;
+          case "blogPostContent":
+            setBlogPostContent(data[key]);
+            break;
+          default:
+            if (key !== "id") console.error(`No action for key of '${key}'`);
+            break;
+        }
+      }
+    }
+  }, [data, loading, error]);
 
   return (
     <Layout header="Edit Post">
