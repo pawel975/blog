@@ -14,9 +14,7 @@ const PostsTable: React.FC<PostsTableInterface> = ({ posts, setPosts }) => {
   function handleDeletePostWithID(id: number): void {
     fetch(`api/blogPosts/${id}`, { method: "DELETE" });
 
-    const filteredPosts = posts.filter(
-      (post: { id: number }) => post.id !== id
-    );
+    const filteredPosts = posts.filter((post: { id: number }) => post.id !== id);
     setPosts(filteredPosts);
   }
 
@@ -31,17 +29,18 @@ const PostsTable: React.FC<PostsTableInterface> = ({ posts, setPosts }) => {
         <Table responsive striped bordered>
           <thead>
             <tr>
-              {TableHeadings.map((heading) => (
-                <th>{heading}</th>
+              {TableHeadings.map((heading, index) => (
+                <th key={index}>{heading}</th>
               ))}
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
+            {/* TODO: Change any */}
             {posts.map((post: any) => (
               <tr key={post.id}>
-                {Object.keys(post).map((heading) => (
-                  <td>{post[heading]}</td>
+                {Object.keys(post).map((heading, index) => (
+                  <td key={index}>{post[heading]}</td>
                 ))}
                 <td>
                   <ActionButtons
