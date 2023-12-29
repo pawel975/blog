@@ -1,62 +1,57 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Layout from "../../Layout/Layout";
-import {
-  Button,
-  Form,
-  FormFeedback,
-  FormGroup,
-  Input,
-  Label,
-} from "reactstrap";
+import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import useApiData from "../../../hooks/useApiData";
 
 interface ErrorsObject {
-  BlogPostContent?: string[];
-  ShortDescription?: string[];
-  Title?: string[];
-  PrimaryImageSrc?: string[];
+  Title: string[];
+  ShortDescription: string[];
+  PrimaryImageSrc: string[];
+  BlogPostContent: string[];
 }
-
-type ErrorArray = string[] | undefined;
 
 // TODO: Copied from Create Post page, check if it's right to update
 const EditPost: React.FC = () => {
-  const [title, setTitle] = useState<string | undefined>("");
-  const [titleErrors, setTitleErrors] = useState<ErrorArray>([]);
-
-  const [shortDescription, setShortDescription] = useState<string | undefined>(
-    ""
-  );
-  const [shortDescriptionErrors, setShortDescriptionErrors] =
-    useState<ErrorArray>([]);
-
-  const [primaryImageSrc, setPrimaryImageSrc] = useState<string>("");
-  const [primaryImageSrcErrors, setPrimaryImageSrcErrors] =
-    useState<ErrorArray>([]);
-
-  const [blogPostContent, setBlogPostContent] = useState<string>("");
-  const [blogPostContentErrors, setBlogPostContentErrors] =
-    useState<ErrorArray>([]);
-
   const navigate = useNavigate();
   const { postId } = useParams();
   // Get value of edit post
   const { data, loading, error } = useApiData(`api/blogPosts/${postId}`);
 
-  // TODO: change any
-  const [errors, setErrors] = useState<ErrorsObject>({});
+  const [title, setTitle] = useState<string | undefined>("");
+  const [shortDescription, setShortDescription] = useState<string | undefined>("");
+  const [primaryImageSrc, setPrimaryImageSrc] = useState<string>("");
+  const [blogPostContent, setBlogPostContent] = useState<string>("");
+
+  const [errors, setErrors] = useState<ErrorsObject>({
+    Title: [],
+    ShortDescription: [],
+    PrimaryImageSrc: [],
+    BlogPostContent: [],
+  });
 
   // Change it so it doesnt run on every typed letter in form
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    const formData = {
-      title: title,
-      shortDescription: shortDescription,
-      primaryImageSrc: primaryImageSrc,
-      blogPostContent: blogPostContent,
+    const formData: {
+      title: string;
+      shortDescription: string;
+      primaryImageSrc: string;
+      blogPostContent: string;
+    } = {
+      title: title || "",
+      shortDescription: shortDescription || "",
+      primaryImageSrc: primaryImageSrc || "",
+      blogPostContent: blogPostContent || "",
     };
+
+    setErrors({
+      Title: [],
+      ShortDescription: [],
+      PrimaryImageSrc: [],
+      BlogPostContent: [],
+    });
 
     axios
       .put(`/api/blogPosts/${postId}`, formData, {
@@ -65,32 +60,31 @@ const EditPost: React.FC = () => {
         },
       })
       .then((response) => {
-        console.log("Post created successfully");
+        console.log("Post edited successfully");
         navigate("/admin-panel/posts");
       })
       .catch((error) => {
-        setErrors(error.response.data.errors);
+        const errorCategory = error.response.data.errors;
+
+        // TODO: Create helper function based on this code
+        // Check if there are any errors from API that are not handled
+        Object.keys(errorCategory).forEach((category) => {
+          if (!Object.keys(errors).includes(category)) {
+            console.error(`Not handled category of error from API, error category - ${category}`);
+          }
+        });
+
+        setErrors({
+          ...errors,
+          Title: errorCategory.Title || [],
+          ShortDescription: errorCategory.ShortDescription || [],
+          PrimaryImageSrc: errorCategory.PrimaryImageSrc || [],
+          BlogPostContent: errorCategory.BlogPostContent || [],
+        });
         console.error("Failed to edit post:", error);
       });
   };
 
-  useEffect(() => {
-    const inputFields = Object.keys(errors);
-
-    inputFields.forEach((field) => {
-      if (field === "Title") {
-        setTitleErrors(errors[field]);
-      } else if (field === "ShortDescription") {
-        setShortDescriptionErrors(errors[field]);
-      } else if (field === "PrimaryImageSrc") {
-        setPrimaryImageSrcErrors(errors[field]);
-      } else if (field === "BlogPostContent") {
-        setBlogPostContentErrors(errors[field]);
-      }
-    });
-  }, [errors]);
-
-  // TODO: Set init value for edit, download those from API based on id
   // TODO: Refactor this
   useEffect(() => {
     if (!loading && !error) {
@@ -122,72 +116,61 @@ const EditPost: React.FC = () => {
         <FormGroup>
           <Label for="title">Title</Label>
           <Input
-            invalid={titleErrors && Boolean(titleErrors.length > 0)}
+            invalid={Boolean(errors["Title"].length > 0)}
             id="title"
             type="text"
             name="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
-          {titleErrors &&
-            titleErrors.map((errorMsg) => (
-              <FormFeedback>{errorMsg}</FormFeedback>
-            ))}
+          {errors["Title"].map((errorMsg, index) => (
+            <FormFeedback key={index}>{errorMsg}</FormFeedback>
+          ))}
         </FormGroup>
 
         <FormGroup>
           <Label for="shortDescription">Short Description</Label>
           <Input
-            invalid={
-              shortDescriptionErrors &&
-              Boolean(shortDescriptionErrors.length > 0)
-            }
+            invalid={Boolean(errors["ShortDescription"].length > 0)}
             type="text"
             id="shortDescription"
             name="shortDescription"
             value={shortDescription}
             onChange={(e) => setShortDescription(e.target.value)}
           />
-          {shortDescriptionErrors &&
-            shortDescriptionErrors.map((errorMsg) => (
-              <FormFeedback>{errorMsg}</FormFeedback>
-            ))}
+          {errors["ShortDescription"].map((errorMsg, index) => (
+            <FormFeedback key={index}>{errorMsg}</FormFeedback>
+          ))}
         </FormGroup>
 
         <FormGroup>
           <Label for="primaryImageSrc">Primary Image Source</Label>
           <Input
-            invalid={
-              primaryImageSrcErrors && Boolean(primaryImageSrcErrors.length > 0)
-            }
+            invalid={Boolean(errors["PrimaryImageSrc"].length > 0)}
             id="primaryImageSrc"
             type="text"
             name="primaryImageSrc"
             value={primaryImageSrc}
             onChange={(e) => setPrimaryImageSrc(e.target.value)}
           />
-          {primaryImageSrcErrors &&
-            primaryImageSrcErrors.map((errorMsg) => (
-              <FormFeedback>{errorMsg}</FormFeedback>
-            ))}
+          {errors["PrimaryImageSrc"].map((errorMsg, index) => (
+            <FormFeedback key={index}>{errorMsg}</FormFeedback>
+          ))}
         </FormGroup>
 
         <FormGroup>
           <Label for="blogPostContent">Blog post content</Label>
           <Input
-            invalid={
-              blogPostContentErrors && Boolean(blogPostContentErrors.length > 0)
-            }
+            invalid={Boolean(errors["BlogPostContent"].length > 0)}
             id="blogPostContent"
             type="textarea"
             name="blogPostContent"
             value={blogPostContent}
             onChange={(e) => setBlogPostContent(e.target.value)}
           />
-          {blogPostContentErrors &&
-            blogPostContentErrors.map((errorMsg) => (
-              <FormFeedback>{errorMsg}</FormFeedback>
-            ))}
+          {errors["BlogPostContent"].map((errorMsg, index) => (
+            <FormFeedback key={index}>{errorMsg}</FormFeedback>
+          ))}
         </FormGroup>
         <Button color="primary">Edit</Button>
       </Form>
