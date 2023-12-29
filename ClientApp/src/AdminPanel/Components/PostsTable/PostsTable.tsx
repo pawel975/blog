@@ -11,7 +11,6 @@ interface PostsTableInterface {
 
 const PostsTable: React.FC<PostsTableInterface> = ({ posts, setPosts }) => {
   const navigate = useNavigate();
-  const TableHeadings = posts && posts.length > 0 ? Object.keys(posts[0]) : [];
 
   function handleDeletePostWithID(id: number): void {
     fetch(`api/blogPosts/${id}`, { method: "DELETE" });
@@ -24,6 +23,7 @@ const PostsTable: React.FC<PostsTableInterface> = ({ posts, setPosts }) => {
     navigate(`/admin-panel/posts/${id}/edit`);
   }
 
+  const TableHeadings = posts && posts.length > 0 ? Object.keys(posts[0]) : [];
   const allTableHeadings = (
     <tr>
       {TableHeadings.map((heading, index) => (
