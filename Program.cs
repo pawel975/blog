@@ -26,6 +26,7 @@ builder.Services.AddScoped<IBlogPostService, BlogPostService>();
 // Validators
 builder.Services.AddControllers().AddFluentValidation();
 builder.Services.AddScoped<IValidator<CreateBlogPostDto>, CreateBlogPostDtoValidator>();
+builder.Services.AddScoped<IValidator<UpdateBlogPostDto>, UpdateBlogPostDtoValidator>();
 
 var app = builder.Build();
 
