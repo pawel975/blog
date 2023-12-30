@@ -1,0 +1,17 @@
+table {
+  font-size: 0.9rem !important;
+  max-width: 100% !important;
+}
+
+td,
+th {
+  vertical-align: middle;
+  max-width: 0 !important;
+  overflow-wrap: break-word;
+  overflow: hidden;
+  max-height: 2rem !important;
+}
+
+tr {
+  max-height: 20px !important;
+}

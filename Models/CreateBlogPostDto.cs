@@ -1,4 +1,5 @@
 ﻿using Blog.Entities;
+using Blog.Entities.BlogPostContentEntities;
 using System.ComponentModel.DataAnnotations;
 
 namespace Blog.Models
@@ -11,7 +12,7 @@ namespace Blog.Models
         public string ShortDescription { get; set; }
         public string PrimaryImageSrc { get; set; }
         [Required]
-        public string BlogPostContent { get; set; }
-        public List<BlogContentImage>? BlogContentImages { get; set; }
+        public virtual ICollection<ContentElement> ContentElements { get; set; }
+
     }
 }
