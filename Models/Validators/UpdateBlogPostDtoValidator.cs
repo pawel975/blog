@@ -3,14 +3,14 @@ using FluentValidation;
 
 namespace Blog.Models.Validators
 {
-    public class CreateBlogPostDtoValidator : AbstractValidator<CreateBlogPostDto>
+    public class UpdateBlogPostDtoValidator : AbstractValidator<UpdateBlogPostDto>
     {
-        public CreateBlogPostDtoValidator(BlogDbContext dbContext)
+        public UpdateBlogPostDtoValidator(BlogDbContext dbContext)
         {
             RuleFor(x => x.Title)
-                .NotEmpty()
-                .MinimumLength(3)
-                .MaximumLength(100);
+                   .NotEmpty()
+                   .MinimumLength(3)
+                   .MaximumLength(100);
 
             RuleFor(x => x.ShortDescription)
                 .NotEmpty()
