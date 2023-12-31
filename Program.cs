@@ -27,7 +27,6 @@ builder.Services.AddScoped<IBlogPostService, BlogPostService>();
 builder.Services.AddControllers().AddFluentValidation();
 builder.Services.AddScoped<IValidator<CreateBlogPostDto>, CreateBlogPostDtoValidator>();
 builder.Services.AddScoped<IValidator<UpdateBlogPostDto>, UpdateBlogPostDtoValidator>();
-
 var app = builder.Build();
 
 // Seed data

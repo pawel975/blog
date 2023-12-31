@@ -11,7 +11,7 @@ namespace Blog.Models
         [Required]
         public string ShortDescription { get; set; }
         public string PrimaryImageSrc { get; set; }
-        [Required]
+
         public virtual ICollection<ContentElement> ContentElements { get; set; }
 
     }

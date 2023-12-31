@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Blog.Entities;
+using Blog.Entities.BlogPostContentEntities;
 using Blog.Exceptions;
 using Blog.Models;
 using Microsoft.EntityFrameworkCore;
@@ -46,6 +47,19 @@ namespace Blog.Services
         public Guid Create(CreateBlogPostDto dto)
         {
             var blogPost = _mapper.Map<BlogPost>(dto);
+
+            foreach(ContentElement contentElement in blogPost.ContentElements)
+            {
+                contentElement.BlogPost = blogPost;    
+                contentElement.OrderInBlogPost = new OrderInBlogPost()
+                {
+                    PlaceInOrder = _dbContext.OrdersInBlogPosts.Count(),
+
+                    BlogPostId = blogPost.Id,
+                    BlogPost = blogPost
+                };
+
+            }
 
             _dbContext.BlogPosts.Add(blogPost);
             _dbContext.SaveChanges();

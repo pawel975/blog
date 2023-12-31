@@ -1,14 +1,17 @@
 ﻿using AutoMapper;
-using Blog.Entities;
 using Blog.Models;
+using Blog.Entities;
+using Blog.Entities.BlogPostContentEntities;
+using Humanizer;
 
 namespace Blog
 {
-    public class BlogMappingProfile: Profile
+    public class BlogMappingProfile : Profile
     {
         public BlogMappingProfile()
         {
             CreateMap<CreateBlogPostDto, BlogPost>();
         }
+    
     }
 }
