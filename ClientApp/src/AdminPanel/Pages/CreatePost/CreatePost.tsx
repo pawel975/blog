@@ -8,7 +8,27 @@ interface ErrorsObject {
   Title: string[];
   ShortDescription: string[];
   PrimaryImageSrc: string[];
-  BlogPostContent: string[];
+  ContentElements: string[];
+}
+
+// TODO: Move to separate file with content creating logic
+// enums and interfaces for created Content Elements
+enum BlogPostContentType {
+  PARAGRAPH,
+  HEADER,
+  CODE_BLOCK,
+  IMAGE,
+}
+// interface ContentElementsInterface {
+//   type?: BlogPostContentType;
+//   content?: String;
+// }
+
+interface FormDataInterface {
+  title: string;
+  shortDescription: string;
+  primaryImageSrc: string;
+  contentElements: string;
 }
 
 const CreatePost: React.FC = () => {
@@ -17,35 +37,30 @@ const CreatePost: React.FC = () => {
   const [title, setTitle] = useState<string | undefined>("");
   const [shortDescription, setShortDescription] = useState<string | undefined>("");
   const [primaryImageSrc, setPrimaryImageSrc] = useState<string>("");
-  const [blogPostContent, setBlogPostContent] = useState<string>("");
+  const [contentElements, setContentElements] = useState<string>("[]");
 
   const [errors, setErrors] = useState<ErrorsObject>({
     Title: [],
     ShortDescription: [],
     PrimaryImageSrc: [],
-    BlogPostContent: [],
+    ContentElements: [],
   });
 
   // TODO: change any
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    const formData: {
-      title: string;
-      shortDescription: string;
-      primaryImageSrc: string;
-      blogPostContent: string;
-    } = {
+    const formData: FormDataInterface = {
       title: title || "",
       shortDescription: shortDescription || "",
       primaryImageSrc: primaryImageSrc || "",
-      blogPostContent: blogPostContent || "",
+      contentElements: JSON.parse(contentElements) || "",
     };
 
     setErrors({
       Title: [],
       ShortDescription: [],
       PrimaryImageSrc: [],
-      BlogPostContent: [],
+      ContentElements: [],
     });
 
     axios
@@ -74,9 +89,9 @@ const CreatePost: React.FC = () => {
           Title: errorCategory.Title || [],
           ShortDescription: errorCategory.ShortDescription || [],
           PrimaryImageSrc: errorCategory.PrimaryImageSrc || [],
-          BlogPostContent: errorCategory.BlogPostContent || [],
+          ContentElements: errorCategory.ContentElements || [],
         });
-        console.error("Failed to create post:", error);
+        console.error("Failed to create post:", error.response.data.errors);
       });
   };
 
@@ -129,16 +144,16 @@ const CreatePost: React.FC = () => {
         </FormGroup>
 
         <FormGroup>
-          <Label for="blogPostContent">Blog post content</Label>
+          <Label for="blogPostContent">Content Elements</Label>
           <Input
-            invalid={Boolean(errors["BlogPostContent"].length > 0)}
+            invalid={Boolean(errors["ContentElements"].length > 0)}
             id="blogPostContent"
             type="textarea"
             name="blogPostContent"
-            value={blogPostContent}
-            onChange={(e) => setBlogPostContent(e.target.value)}
+            value={contentElements}
+            onChange={(e) => setContentElements(e.target.value)}
           />
-          {errors["BlogPostContent"].map((errorMsg, index) => (
+          {errors["ContentElements"].map((errorMsg, index) => (
             <FormFeedback key={index}>{errorMsg}</FormFeedback>
           ))}
         </FormGroup>
