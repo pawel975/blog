@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Blog.Migrations
 {
     [DbContext(typeof(BlogDbContext))]
-    [Migration("20231231093150_eraseFalseRequired2")]
-    partial class eraseFalseRequired2
+    [Migration("20240101212343_init5")]
+    partial class init5
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,31 +64,29 @@ namespace Blog.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OrderInBlogPostId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BlogPostId");
+                    b.ToTable("ContentElement");
 
-                    b.HasIndex("OrderInBlogPostId")
-                        .IsUnique();
+                    b.HasDiscriminator<string>("Discriminator").HasValue("ContentElement");
 
-                    b.ToTable("ContentElements");
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Blog.Entities.BlogPostContentEntities.OrderInBlogPost", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("BlogPostId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ContentElementId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("PlaceInOrder")
@@ -97,6 +95,9 @@ namespace Blog.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BlogPostId");
+
+                    b.HasIndex("ContentElementId")
+                        .IsUnique();
 
                     b.ToTable("OrdersInBlogPosts");
                 });
@@ -146,23 +147,52 @@ namespace Blog.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Blog.Entities.BlogPostContentEntities.ContentElement", b =>
+            modelBuilder.Entity("Blog.Entities.BlogPostContentEntities.CodeBlock", b =>
                 {
-                    b.HasOne("Blog.Entities.BlogPost", "BlogPost")
-                        .WithMany("ContentElements")
-                        .HasForeignKey("BlogPostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasBaseType("Blog.Entities.BlogPostContentEntities.ContentElement");
 
-                    b.HasOne("Blog.Entities.BlogPostContentEntities.OrderInBlogPost", "OrderInBlogPost")
-                        .WithOne("ContentElement")
-                        .HasForeignKey("Blog.Entities.BlogPostContentEntities.ContentElement", "OrderInBlogPostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Navigation("BlogPost");
+                    b.HasIndex("BlogPostId");
 
-                    b.Navigation("OrderInBlogPost");
+                    b.HasDiscriminator().HasValue("CodeBlock");
+                });
+
+            modelBuilder.Entity("Blog.Entities.BlogPostContentEntities.ContentImage", b =>
+                {
+                    b.HasBaseType("Blog.Entities.BlogPostContentEntities.ContentElement");
+
+                    b.Property<string>("AltText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasIndex("BlogPostId");
+
+                    b.HasDiscriminator().HasValue("ContentImage");
+                });
+
+            modelBuilder.Entity("Blog.Entities.BlogPostContentEntities.Header", b =>
+                {
+                    b.HasBaseType("Blog.Entities.BlogPostContentEntities.ContentElement");
+
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasIndex("BlogPostId");
+
+                    b.HasDiscriminator().HasValue("Header");
+                });
+
+            modelBuilder.Entity("Blog.Entities.BlogPostContentEntities.Paragraph", b =>
+                {
+                    b.HasBaseType("Blog.Entities.BlogPostContentEntities.ContentElement");
+
+                    b.HasIndex("BlogPostId");
+
+                    b.HasDiscriminator().HasValue("Paragraph");
                 });
 
             modelBuilder.Entity("Blog.Entities.BlogPostContentEntities.OrderInBlogPost", b =>
@@ -173,7 +203,15 @@ namespace Blog.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Blog.Entities.BlogPostContentEntities.ContentElement", "ContentElement")
+                        .WithOne("OrderInBlogPost")
+                        .HasForeignKey("Blog.Entities.BlogPostContentEntities.OrderInBlogPost", "ContentElementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("BlogPost");
+
+                    b.Navigation("ContentElement");
                 });
 
             modelBuilder.Entity("Blog.Entities.User", b =>
@@ -187,16 +225,66 @@ namespace Blog.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Blog.Entities.BlogPost", b =>
+            modelBuilder.Entity("Blog.Entities.BlogPostContentEntities.CodeBlock", b =>
                 {
-                    b.Navigation("ContentElements");
+                    b.HasOne("Blog.Entities.BlogPost", "BlogPost")
+                        .WithMany("CodeBlocks")
+                        .HasForeignKey("BlogPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("OrderInBlogPost");
+                    b.Navigation("BlogPost");
                 });
 
-            modelBuilder.Entity("Blog.Entities.BlogPostContentEntities.OrderInBlogPost", b =>
+            modelBuilder.Entity("Blog.Entities.BlogPostContentEntities.ContentImage", b =>
                 {
-                    b.Navigation("ContentElement")
+                    b.HasOne("Blog.Entities.BlogPost", "BlogPost")
+                        .WithMany("ContentImages")
+                        .HasForeignKey("BlogPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BlogPost");
+                });
+
+            modelBuilder.Entity("Blog.Entities.BlogPostContentEntities.Header", b =>
+                {
+                    b.HasOne("Blog.Entities.BlogPost", "BlogPost")
+                        .WithMany("Headers")
+                        .HasForeignKey("BlogPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BlogPost");
+                });
+
+            modelBuilder.Entity("Blog.Entities.BlogPostContentEntities.Paragraph", b =>
+                {
+                    b.HasOne("Blog.Entities.BlogPost", "BlogPost")
+                        .WithMany("Paragraphs")
+                        .HasForeignKey("BlogPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BlogPost");
+                });
+
+            modelBuilder.Entity("Blog.Entities.BlogPost", b =>
+                {
+                    b.Navigation("CodeBlocks");
+
+                    b.Navigation("ContentImages");
+
+                    b.Navigation("Headers");
+
+                    b.Navigation("OrderInBlogPost");
+
+                    b.Navigation("Paragraphs");
+                });
+
+            modelBuilder.Entity("Blog.Entities.BlogPostContentEntities.ContentElement", b =>
+                {
+                    b.Navigation("OrderInBlogPost")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618
