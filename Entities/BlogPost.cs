@@ -14,9 +14,14 @@ namespace Blog.Entities
         public string ShortDescription { get; set; }
         public string PrimaryImageSrc { get; set; }
         [Required]
-        public DateTime CreatedAt { get; set; }
-        // Connection with all BlogPost ContentElements
-        public virtual ICollection<ContentElement> ContentElements { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        // Connection with all BlogPost ContentElements types
+        public virtual ICollection<Paragraph> Paragraphs { get; set; } = new List<Paragraph>();
+        public virtual ICollection<Header> Headers { get; set; } = new List<Header>();
+        public virtual ICollection<CodeBlock> CodeBlocks { get; set; } = new List<CodeBlock>();
+        public virtual ICollection<ContentImage> ContentImages { get; set; } = new List<ContentImage>();
+
         // Connection with OrderInBlogPost
         public virtual ICollection<OrderInBlogPost> OrderInBlogPost { get; set; }
     }

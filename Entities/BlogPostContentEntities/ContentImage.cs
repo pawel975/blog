@@ -1,6 +1,6 @@
 ﻿namespace Blog.Entities.BlogPostContentEntities
 {
-    public class Image : ContentElement
+    public class ContentImage : ContentElement
     {
         public string AltText { get; set; }
     }

@@ -3,8 +3,10 @@ using Blog.Entities;
 using Blog.Entities.BlogPostContentEntities;
 using Blog.Exceptions;
 using Blog.Models;
+using Blog.Models.BlogPostContentModels;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using System.Reflection.PortableExecutable;
 
 namespace Blog.Services
 {
@@ -32,8 +34,6 @@ namespace Blog.Services
         {
             List<BlogPost> blogPosts = _dbContext.BlogPosts.ToList();
 
-            Console.WriteLine(blogPosts);
-
             return blogPosts;
         }
 
@@ -48,16 +48,104 @@ namespace Blog.Services
         {
             var blogPost = _mapper.Map<BlogPost>(dto);
 
-            foreach(ContentElement contentElement in blogPost.ContentElements)
+            // TODO: DELETE this when there will be better way to count PlaceInOrder
+            int currentPlaceInOrder = 0;
+
+            // Paragraphs Map
+            IEnumerable<ParagraphDto> paragraphsDtos = dto.Paragraphs;
+            List<Paragraph> paragraphs = new List<Paragraph>();
+
+            foreach (ParagraphDto paragraphDto in paragraphsDtos)
             {
-                contentElement.BlogPost = blogPost;    
-                contentElement.OrderInBlogPost = new OrderInBlogPost()
+                Paragraph paragraph = _mapper.Map<Paragraph>(paragraphDto);
+                paragraph.BlogPost = blogPost;
+                paragraph.OrderInBlogPost = new OrderInBlogPost()
                 {
-                    PlaceInOrder = _dbContext.OrdersInBlogPosts.Count(),
+                    //TODO: Place in order should be based on count of posts
+                    PlaceInOrder = currentPlaceInOrder++,
 
                     BlogPostId = blogPost.Id,
-                    BlogPost = blogPost
+                    BlogPost = blogPost,
+                    ContentElementId = paragraph.Id,
+                    ContentElement = paragraph
                 };
+
+                paragraphs.Add(paragraph);
+
+                _dbContext.OrdersInBlogPosts.Add(paragraph.OrderInBlogPost);
+            }
+
+            // Headers Map
+            IEnumerable<HeaderDto> headerDtos = dto.Headers;
+            List<Header> headers = new List<Header>();
+
+            foreach (HeaderDto headerDto in headerDtos)
+            {
+                Header header = _mapper.Map<Header>(headerDto);
+                header.BlogPost = blogPost;
+                header.OrderInBlogPost = new OrderInBlogPost()
+                {
+                    //TODO: Place in order should be based on count of posts
+                    PlaceInOrder = currentPlaceInOrder++,
+
+                    BlogPostId = blogPost.Id,
+                    BlogPost = blogPost,
+                    ContentElementId = header.Id,
+                    ContentElement = header
+                    
+                };
+
+                headers.Add(header);
+
+                _dbContext.OrdersInBlogPosts.Add(header.OrderInBlogPost);
+            }
+
+            // CodeBlock Map
+            IEnumerable<CodeBlockDto> codeblockDtos = dto.CodeBlocks;
+            List<CodeBlock> codeblocks = new List<CodeBlock>();
+
+            foreach (CodeBlockDto codeblockDto in codeblockDtos)
+            {
+                CodeBlock codeblock = _mapper.Map<CodeBlock>(codeblockDto);
+                codeblock.BlogPost = blogPost;
+                codeblock.OrderInBlogPost = new OrderInBlogPost()
+                {
+                    //TODO: Place in order should be based on count of posts
+                    PlaceInOrder = currentPlaceInOrder++,
+
+                    BlogPostId = blogPost.Id,
+                    BlogPost = blogPost,
+                    ContentElementId = codeblock.Id,
+                    ContentElement = codeblock
+                };
+
+                codeblocks.Add(codeblock);
+
+                _dbContext.OrdersInBlogPosts.Add(codeblock.OrderInBlogPost);
+            }
+
+            // ContentImage Map
+            IEnumerable<ContentImageDto> contentImageDtos = dto.ContentImages;
+            List<ContentImage> contentImages = new List<ContentImage>();
+
+            foreach (ContentImageDto contentImageDto in contentImageDtos)
+            {
+                ContentImage contentImage = _mapper.Map<ContentImage>(contentImageDto);
+                contentImage.BlogPost = blogPost;
+                contentImage.OrderInBlogPost = new OrderInBlogPost()
+                {
+                    //TODO: Place in order should be based on count of posts
+                    PlaceInOrder = currentPlaceInOrder++,
+
+                    BlogPostId = blogPost.Id,
+                    BlogPost = blogPost,
+                    ContentElementId = contentImage.Id,
+                    ContentElement = contentImage
+                };
+
+                contentImages.Add(contentImage);
+
+                _dbContext.OrdersInBlogPosts.Add(contentImage.OrderInBlogPost);
 
             }
 

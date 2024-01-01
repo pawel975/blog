@@ -5,7 +5,7 @@
 namespace Blog.Migrations
 {
     /// <inheritdoc />
-    public partial class eraseFalseRequired2 : Migration
+    public partial class init5 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

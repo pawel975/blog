@@ -2,5 +2,6 @@
 {
     public class Header : ContentElement
     {
+        public string Level { get; set; }
     }
 }
