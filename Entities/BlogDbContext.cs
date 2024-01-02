@@ -17,7 +17,6 @@ namespace Blog.Entities
         public DbSet<ContentImage> ContentImages { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
-        public object ContentElements { get; internal set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

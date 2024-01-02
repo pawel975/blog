@@ -24,7 +24,7 @@ namespace Blog.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<BlogPost>> GetAll()
+        public ActionResult<IEnumerable<BlogPostDto>> GetAll()
         {
             var blogPosts = _blogPostService.GetAllBlogPosts();
 
@@ -32,7 +32,7 @@ namespace Blog.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<BlogPost> Get([FromRoute] Guid id)
+        public ActionResult<BlogPostDto> Get([FromRoute] Guid id)
         {
             var blogPost = _blogPostService.GetBlogPostById(id);
 

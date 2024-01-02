@@ -13,13 +13,13 @@ namespace Blog.Models
         public string ShortDescription { get; set; }
         public string PrimaryImageSrc { get; set; }
         [Required]
-        public virtual ICollection<ParagraphDto> Paragraphs { get; set; } = new List<ParagraphDto>();
+        public List<ParagraphDto> Paragraphs { get; set; }
         [Required]
-        public virtual ICollection<HeaderDto> Headers { get; set; } = new List<HeaderDto>();
+        public List<HeaderDto> Headers { get; set; } 
         [Required]
-        public virtual ICollection<CodeBlockDto> CodeBlocks { get; set; } = new List<CodeBlockDto>();
+        public List<CodeBlockDto> CodeBlocks { get; set; } 
         [Required]
-        public virtual ICollection<ContentImageDto> ContentImages { get; set; } = new List<ContentImageDto>();
+        public List<ContentImageDto> ContentImages { get; set; } 
 
     }
 }
