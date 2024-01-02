@@ -14,8 +14,8 @@ namespace Blog.Services
     {
         Guid Create(CreateBlogPostDto dto);
         void Delete(Guid blogPostId);
-        List<BlogPost> GetAllBlogPosts();
-        BlogPost GetBlogPostById(Guid id);
+        List<BlogPostDto> GetAllBlogPosts();
+        BlogPostDto GetBlogPostById(Guid id);
         void Update(Guid blogPostId, UpdateBlogPostDto dto);
     }
 
@@ -30,18 +30,24 @@ namespace Blog.Services
             _dbContext = dbContext;
         }
 
-        public List<BlogPost> GetAllBlogPosts()
+        public List<BlogPostDto> GetAllBlogPosts()
         {
-            List<BlogPost> blogPosts = _dbContext.BlogPosts.ToList();
+            List<BlogPost> blogPosts = _dbContext.BlogPosts
+                .Include(bp => bp.Paragraphs)
+                .Include(bp => bp.Headers)
+                .Include(bp => bp.CodeBlocks)
+                .Include(bp => bp.ContentImages)
+                .ToList();
 
-            return blogPosts;
+            List<BlogPostDto> blogPostsDtos = _mapper.Map<List<BlogPostDto>>(blogPosts);
+            return blogPostsDtos;
         }
 
-        public BlogPost GetBlogPostById(Guid id)
+        public BlogPostDto GetBlogPostById(Guid id)
         {
-            BlogPost blogPost = _dbContext.BlogPosts.FirstOrDefault(bp => bp.Id == id);
+            var blogPost = _dbContext.BlogPosts.FirstOrDefault(bp => bp.Id == id);
 
-            return blogPost is null ? throw new NotFoundException("Blog post not found") : blogPost;
+            return blogPost is null ? throw new NotFoundException("Blog post not found") : _mapper.Map<BlogPostDto>(blogPost);
         }
 
         public Guid Create(CreateBlogPostDto dto)
@@ -51,10 +57,17 @@ namespace Blog.Services
             // TODO: DELETE this when there will be better way to count PlaceInOrder
             int currentPlaceInOrder = 0;
 
-            // Paragraphs Map
             IEnumerable<ParagraphDto> paragraphsDtos = dto.Paragraphs;
-            List<Paragraph> paragraphs = new List<Paragraph>();
+            IEnumerable<HeaderDto> headerDtos = dto.Headers;
+            IEnumerable<ContentImageDto> contentImageDtos = dto.ContentImages;
+            IEnumerable<CodeBlockDto> codeblockDtos = dto.CodeBlocks;
 
+            List<Paragraph> paragraphs = new List<Paragraph>();
+            List<Header> headers = new List<Header>();
+            List<ContentImage> contentImages = new List<ContentImage>(); 
+            List<CodeBlock> codeblocks = new List<CodeBlock>();
+
+            // Paragraphs Map
             foreach (ParagraphDto paragraphDto in paragraphsDtos)
             {
                 Paragraph paragraph = _mapper.Map<Paragraph>(paragraphDto);
@@ -76,9 +89,6 @@ namespace Blog.Services
             }
 
             // Headers Map
-            IEnumerable<HeaderDto> headerDtos = dto.Headers;
-            List<Header> headers = new List<Header>();
-
             foreach (HeaderDto headerDto in headerDtos)
             {
                 Header header = _mapper.Map<Header>(headerDto);
@@ -101,9 +111,6 @@ namespace Blog.Services
             }
 
             // CodeBlock Map
-            IEnumerable<CodeBlockDto> codeblockDtos = dto.CodeBlocks;
-            List<CodeBlock> codeblocks = new List<CodeBlock>();
-
             foreach (CodeBlockDto codeblockDto in codeblockDtos)
             {
                 CodeBlock codeblock = _mapper.Map<CodeBlock>(codeblockDto);
@@ -125,9 +132,6 @@ namespace Blog.Services
             }
 
             // ContentImage Map
-            IEnumerable<ContentImageDto> contentImageDtos = dto.ContentImages;
-            List<ContentImage> contentImages = new List<ContentImage>();
-
             foreach (ContentImageDto contentImageDto in contentImageDtos)
             {
                 ContentImage contentImage = _mapper.Map<ContentImage>(contentImageDto);
@@ -148,6 +152,11 @@ namespace Blog.Services
                 _dbContext.OrdersInBlogPosts.Add(contentImage.OrderInBlogPost);
 
             }
+
+            blogPost.Paragraphs.AddRange(paragraphs);
+            blogPost.Headers.AddRange(headers);
+            blogPost.CodeBlocks.AddRange(codeblocks);
+            blogPost.ContentImages.AddRange(contentImages);
 
             _dbContext.BlogPosts.Add(blogPost);
             _dbContext.SaveChanges();

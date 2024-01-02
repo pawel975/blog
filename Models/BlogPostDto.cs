@@ -1,11 +1,11 @@
 ﻿
 using Blog.Entities.BlogPostContentEntities;
+using Blog.Models.BlogPostContentModels;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Blog.Entities
 {
-    public class BlogPost
+    public class BlogPostDto
     {
         public Guid Id { get; set; }
         [Required]
@@ -17,12 +17,12 @@ namespace Blog.Entities
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         // Connection with all BlogPost ContentElements types
-        public List<Paragraph> Paragraphs { get; set; }
-        public List<Header> Headers { get; set; } 
-        public List<CodeBlock> CodeBlocks { get; set; } 
-        public List<ContentImage> ContentImages { get; set; }   
+        public List<ParagraphDto> Paragraphs { get; set; }
+        public List<HeaderDto> Headers { get; set; } 
+        public List<CodeBlockDto> CodeBlocks { get; set; } 
+        public List<ContentImageDto> ContentImages { get; set; } 
 
         // Connection with OrderInBlogPost
-        public List<OrderInBlogPost> OrderInBlogPost { get; set; }
+        //public List<OrderInBlogPost> OrderInBlogPost { get; set; }
     }
 }
