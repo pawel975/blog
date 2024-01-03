@@ -3,6 +3,7 @@ import ActionButtons from "../ActionButtons/ActionButtons";
 import { useNavigate } from "react-router-dom";
 import "./PostsTable.css";
 import formatTableCellValue from "./helpers/formatTableCellValue";
+import isCellValueObject from "./helpers/isCellValueObject";
 
 interface PostsTableInterface {
   posts: any[];
@@ -21,10 +22,6 @@ const PostsTable: React.FC<PostsTableInterface> = ({ posts, setPosts }) => {
 
   function handleEditPostWithID(id: number): void {
     navigate(`/admin-panel/posts/${id}/edit`);
-  }
-
-  function isCellValueObject(val: any): boolean {
-    return typeof val === "object";
   }
 
   const TableHeadings =

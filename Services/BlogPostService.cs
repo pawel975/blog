@@ -74,7 +74,6 @@ namespace Blog.Services
                 paragraph.BlogPost = blogPost;
                 paragraph.OrderInBlogPost = new OrderInBlogPost()
                 {
-                    //TODO: Place in order should be based on count of posts
                     PlaceInOrder = currentPlaceInOrder++,
 
                     BlogPostId = blogPost.Id,
@@ -95,7 +94,6 @@ namespace Blog.Services
                 header.BlogPost = blogPost;
                 header.OrderInBlogPost = new OrderInBlogPost()
                 {
-                    //TODO: Place in order should be based on count of posts
                     PlaceInOrder = currentPlaceInOrder++,
 
                     BlogPostId = blogPost.Id,
@@ -117,7 +115,6 @@ namespace Blog.Services
                 codeblock.BlogPost = blogPost;
                 codeblock.OrderInBlogPost = new OrderInBlogPost()
                 {
-                    //TODO: Place in order should be based on count of posts
                     PlaceInOrder = currentPlaceInOrder++,
 
                     BlogPostId = blogPost.Id,
@@ -138,7 +135,6 @@ namespace Blog.Services
                 contentImage.BlogPost = blogPost;
                 contentImage.OrderInBlogPost = new OrderInBlogPost()
                 {
-                    //TODO: Place in order should be based on count of posts
                     PlaceInOrder = currentPlaceInOrder++,
 
                     BlogPostId = blogPost.Id,

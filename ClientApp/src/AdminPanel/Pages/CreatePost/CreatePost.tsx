@@ -1,7 +1,20 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Layout from "../../Layout/Layout";
-import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
+import {
+  Button,
+  ButtonGroup,
+  ButtonToolbar,
+  Card,
+  CardBody,
+  Collapse,
+  Form,
+  FormFeedback,
+  FormGroup,
+  Input,
+  Label,
+  Row,
+} from "reactstrap";
 import { useNavigate } from "react-router-dom";
 
 interface ErrorsObject {
@@ -11,33 +24,31 @@ interface ErrorsObject {
   ContentElements: string[];
 }
 
-// TODO: Move to separate file with content creating logic
-// enums and interfaces for created Content Elements
-enum BlogPostContentType {
-  PARAGRAPH,
-  HEADER,
-  CODE_BLOCK,
-  IMAGE,
-}
-// interface ContentElementsInterface {
-//   type?: BlogPostContentType;
-//   content?: String;
-// }
-
-interface FormDataInterface {
+interface FormData {
   title: string;
   shortDescription: string;
   primaryImageSrc: string;
-  contentElements: string;
+  contentElements: ContentElementToCreate[];
 }
+
+type ContentElementToCreate = Paragraph | Header | CodeBlock | ContentImage;
 
 const CreatePost: React.FC = () => {
   const navigate = useNavigate();
 
-  const [title, setTitle] = useState<string | undefined>("");
-  const [shortDescription, setShortDescription] = useState<string | undefined>("");
+  const [title, setTitle] = useState<string>("");
+  const [shortDescription, setShortDescription] = useState<string>("");
   const [primaryImageSrc, setPrimaryImageSrc] = useState<string>("");
-  const [contentElements, setContentElements] = useState<string>("[]");
+  const [contentElements, setContentElements] = useState<ContentElementToCreate[]>([
+    {
+      content: "",
+    },
+    {
+      content: "",
+      level: "h2",
+      language: "js",
+    },
+  ]);
 
   const [errors, setErrors] = useState<ErrorsObject>({
     Title: [],
@@ -49,11 +60,11 @@ const CreatePost: React.FC = () => {
   // TODO: change any
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    const formData: FormDataInterface = {
+    const formData: FormData = {
       title: title || "",
       shortDescription: shortDescription || "",
       primaryImageSrc: primaryImageSrc || "",
-      contentElements: JSON.parse(contentElements) || "",
+      contentElements: contentElements || [],
     };
 
     setErrors({
@@ -94,6 +105,10 @@ const CreatePost: React.FC = () => {
         console.error("Failed to create post:", error.response.data.errors);
       });
   };
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggle = () => setIsOpen(!isOpen);
 
   return (
     <Layout header="Create Post">
@@ -143,7 +158,30 @@ const CreatePost: React.FC = () => {
           ))}
         </FormGroup>
 
-        <FormGroup>
+        {/* Form for Adding content elements */}
+        <Form>
+          <Label for="contentElements">Add elements to post</Label>
+          <Row>
+            <ButtonToolbar>
+              <ButtonGroup>
+                <Button onClick={toggle}>Header</Button>
+                <Button onClick={toggle}>Paragraph</Button>
+                <Button onClick={toggle}>Code</Button>
+                <Button onClick={toggle}>Image</Button>
+              </ButtonGroup>
+            </ButtonToolbar>
+            <Collapse isOpen={isOpen}>
+              {/* TODO: Make here form to handle elements params, based on choosen element type */}
+              <Card>
+                <CardBody>
+                  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil
+                  anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                </CardBody>
+              </Card>
+            </Collapse>
+          </Row>
+        </Form>
+        {/* <FormGroup>
           <Label for="blogPostContent">Content Elements</Label>
           <Input
             invalid={Boolean(errors["ContentElements"].length > 0)}
@@ -156,8 +194,8 @@ const CreatePost: React.FC = () => {
           {errors["ContentElements"].map((errorMsg, index) => (
             <FormFeedback key={index}>{errorMsg}</FormFeedback>
           ))}
-        </FormGroup>
-        <Button color="primary">Create</Button>
+        </FormGroup> */}
+        <Button color="primary">Create Post</Button>
       </Form>
     </Layout>
   );
