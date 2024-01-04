@@ -1,27 +1,21 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Layout from "../../Layout/Layout";
-import {
-  Button,
-  ButtonGroup,
-  ButtonToolbar,
-  Card,
-  CardBody,
-  Collapse,
-  Form,
-  FormFeedback,
-  FormGroup,
-  Input,
-  Label,
-  Row,
-} from "reactstrap";
+import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 import { useNavigate } from "react-router-dom";
+import { BlogPostContentElementType, CodeBlock, ContentImage, Header, Paragraph } from "../../../common/types";
+import AddElementForm from "./Components/AddElementForm";
 
 interface ErrorsObject {
   Title: string[];
   ShortDescription: string[];
   PrimaryImageSrc: string[];
-  ContentElements: string[];
+  ContentElements: {
+    Paragraph: string[];
+    Header: string[];
+    CodeBlock: string[];
+    ContentImage: string[];
+  };
 }
 
 interface FormData {
@@ -39,22 +33,18 @@ const CreatePost: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [shortDescription, setShortDescription] = useState<string>("");
   const [primaryImageSrc, setPrimaryImageSrc] = useState<string>("");
-  const [contentElements, setContentElements] = useState<ContentElementToCreate[]>([
-    {
-      content: "",
-    },
-    {
-      content: "",
-      level: "h2",
-      language: "js",
-    },
-  ]);
+  const [contentElements, setContentElements] = useState<ContentElementToCreate[]>([]);
 
   const [errors, setErrors] = useState<ErrorsObject>({
     Title: [],
     ShortDescription: [],
     PrimaryImageSrc: [],
-    ContentElements: [],
+    ContentElements: {
+      Paragraph: [],
+      Header: [],
+      CodeBlock: [],
+      ContentImage: [],
+    },
   });
 
   // TODO: change any
@@ -67,12 +57,19 @@ const CreatePost: React.FC = () => {
       contentElements: contentElements || [],
     };
 
-    setErrors({
-      Title: [],
-      ShortDescription: [],
-      PrimaryImageSrc: [],
-      ContentElements: [],
-    });
+    // Erase previous errors
+    errors &&
+      setErrors({
+        Title: [],
+        ShortDescription: [],
+        PrimaryImageSrc: [],
+        ContentElements: {
+          Paragraph: [],
+          Header: [],
+          CodeBlock: [],
+          ContentImage: [],
+        },
+      });
 
     axios
       .post("/api/blogPosts", formData, {
@@ -95,20 +92,63 @@ const CreatePost: React.FC = () => {
           }
         });
 
+        interface NestedError {
+          index: number;
+          propName: string;
+          message: string;
+        }
+
+        type ParsedContentElementNestedErrors = {
+          Paragraph?: NestedError[];
+          Header?: NestedError[];
+          CodeBlock?: NestedError[];
+          ContentImage?: NestedError[];
+        };
+
+        const parseContentElementsNestedErrors = (errorsObj: Object): ParsedContentElementNestedErrors => {
+          const nestedErrorsCategories = Object.keys(errorsObj);
+
+          const nestedErrors = {
+            Paragraph: [],
+            Header: [],
+            CodeBlock: [],
+            ContentImage: [],
+          };
+
+          nestedErrorsCategories.map((cat) => {
+            const type = cat.match(/^[a-z]+/gi)![0];
+            const index = cat.match(/\[[0-9]\]/gi)![0];
+            const propName = cat.match(/[a-z]+$/gi)![0];
+
+            if (type && index && propName) {
+              console.error(`Invalid nested error categories parsing: 
+              type = ${type}
+              index = ${index}
+              propName = ${propName}
+              `);
+            }
+
+            if (type === BlogPostContentElementType.PARAGRAPH) nestedErrors.Paragraph.push({ type, index, propName });
+          });
+
+          return nestedErrors;
+        };
+
         setErrors({
           ...errors,
           Title: errorCategory.Title || [],
           ShortDescription: errorCategory.ShortDescription || [],
           PrimaryImageSrc: errorCategory.PrimaryImageSrc || [],
-          ContentElements: errorCategory.ContentElements || [],
+          ContentElements: {
+            Paragraph: errorCategory.Paragraph || errorCategory.map((errCat: any) => errCat.startsWith()),
+            Header: [],
+            CodeBlock: [],
+            ContentImage: [],
+          },
         });
         console.error("Failed to create post:", error.response.data.errors);
       });
   };
-
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggle = () => setIsOpen(!isOpen);
 
   return (
     <Layout header="Create Post">
@@ -158,43 +198,8 @@ const CreatePost: React.FC = () => {
           ))}
         </FormGroup>
 
-        {/* Form for Adding content elements */}
-        <Form>
-          <Label for="contentElements">Add elements to post</Label>
-          <Row>
-            <ButtonToolbar>
-              <ButtonGroup>
-                <Button onClick={toggle}>Header</Button>
-                <Button onClick={toggle}>Paragraph</Button>
-                <Button onClick={toggle}>Code</Button>
-                <Button onClick={toggle}>Image</Button>
-              </ButtonGroup>
-            </ButtonToolbar>
-            <Collapse isOpen={isOpen}>
-              {/* TODO: Make here form to handle elements params, based on choosen element type */}
-              <Card>
-                <CardBody>
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil
-                  anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-                </CardBody>
-              </Card>
-            </Collapse>
-          </Row>
-        </Form>
-        {/* <FormGroup>
-          <Label for="blogPostContent">Content Elements</Label>
-          <Input
-            invalid={Boolean(errors["ContentElements"].length > 0)}
-            id="blogPostContent"
-            type="textarea"
-            name="blogPostContent"
-            value={contentElements}
-            onChange={(e) => setContentElements(e.target.value)}
-          />
-          {errors["ContentElements"].map((errorMsg, index) => (
-            <FormFeedback key={index}>{errorMsg}</FormFeedback>
-          ))}
-        </FormGroup> */}
+        <AddElementForm />
+
         <Button color="primary">Create Post</Button>
       </Form>
     </Layout>
