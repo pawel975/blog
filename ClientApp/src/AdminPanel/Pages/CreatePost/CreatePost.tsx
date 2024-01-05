@@ -11,10 +11,11 @@ interface ErrorsObject {
   ShortDescription: string[];
   PrimaryImageSrc: string[];
   ContentElements: {
-    Paragraph: string[];
-    Header: string[];
-    CodeBlock: string[];
-    ContentImage: string[];
+    // TODO: Change any
+    Paragraph: any;
+    Header: any;
+    CodeBlock: any;
+    ContentImage: any;
   };
 }
 
@@ -105,10 +106,12 @@ const CreatePost: React.FC = () => {
           ContentImage?: NestedError[];
         };
 
-        const parseContentElementsNestedErrors = (errorsObj: Object): ParsedContentElementNestedErrors => {
+        // Errors object is like {Header[0].Level : ["Error with Level"]}
+        // TODO: Test it
+        const parseContentElementsNestedErrors = (errorsObj: any): ParsedContentElementNestedErrors => {
           const nestedErrorsCategories = Object.keys(errorsObj);
 
-          const nestedErrors = {
+          const nestedErrors: any = {
             Paragraph: [],
             Header: [],
             CodeBlock: [],
@@ -117,36 +120,49 @@ const CreatePost: React.FC = () => {
 
           nestedErrorsCategories.map((cat) => {
             const type = cat.match(/^[a-z]+/gi)![0];
-            const index = cat.match(/\[[0-9]\]/gi)![0];
+            const index = cat.match(/\[[0-9]\]/gi)![0] as unknown as number;
             const propName = cat.match(/[a-z]+$/gi)![0];
 
-            if (type && index && propName) {
-              console.error(`Invalid nested error categories parsing: 
+            if (!type || index <= 0 || index === null || !propName) {
+              throw new Error(`Invalid nested error categories parsing: 
               type = ${type}
               index = ${index}
               propName = ${propName}
               `);
             }
 
-            if (type === BlogPostContentElementType.PARAGRAPH) nestedErrors.Paragraph.push({ type, index, propName });
+            const nestedSingleError = { index: index, propName: propName, message: errorCategory[errorsObj] };
+            if (type === BlogPostContentElementType.PARAGRAPH) nestedErrors.Paragraph.push(nestedSingleError);
           });
 
           return nestedErrors;
         };
 
-        setErrors({
-          ...errors,
-          Title: errorCategory.Title || [],
-          ShortDescription: errorCategory.ShortDescription || [],
-          PrimaryImageSrc: errorCategory.PrimaryImageSrc || [],
-          ContentElements: {
-            Paragraph: errorCategory.Paragraph || errorCategory.map((errCat: any) => errCat.startsWith()),
-            Header: [],
-            CodeBlock: [],
-            ContentImage: [],
-          },
-        });
-        console.error("Failed to create post:", error.response.data.errors);
+        try {
+          setErrors({
+            ...errors,
+            Title: errorCategory.Title || [],
+            ShortDescription: errorCategory.ShortDescription || [],
+            PrimaryImageSrc: errorCategory.PrimaryImageSrc || [],
+            ContentElements: {
+              Paragraph: errorCategory.Paragraph
+                ? [errorCategory.Paragraph, parseContentElementsNestedErrors(errorCategory).Paragraph]
+                : parseContentElementsNestedErrors(errorCategory).Paragraph,
+              Header: errorCategory.Header
+                ? [errorCategory.Header, parseContentElementsNestedErrors(errorCategory).Header]
+                : parseContentElementsNestedErrors(errorCategory).Header,
+              CodeBlock: errorCategory.CodeBlock
+                ? [errorCategory.CodeBlock, parseContentElementsNestedErrors(errorCategory).CodeBlock]
+                : parseContentElementsNestedErrors(errorCategory).CodeBlock,
+              ContentImage: errorCategory.ContentImage
+                ? [errorCategory.ContentImage, parseContentElementsNestedErrors(errorCategory).ContentImage]
+                : parseContentElementsNestedErrors(errorCategory).ContentImage,
+            },
+          });
+          console.error("Failed to create post:", error.response.data.errors);
+        } catch (error: any) {
+          console.error("Cannot set errors state: \n error.message");
+        }
       });
   };
 
