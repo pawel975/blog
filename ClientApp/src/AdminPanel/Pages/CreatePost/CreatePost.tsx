@@ -3,8 +3,9 @@ import axios from "axios";
 import Layout from "../../Layout/Layout";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 import { useNavigate } from "react-router-dom";
-import { BlogPostContentElementType, CodeBlock, ContentImage, Header, Paragraph } from "../../../common/types";
+import { CodeBlock, ContentImage, Header, Paragraph } from "../../../common/types";
 import AddElementForm from "./Components/AddElementForm";
+import parseContentElementsNestedErrors from "./helpers/parseContentElementsNestedErrors";
 
 interface ErrorsObject {
   Title: string[];
@@ -23,7 +24,6 @@ interface FormData {
   title: string;
   shortDescription: string;
   primaryImageSrc: string;
-  contentElements: ContentElementToCreate[];
 }
 
 type ContentElementToCreate = Paragraph | Header | CodeBlock | ContentImage;
@@ -55,7 +55,6 @@ const CreatePost: React.FC = () => {
       title: title || "",
       shortDescription: shortDescription || "",
       primaryImageSrc: primaryImageSrc || "",
-      contentElements: contentElements || [],
     };
 
     // Erase previous errors
@@ -83,85 +82,41 @@ const CreatePost: React.FC = () => {
         navigate("/admin-panel/posts");
       })
       .catch((error) => {
-        const errorCategory = error.response.data.errors;
+        const errorCategories = error.response.data.errors;
 
         // TODO: Create helper function based on this code
         // Check if there are any errors from API that are not handled
-        Object.keys(errorCategory).forEach((category) => {
+        Object.keys(errorCategories).forEach((category) => {
           if (!Object.keys(errors).includes(category)) {
             console.error(`Not handled category of error from API, error category - ${category}`);
           }
         });
 
-        interface NestedError {
-          index: number;
-          propName: string;
-          message: string;
-        }
-
-        type ParsedContentElementNestedErrors = {
-          Paragraph?: NestedError[];
-          Header?: NestedError[];
-          CodeBlock?: NestedError[];
-          ContentImage?: NestedError[];
-        };
-
-        // Errors object is like {Header[0].Level : ["Error with Level"]}
-        // TODO: Test it
-        const parseContentElementsNestedErrors = (errorsObj: any): ParsedContentElementNestedErrors => {
-          const nestedErrorsCategories = Object.keys(errorsObj);
-
-          const nestedErrors: any = {
-            Paragraph: [],
-            Header: [],
-            CodeBlock: [],
-            ContentImage: [],
-          };
-
-          nestedErrorsCategories.map((cat) => {
-            const type = cat.match(/^[a-z]+/gi)![0];
-            const index = cat.match(/\[[0-9]\]/gi)![0] as unknown as number;
-            const propName = cat.match(/[a-z]+$/gi)![0];
-
-            if (!type || index <= 0 || index === null || !propName) {
-              throw new Error(`Invalid nested error categories parsing: 
-              type = ${type}
-              index = ${index}
-              propName = ${propName}
-              `);
-            }
-
-            const nestedSingleError = { index: index, propName: propName, message: errorCategory[errorsObj] };
-            if (type === BlogPostContentElementType.PARAGRAPH) nestedErrors.Paragraph.push(nestedSingleError);
-          });
-
-          return nestedErrors;
-        };
-
         try {
+          const parsedErrors = parseContentElementsNestedErrors(errorCategories);
+
+          console.log(parsedErrors, "parsedErrors");
           setErrors({
             ...errors,
-            Title: errorCategory.Title || [],
-            ShortDescription: errorCategory.ShortDescription || [],
-            PrimaryImageSrc: errorCategory.PrimaryImageSrc || [],
+            Title: errorCategories.Title || [],
+            ShortDescription: errorCategories.ShortDescription || [],
+            PrimaryImageSrc: errorCategories.PrimaryImageSrc || [],
             ContentElements: {
-              Paragraph: errorCategory.Paragraph
-                ? [errorCategory.Paragraph, parseContentElementsNestedErrors(errorCategory).Paragraph]
-                : parseContentElementsNestedErrors(errorCategory).Paragraph,
-              Header: errorCategory.Header
-                ? [errorCategory.Header, parseContentElementsNestedErrors(errorCategory).Header]
-                : parseContentElementsNestedErrors(errorCategory).Header,
-              CodeBlock: errorCategory.CodeBlock
-                ? [errorCategory.CodeBlock, parseContentElementsNestedErrors(errorCategory).CodeBlock]
-                : parseContentElementsNestedErrors(errorCategory).CodeBlock,
-              ContentImage: errorCategory.ContentImage
-                ? [errorCategory.ContentImage, parseContentElementsNestedErrors(errorCategory).ContentImage]
-                : parseContentElementsNestedErrors(errorCategory).ContentImage,
+              Paragraph: errorCategories.Paragraph
+                ? [errorCategories.Paragraph, parsedErrors.Paragraph]
+                : parsedErrors.Paragraph,
+              Header: errorCategories.Header ? [errorCategories.Header, parsedErrors.Header] : parsedErrors.Header,
+              CodeBlock: errorCategories.CodeBlock
+                ? [errorCategories.CodeBlock, parsedErrors.CodeBlock]
+                : parsedErrors.CodeBlock,
+              ContentImage: errorCategories.ContentImage
+                ? [errorCategories.ContentImage, parsedErrors.ContentImage]
+                : parsedErrors.ContentImage,
             },
           });
           console.error("Failed to create post:", error.response.data.errors);
         } catch (error: any) {
-          console.error("Cannot set errors state: \n error.message");
+          console.error("Cannot set errors state\n", error);
         }
       });
   };
@@ -214,10 +169,10 @@ const CreatePost: React.FC = () => {
           ))}
         </FormGroup>
 
-        <AddElementForm />
-
         <Button color="primary">Create Post</Button>
       </Form>
+      {/* TODO: Cannot nest forms, I need to add mechanism of sending*/}
+      <AddElementForm />
     </Layout>
   );
 };

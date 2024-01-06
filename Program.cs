@@ -20,11 +20,13 @@ builder.Services.AddDbContext<BlogDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IBlogPostService, BlogPostService>();
 
 // Validators
-builder.Services.AddControllers().AddFluentValidation();
+builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddScoped<IValidator<CreateBlogPostDto>, CreateBlogPostDtoValidator>();
 builder.Services.AddScoped<IValidator<UpdateBlogPostDto>, UpdateBlogPostDtoValidator>();
 var app = builder.Build();
@@ -36,6 +38,8 @@ var seeder = scope.ServiceProvider.GetRequiredService<BlogSeeder>();
 app.UseResponseCaching();
 seeder.Seed();
 
+app.UseSwagger();
+app.UseSwaggerUI();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
