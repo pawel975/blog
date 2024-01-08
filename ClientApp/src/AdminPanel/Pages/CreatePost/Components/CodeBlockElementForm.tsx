@@ -28,7 +28,11 @@ const CodeBlockElementForm: React.FC<CodeBlockElementFormProps> = ({ codeBlocksE
     if (codeBlocksErrors.length === 0) setCodeBlockState(initCodeBlockState);
   };
 
-  const allCodeBlockLanguages = codeBlockLanguages.map((lang) => <option value={lang}>{lang}</option>);
+  const allCodeBlockLanguages = codeBlockLanguages.map((lang) => (
+    <option key={lang} value={lang}>
+      {lang}
+    </option>
+  ));
 
   return (
     <Form onSubmit={handleSubmit}>

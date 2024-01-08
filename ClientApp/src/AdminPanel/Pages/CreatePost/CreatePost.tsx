@@ -12,7 +12,10 @@ interface FormData {
   title: string;
   shortDescription: string;
   primaryImageSrc: string;
-  contentElements: ContentElements;
+  paragraphs: Paragraph[];
+  headers: Header[];
+  codeBlocks: CodeBlock[];
+  contentImages: ContentImage[];
 }
 
 const initErrorState: ErrorsObject = {
@@ -53,7 +56,10 @@ const CreatePost: React.FC = () => {
       title: title || "",
       shortDescription: shortDescription || "",
       primaryImageSrc: primaryImageSrc || "",
-      contentElements: contentElements,
+      paragraphs: contentElements.paragraphs || [],
+      headers: contentElements.headers || [],
+      codeBlocks: contentElements.codeBlocks || [],
+      contentImages: contentElements.contentImages || [],
     };
 
     // Erase previous errors
@@ -74,16 +80,17 @@ const CreatePost: React.FC = () => {
 
         // TODO: Create helper function based on this code
         // Check if there are any errors from API that are not handled
-        Object.keys(errorCategories).forEach((category) => {
-          if (!Object.keys(errors).includes(category)) {
-            console.error(`Not handled category of error from API, error category - ${category}`);
-          }
-        });
+        errorCategories &&
+          Object.keys(errorCategories).forEach((category) => {
+            if (!Object.keys(errors).includes(category)) {
+              console.error(`Not handled category of error from API, error category - ${category}`);
+            }
+          });
 
         try {
           const parsedErrors = parseContentElementsNestedErrors(errorCategories);
           console.log(parsedErrors, "parsedErrors");
-          setErrors((prevState) => ({ ...prevState, parsedErrors }));
+          if (parsedErrors) setErrors((prevState) => ({ ...prevState, ...parsedErrors }));
 
           console.error("Failed to create post:", errorCategories);
         } catch (error: any) {
@@ -91,9 +98,6 @@ const CreatePost: React.FC = () => {
         }
       });
   };
-
-  console.log(contentElements);
-
   return (
     <Layout header="Create Post">
       {/* TODO: Move this form to separate file */}
@@ -108,7 +112,7 @@ const CreatePost: React.FC = () => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
-          {errors.Title.map((errorMsg, index) => (
+          {errors["Title"].map((errorMsg, index) => (
             <FormFeedback key={index}>{errorMsg}</FormFeedback>
           ))}
         </FormGroup>
