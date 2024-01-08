@@ -1,13 +1,19 @@
+export interface NestedError {
+  index: number;
+  propName: string;
+  messages: string[];
+}
+
 export interface ErrorsObject {
   Title: string[];
   ShortDescription: string[];
   PrimaryImageSrc: string[];
   ContentElements: {
     // TODO: Change any
-    Paragraphs: any;
-    Headers: any;
-    CodeBlocks: any;
-    ContentImages: any;
+    Paragraphs: NestedError[];
+    Headers: NestedError[];
+    CodeBlocks: NestedError[];
+    ContentImages: NestedError[];
   };
   Paragraphs: string[];
   Headers: string[];

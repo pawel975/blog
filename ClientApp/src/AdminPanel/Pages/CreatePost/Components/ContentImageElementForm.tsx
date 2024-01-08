@@ -55,7 +55,7 @@ const ContentImageElementForm: React.FC<ContentImageElementFormProps> = ({
           type="text"
           name="alt-text"
           value={contentImageState.altText}
-          onChange={(e) => setContentImageState((prevState) => ({ ...prevState, language: e.target.value }))}
+          onChange={(e) => setContentImageState((prevState) => ({ ...prevState, altText: e.target.value }))}
         />
         {contentImagesErrors.map((errorMsg, index) => (
           <FormFeedback key={index}>{errorMsg}</FormFeedback>
