@@ -33,7 +33,11 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({ headersErrors, se
     if (headersErrors.length === 0) setHeaderState(initHeaderState);
   };
 
-  const allHeadingLevelOptions = headingLevels.map((lvl) => <option value={lvl}>{lvl}</option>);
+  const allHeadingLevelOptions = headingLevels.map((lvl) => (
+    <option key={lvl} value={lvl}>
+      {lvl}
+    </option>
+  ));
 
   return (
     <Form onSubmit={handleSubmit}>
