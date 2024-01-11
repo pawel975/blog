@@ -21,8 +21,5 @@ namespace Blog.Entities
         public List<HeaderDto> Headers { get; set; } 
         public List<CodeBlockDto> CodeBlocks { get; set; } 
         public List<ContentImageDto> ContentImages { get; set; } 
-
-        // Connection with OrderInBlogPost
-        //public List<OrderInBlogPost> OrderInBlogPost { get; set; }
     }
 }
