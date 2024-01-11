@@ -54,9 +54,6 @@ namespace Blog.Services
         {
             var blogPost = _mapper.Map<BlogPost>(dto);
 
-            // TODO: DELETE this when there will be better way to count PlaceInOrder
-            int currentPlaceInOrder = 0;
-
             IEnumerable<ParagraphDto> paragraphsDtos = dto.Paragraphs;
             IEnumerable<HeaderDto> headerDtos = dto.Headers;
             IEnumerable<ContentImageDto> contentImageDtos = dto.ContentImages;
@@ -72,19 +69,8 @@ namespace Blog.Services
             {
                 Paragraph paragraph = _mapper.Map<Paragraph>(paragraphDto);
                 paragraph.BlogPost = blogPost;
-                paragraph.OrderInBlogPost = new OrderInBlogPost()
-                {
-                    PlaceInOrder = currentPlaceInOrder++,
-
-                    BlogPostId = blogPost.Id,
-                    BlogPost = blogPost,
-                    ContentElementId = paragraph.Id,
-                    ContentElement = paragraph
-                };
 
                 paragraphs.Add(paragraph);
-
-                _dbContext.OrdersInBlogPosts.Add(paragraph.OrderInBlogPost);
             }
 
             // Headers Map
@@ -92,20 +78,8 @@ namespace Blog.Services
             {
                 Header header = _mapper.Map<Header>(headerDto);
                 header.BlogPost = blogPost;
-                header.OrderInBlogPost = new OrderInBlogPost()
-                {
-                    PlaceInOrder = currentPlaceInOrder++,
-
-                    BlogPostId = blogPost.Id,
-                    BlogPost = blogPost,
-                    ContentElementId = header.Id,
-                    ContentElement = header
-                    
-                };
 
                 headers.Add(header);
-
-                _dbContext.OrdersInBlogPosts.Add(header.OrderInBlogPost);
             }
 
             // CodeBlock Map
@@ -113,19 +87,9 @@ namespace Blog.Services
             {
                 CodeBlock codeblock = _mapper.Map<CodeBlock>(codeblockDto);
                 codeblock.BlogPost = blogPost;
-                codeblock.OrderInBlogPost = new OrderInBlogPost()
-                {
-                    PlaceInOrder = currentPlaceInOrder++,
-
-                    BlogPostId = blogPost.Id,
-                    BlogPost = blogPost,
-                    ContentElementId = codeblock.Id,
-                    ContentElement = codeblock
-                };
 
                 codeblocks.Add(codeblock);
 
-                _dbContext.OrdersInBlogPosts.Add(codeblock.OrderInBlogPost);
             }
 
             // ContentImage Map
@@ -133,20 +97,8 @@ namespace Blog.Services
             {
                 ContentImage contentImage = _mapper.Map<ContentImage>(contentImageDto);
                 contentImage.BlogPost = blogPost;
-                contentImage.OrderInBlogPost = new OrderInBlogPost()
-                {
-                    PlaceInOrder = currentPlaceInOrder++,
-
-                    BlogPostId = blogPost.Id,
-                    BlogPost = blogPost,
-                    ContentElementId = contentImage.Id,
-                    ContentElement = contentImage
-                };
 
                 contentImages.Add(contentImage);
-
-                _dbContext.OrdersInBlogPosts.Add(contentImage.OrderInBlogPost);
-
             }
 
             blogPost.Paragraphs.AddRange(paragraphs);

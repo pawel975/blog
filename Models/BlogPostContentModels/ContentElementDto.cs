@@ -6,5 +6,7 @@ namespace Blog.Models.BlogPostContentModels
     {
         [Required]
         public string Content { get; set; }
+        [Required]
+        public int OrderInBlogPost { get; set; }
     }
 }

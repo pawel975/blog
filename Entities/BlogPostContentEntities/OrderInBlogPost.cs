@@ -8,7 +8,6 @@
         public Guid BlogPostId { get; set; }
         public virtual BlogPost BlogPost { get; set; }
         // Connection with ContentElement
-        // TODO: Possibly to delete/ was uncommented and worked
         public Guid ContentElementId { get; set; }
         public virtual ContentElement ContentElement { get; set; }
     }

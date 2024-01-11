@@ -10,13 +10,9 @@ namespace Blog.Entities.BlogPostContentEntities
         [Required]
         public string Content { get; set; }
         [Required]
-        //public string Type { get; set; }
+        public int OrderInBlogPost { get; set; }
         // Connection with BlogPost
         public Guid BlogPostId { get; set; }
         public virtual BlogPost BlogPost { get; set; }
-        // Connection With OrderInBlogPost
-        //public Guid OrderInBlogPostId { get; set; }
-        public virtual OrderInBlogPost OrderInBlogPost { get; set; }
-
     }
 }

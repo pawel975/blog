@@ -10,7 +10,6 @@ namespace Blog.Entities
         }
 
         public DbSet<BlogPost> BlogPosts { get; set; }
-        public DbSet<OrderInBlogPost> OrdersInBlogPosts { get; set; }
         public DbSet<Paragraph> Paragraphs { get; set; }
         public DbSet<Header> Headers { get; set; }
         public DbSet<CodeBlock> CodeBlocks { get; set; }

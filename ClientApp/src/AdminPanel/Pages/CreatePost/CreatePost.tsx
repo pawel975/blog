@@ -7,6 +7,7 @@ import { CodeBlock, ContentImage, Header, Paragraph } from "../../../common/type
 import AddElementForm from "./Components/AddElementForm";
 import parseContentElementsNestedErrors from "./helpers/parseContentElementsNestedErrors";
 import { ContentElements, ErrorsObject } from "./types";
+import PostElements from "./Components/PostElements";
 
 interface FormData {
   title: string;
@@ -101,7 +102,7 @@ const CreatePost: React.FC = () => {
   return (
     <Layout header="Create Post">
       {/* TODO: Move this form to separate file */}
-      <Form onSubmit={handleSubmit}>
+      <Form>
         <FormGroup>
           <Label for="title">Title</Label>
           <Input
@@ -112,7 +113,7 @@ const CreatePost: React.FC = () => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
-          {errors["Title"].map((errorMsg, index) => (
+          {errors.Title.map((errorMsg, index) => (
             <FormFeedback key={index}>{errorMsg}</FormFeedback>
           ))}
         </FormGroup>
@@ -146,11 +147,15 @@ const CreatePost: React.FC = () => {
             <FormFeedback key={index}>{errorMsg}</FormFeedback>
           ))}
         </FormGroup>
-
-        <Button color="primary">Create Post</Button>
       </Form>
 
       <AddElementForm errors={errors} contentElements={contentElements} setContentElements={setContentElements} />
+
+      <PostElements contentElements={contentElements} />
+
+      <Button onClick={handleSubmit} color="primary">
+        Create Post
+      </Button>
     </Layout>
   );
 };
