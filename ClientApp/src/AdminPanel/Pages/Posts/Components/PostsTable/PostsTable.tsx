@@ -3,6 +3,7 @@ import ActionButtons from "../ActionButtons/ActionButtons";
 import { useNavigate } from "react-router-dom";
 import "./PostsTable.css";
 import formatTableCellValue from "./helpers/formatTableCellValue";
+import isCellValueObject from "./helpers/isCellValueObject";
 
 interface PostsTableInterface {
   posts: any[];
@@ -23,7 +24,9 @@ const PostsTable: React.FC<PostsTableInterface> = ({ posts, setPosts }) => {
     navigate(`/admin-panel/posts/${id}/edit`);
   }
 
-  const TableHeadings = posts && posts.length > 0 ? Object.keys(posts[0]) : [];
+  const TableHeadings =
+    posts && posts.length > 0 ? Object.keys(posts[0]).filter((heading) => !isCellValueObject(posts[0][heading])) : [];
+
   const allTableHeadings = (
     <tr>
       {TableHeadings.map((heading, index) => (
@@ -35,9 +38,10 @@ const PostsTable: React.FC<PostsTableInterface> = ({ posts, setPosts }) => {
 
   const allPosts = posts.map((post: any) => (
     <tr key={post.id}>
-      {Object.keys(post).map((heading, index) => (
-        <td key={index}>{formatTableCellValue(post[heading])}</td>
-      ))}
+      {TableHeadings.map((heading, index) => {
+        const cellValue = post[heading];
+        return !isCellValueObject(cellValue) && <td key={index}>{formatTableCellValue(cellValue)}</td>;
+      })}
       <td>
         <ActionButtons postId={post.id} deleteHandler={handleDeletePostWithID} editHandler={handleEditPostWithID} />
       </td>
@@ -47,7 +51,7 @@ const PostsTable: React.FC<PostsTableInterface> = ({ posts, setPosts }) => {
   return (
     <>
       {posts && posts.length > 0 ? (
-        <Table className="posts-table" striped bordered hover>
+        <Table responsive className="posts-table" striped bordered hover>
           <thead>{allTableHeadings}</thead>
           <tbody>{allPosts}</tbody>
         </Table>

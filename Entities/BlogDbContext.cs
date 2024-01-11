@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Blog.Entities.BlogPostContentEntities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Entities
 {
@@ -7,9 +8,12 @@ namespace Blog.Entities
         public BlogDbContext(DbContextOptions options) : base(options)
         {
         }
-        public DbSet<BlogContentImage> BlogContentImages { get; set; }
 
         public DbSet<BlogPost> BlogPosts { get; set; }
+        public DbSet<Paragraph> Paragraphs { get; set; }
+        public DbSet<Header> Headers { get; set; }
+        public DbSet<CodeBlock> CodeBlocks { get; set; }
+        public DbSet<ContentImage> ContentImages { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
 
@@ -34,7 +38,6 @@ namespace Blog.Entities
             modelBuilder.Entity<User>()
                 .Property(r => r.LastName)
                 .IsRequired();
-
         }
 
     }

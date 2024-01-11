@@ -17,10 +17,6 @@ namespace Blog.Models.Validators
                 .MinimumLength(30)
                 .MaximumLength(200);
 
-            RuleFor(x => x.BlogPostContent)
-                .NotEmpty()
-                .MinimumLength(100)
-                .MaximumLength(10000);
         }
     }
 }

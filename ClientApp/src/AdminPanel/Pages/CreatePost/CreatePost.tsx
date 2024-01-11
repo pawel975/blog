@@ -3,50 +3,68 @@ import axios from "axios";
 import Layout from "../../Layout/Layout";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 import { useNavigate } from "react-router-dom";
+import { CodeBlock, ContentImage, Header, Paragraph } from "../../../common/types";
+import AddElementForm from "./Components/AddElementForm";
+import parseContentElementsNestedErrors from "./helpers/parseContentElementsNestedErrors";
+import { ContentElements, ErrorsObject } from "./types";
+import PostElements from "./Components/PostElements";
 
-interface ErrorsObject {
-  Title: string[];
-  ShortDescription: string[];
-  PrimaryImageSrc: string[];
-  BlogPostContent: string[];
+interface FormData {
+  title: string;
+  shortDescription: string;
+  primaryImageSrc: string;
+  paragraphs: Paragraph[];
+  headers: Header[];
+  codeBlocks: CodeBlock[];
+  contentImages: ContentImage[];
 }
+
+const initErrorState: ErrorsObject = {
+  Title: [],
+  ShortDescription: [],
+  PrimaryImageSrc: [],
+  ContentElements: {
+    Paragraphs: [],
+    Headers: [],
+    CodeBlocks: [],
+    ContentImages: [],
+  },
+  Paragraphs: [],
+  Headers: [],
+  CodeBlocks: [],
+  ContentImages: [],
+};
 
 const CreatePost: React.FC = () => {
   const navigate = useNavigate();
 
-  const [title, setTitle] = useState<string | undefined>("");
-  const [shortDescription, setShortDescription] = useState<string | undefined>("");
+  const [title, setTitle] = useState<string>("");
+  const [shortDescription, setShortDescription] = useState<string>("");
   const [primaryImageSrc, setPrimaryImageSrc] = useState<string>("");
-  const [blogPostContent, setBlogPostContent] = useState<string>("");
-
-  const [errors, setErrors] = useState<ErrorsObject>({
-    Title: [],
-    ShortDescription: [],
-    PrimaryImageSrc: [],
-    BlogPostContent: [],
+  const [contentElements, setContentElements] = useState<ContentElements>({
+    paragraphs: [],
+    headers: [],
+    codeBlocks: [],
+    contentImages: [],
   });
+
+  const [errors, setErrors] = useState<ErrorsObject>(initErrorState);
 
   // TODO: change any
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    const formData: {
-      title: string;
-      shortDescription: string;
-      primaryImageSrc: string;
-      blogPostContent: string;
-    } = {
+    const formData: FormData = {
       title: title || "",
       shortDescription: shortDescription || "",
       primaryImageSrc: primaryImageSrc || "",
-      blogPostContent: blogPostContent || "",
+      paragraphs: contentElements.paragraphs || [],
+      headers: contentElements.headers || [],
+      codeBlocks: contentElements.codeBlocks || [],
+      contentImages: contentElements.contentImages || [],
     };
 
-    setErrors({
-      Title: [],
-      ShortDescription: [],
-      PrimaryImageSrc: [],
-      BlogPostContent: [],
-    });
+    // Erase previous errors
+    errors && setErrors(initErrorState);
 
     axios
       .post("/api/blogPosts", formData, {
@@ -59,41 +77,43 @@ const CreatePost: React.FC = () => {
         navigate("/admin-panel/posts");
       })
       .catch((error) => {
-        const errorCategory = error.response.data.errors;
+        const errorCategories = error.response.data.errors;
 
         // TODO: Create helper function based on this code
         // Check if there are any errors from API that are not handled
-        Object.keys(errorCategory).forEach((category) => {
-          if (!Object.keys(errors).includes(category)) {
-            console.error(`Not handled category of error from API, error category - ${category}`);
-          }
-        });
+        errorCategories &&
+          Object.keys(errorCategories).forEach((category) => {
+            if (!Object.keys(errors).includes(category)) {
+              console.error(`Not handled category of error from API, error category - ${category}`);
+            }
+          });
 
-        setErrors({
-          ...errors,
-          Title: errorCategory.Title || [],
-          ShortDescription: errorCategory.ShortDescription || [],
-          PrimaryImageSrc: errorCategory.PrimaryImageSrc || [],
-          BlogPostContent: errorCategory.BlogPostContent || [],
-        });
-        console.error("Failed to create post:", error);
+        try {
+          const parsedErrors = parseContentElementsNestedErrors(errorCategories);
+          console.log(parsedErrors, "parsedErrors");
+          if (parsedErrors) setErrors((prevState) => ({ ...prevState, ...parsedErrors }));
+
+          console.error("Failed to create post:", errorCategories);
+        } catch (error: any) {
+          console.error("Cannot set errors state\n", error);
+        }
       });
   };
-
   return (
     <Layout header="Create Post">
-      <Form onSubmit={handleSubmit}>
+      {/* TODO: Move this form to separate file */}
+      <Form>
         <FormGroup>
           <Label for="title">Title</Label>
           <Input
-            invalid={Boolean(errors["Title"].length > 0)}
+            invalid={Boolean(errors.Title.length > 0)}
             id="title"
             type="text"
             name="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
-          {errors["Title"].map((errorMsg, index) => (
+          {errors.Title.map((errorMsg, index) => (
             <FormFeedback key={index}>{errorMsg}</FormFeedback>
           ))}
         </FormGroup>
@@ -101,14 +121,14 @@ const CreatePost: React.FC = () => {
         <FormGroup>
           <Label for="shortDescription">Short Description</Label>
           <Input
-            invalid={Boolean(errors["ShortDescription"].length > 0)}
+            invalid={Boolean(errors.ShortDescription.length > 0)}
             type="text"
             id="shortDescription"
             name="shortDescription"
             value={shortDescription}
             onChange={(e) => setShortDescription(e.target.value)}
           />
-          {errors["ShortDescription"].map((errorMsg, index) => (
+          {errors.ShortDescription.map((errorMsg, index) => (
             <FormFeedback key={index}>{errorMsg}</FormFeedback>
           ))}
         </FormGroup>
@@ -116,34 +136,26 @@ const CreatePost: React.FC = () => {
         <FormGroup>
           <Label for="primaryImageSrc">Primary Image Source</Label>
           <Input
-            invalid={Boolean(errors["PrimaryImageSrc"].length > 0)}
+            invalid={Boolean(errors.PrimaryImageSrc.length > 0)}
             id="primaryImageSrc"
             type="text"
             name="primaryImageSrc"
             value={primaryImageSrc}
             onChange={(e) => setPrimaryImageSrc(e.target.value)}
           />
-          {errors["PrimaryImageSrc"].map((errorMsg, index) => (
+          {errors.PrimaryImageSrc.map((errorMsg, index) => (
             <FormFeedback key={index}>{errorMsg}</FormFeedback>
           ))}
         </FormGroup>
-
-        <FormGroup>
-          <Label for="blogPostContent">Blog post content</Label>
-          <Input
-            invalid={Boolean(errors["BlogPostContent"].length > 0)}
-            id="blogPostContent"
-            type="textarea"
-            name="blogPostContent"
-            value={blogPostContent}
-            onChange={(e) => setBlogPostContent(e.target.value)}
-          />
-          {errors["BlogPostContent"].map((errorMsg, index) => (
-            <FormFeedback key={index}>{errorMsg}</FormFeedback>
-          ))}
-        </FormGroup>
-        <Button color="primary">Create</Button>
       </Form>
+
+      <AddElementForm errors={errors} contentElements={contentElements} setContentElements={setContentElements} />
+
+      <PostElements contentElements={contentElements} />
+
+      <Button onClick={handleSubmit} color="primary">
+        Create Post
+      </Button>
     </Layout>
   );
 };

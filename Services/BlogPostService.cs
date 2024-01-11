@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using Blog.Entities;
+using Blog.Entities.BlogPostContentEntities;
 using Blog.Exceptions;
 using Blog.Models;
+using Blog.Models.BlogPostContentModels;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using System.Reflection.PortableExecutable;
 
 namespace Blog.Services
 {
@@ -11,8 +14,8 @@ namespace Blog.Services
     {
         Guid Create(CreateBlogPostDto dto);
         void Delete(Guid blogPostId);
-        List<BlogPost> GetAllBlogPosts();
-        BlogPost GetBlogPostById(Guid id);
+        List<BlogPostDto> GetAllBlogPosts();
+        BlogPostDto GetBlogPostById(Guid id);
         void Update(Guid blogPostId, UpdateBlogPostDto dto);
     }
 
@@ -27,25 +30,81 @@ namespace Blog.Services
             _dbContext = dbContext;
         }
 
-        public List<BlogPost> GetAllBlogPosts()
+        public List<BlogPostDto> GetAllBlogPosts()
         {
-            List<BlogPost> blogPosts = _dbContext.BlogPosts.ToList();
+            List<BlogPost> blogPosts = _dbContext.BlogPosts
+                .Include(bp => bp.Paragraphs)
+                .Include(bp => bp.Headers)
+                .Include(bp => bp.CodeBlocks)
+                .Include(bp => bp.ContentImages)
+                .ToList();
 
-            Console.WriteLine(blogPosts);
-
-            return blogPosts;
+            List<BlogPostDto> blogPostsDtos = _mapper.Map<List<BlogPostDto>>(blogPosts);
+            return blogPostsDtos;
         }
 
-        public BlogPost GetBlogPostById(Guid id)
+        public BlogPostDto GetBlogPostById(Guid id)
         {
-            BlogPost blogPost = _dbContext.BlogPosts.FirstOrDefault(bp => bp.Id == id);
+            var blogPost = _dbContext.BlogPosts.FirstOrDefault(bp => bp.Id == id);
 
-            return blogPost is null ? throw new NotFoundException("Blog post not found") : blogPost;
+            return blogPost is null ? throw new NotFoundException("Blog post not found") : _mapper.Map<BlogPostDto>(blogPost);
         }
 
         public Guid Create(CreateBlogPostDto dto)
         {
             var blogPost = _mapper.Map<BlogPost>(dto);
+
+            IEnumerable<ParagraphDto> paragraphsDtos = dto.Paragraphs;
+            IEnumerable<HeaderDto> headerDtos = dto.Headers;
+            IEnumerable<ContentImageDto> contentImageDtos = dto.ContentImages;
+            IEnumerable<CodeBlockDto> codeblockDtos = dto.CodeBlocks;
+
+            List<Paragraph> paragraphs = new List<Paragraph>();
+            List<Header> headers = new List<Header>();
+            List<ContentImage> contentImages = new List<ContentImage>(); 
+            List<CodeBlock> codeblocks = new List<CodeBlock>();
+
+            // Paragraphs Map
+            foreach (ParagraphDto paragraphDto in paragraphsDtos)
+            {
+                Paragraph paragraph = _mapper.Map<Paragraph>(paragraphDto);
+                paragraph.BlogPost = blogPost;
+
+                paragraphs.Add(paragraph);
+            }
+
+            // Headers Map
+            foreach (HeaderDto headerDto in headerDtos)
+            {
+                Header header = _mapper.Map<Header>(headerDto);
+                header.BlogPost = blogPost;
+
+                headers.Add(header);
+            }
+
+            // CodeBlock Map
+            foreach (CodeBlockDto codeblockDto in codeblockDtos)
+            {
+                CodeBlock codeblock = _mapper.Map<CodeBlock>(codeblockDto);
+                codeblock.BlogPost = blogPost;
+
+                codeblocks.Add(codeblock);
+
+            }
+
+            // ContentImage Map
+            foreach (ContentImageDto contentImageDto in contentImageDtos)
+            {
+                ContentImage contentImage = _mapper.Map<ContentImage>(contentImageDto);
+                contentImage.BlogPost = blogPost;
+
+                contentImages.Add(contentImage);
+            }
+
+            blogPost.Paragraphs.AddRange(paragraphs);
+            blogPost.Headers.AddRange(headers);
+            blogPost.CodeBlocks.AddRange(codeblocks);
+            blogPost.ContentImages.AddRange(contentImages);
 
             _dbContext.BlogPosts.Add(blogPost);
             _dbContext.SaveChanges();

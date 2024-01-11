@@ -1,7 +1,7 @@
 import { Spinner } from "reactstrap";
 import Layout from "../../Layout/Layout";
-import PostsTable from "../../Components/PostsTable/PostsTable";
-import ErrorMessage from "../../Components/ErrorMessage/ErrorMessage";
+import PostsTable from "./Components/PostsTable/PostsTable";
+import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
 import useApiData from "../../../hooks/useApiData";
 import { useEffect, useState } from "react";
 
