@@ -6,8 +6,12 @@ using Blog.Models.Validators;
 using Blog.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +19,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<BlogSeeder>();
-builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddDbContext<BlogDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -23,12 +26,46 @@ builder.Services.AddDbContext<BlogDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Authentication
+var authenticationSettings = new AuthenticationSettings();
+builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
+
+builder.Services.AddAuthentication(option =>
+{
+    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+}).AddJwtBearer(cfg =>
+{
+    cfg.RequireHttpsMetadata = false; // TODO: Possibly change to true, so it will require HTTPS certificate
+    cfg.SaveToken = true;
+    cfg.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidIssuer = authenticationSettings.JwtIssuer, // Who delivers token
+        ValidAudience = authenticationSettings.JwtIssuer, // Who can access token
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)) // Generated key based on JwtKey
+    };
+});
+
+// Middlewares
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
+
+// Services for Controllers
 builder.Services.AddScoped<IBlogPostService, BlogPostService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 // Validators
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddScoped<IValidator<CreateBlogPostDto>, CreateBlogPostDtoValidator>();
 builder.Services.AddScoped<IValidator<UpdateBlogPostDto>, UpdateBlogPostDtoValidator>();
+builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
+
+// Other
+builder.Services.AddSingleton(authenticationSettings); // Enables usage of auth settings in app
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddHttpContextAccessor(); // Give access to current http request context
+
 var app = builder.Build();
 
 // Seed data
@@ -50,7 +87,11 @@ if (!app.Environment.IsDevelopment())
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
+// Must be used before routing
+app.UseAuthentication();
+
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 app.UseRouting();
 

@@ -15,6 +15,8 @@ namespace Blog
 
             CreateMap<CreateBlogPostDto, BlogPost>();
 
+            CreateMap<RegisterUserDto, User>();
+
             CreateMap<ContentElementDto, ContentElement>();
 
             CreateMap<ParagraphDto, Paragraph>();

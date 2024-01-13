@@ -8,12 +8,9 @@ namespace Blog.Entities
     public class BlogPost
     {
         public Guid Id { get; set; }
-        [Required]
         public string Title { get; set; }
-        [Required]
         public string ShortDescription { get; set; }
         public string PrimaryImageSrc { get; set; }
-        [Required]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         // Connection with all BlogPost ContentElements types

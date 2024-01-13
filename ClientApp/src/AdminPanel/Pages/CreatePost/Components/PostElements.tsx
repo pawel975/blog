@@ -8,9 +8,9 @@ interface PostElementsProps {
 const PostElements: React.FC<PostElementsProps> = ({ contentElements }) => {
   return (
     <CardBody>
-      {contentElements.map((element) => (
-        <Card></Card>
-      ))}
+      {/*{contentElements.map((element) => (*/}
+      {/*  <Card></Card>*/}
+      {/*))}*/}
     </CardBody>
   );
 };

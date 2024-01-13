@@ -19,14 +19,19 @@ namespace Blog.Middleware
             }
             catch (NotFoundException e)
             {
-                context.Response.StatusCode = 404;
+                context.Response.StatusCode = StatusCodes.Status404NotFound;
+                await context.Response.WriteAsync(e.Message);
+            }
+            catch (BadRequestException e)
+            {
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 await context.Response.WriteAsync(e.Message);
             }
             catch (Exception e) 
             {
                 _logger.LogError(e, e.Message);
 
-                context.Response.StatusCode = 500;
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 await context.Response.WriteAsync("Something went wrong");
             }
         }
