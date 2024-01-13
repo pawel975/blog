@@ -19,6 +19,14 @@ namespace Blog.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>()
+                .Property(u => u.Email)
+                .IsRequired();
+
+            modelBuilder.Entity<Role>()
+                .Property(r => r.Name)
+                .IsRequired();
+
             modelBuilder.Entity<BlogPost>()
                 .Property(bp => bp.Title)
                 .IsRequired();
