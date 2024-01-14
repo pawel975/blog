@@ -6,21 +6,33 @@ import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap"
 interface ContentImageElementFormProps {
   contentImagesErrors: string[];
   setContentElements: Function;
+  setElementOrderInBlogPost: Function;
 }
 
 const initContentImageState: ContentImage = {
   content: "",
   altText: "",
+  orderInBlogPost: 0,
 };
 
 const ContentImageElementForm: React.FC<ContentImageElementFormProps> = ({
   contentImagesErrors,
   setContentElements,
+  setElementOrderInBlogPost,
 }) => {
   const [contentImageState, setContentImageState] = useState<ContentImage>(initContentImageState);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+
+    // if (contentImageState.orderInBlogPost === 0) {
+    //   console.error("OrderInBlogPost must be more than 0");
+    // }
+
+    const stateCopy = contentImageState;
+    setElementOrderInBlogPost(stateCopy);
+    setContentImageState(stateCopy);
+
     setContentElements((prevState: ContentElements) => ({
       ...prevState,
       contentImages: [...prevState.contentImages, contentImageState],

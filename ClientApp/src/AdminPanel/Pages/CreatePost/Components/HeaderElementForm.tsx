@@ -11,20 +11,35 @@ interface HeaderElementFormProps {
 interface HeaderElementFormProps {
   headersErrors: string[];
   setContentElements: Function;
+  setElementOrderInBlogPost: Function;
 }
 
 const initHeaderState: Header = {
   content: "",
   level: "h1",
+  orderInBlogPost: 0,
 };
 
 const headingLevels: Header["level"][] = ["h1", "h2", "h3", "h4", "h5", "h6"];
 
-const HeaderElementForm: React.FC<HeaderElementFormProps> = ({ headersErrors, setContentElements }) => {
+const HeaderElementForm: React.FC<HeaderElementFormProps> = ({
+  headersErrors,
+  setContentElements,
+  setElementOrderInBlogPost,
+}) => {
   const [headerState, setHeaderState] = useState<Header>(initHeaderState);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+
+    // if (headerState.orderInBlogPost === 0) {
+    //   console.error("OrderInBlogPost must be more than 0");
+    // }
+
+    const stateCopy = headerState;
+    setElementOrderInBlogPost(stateCopy);
+    setHeaderState(stateCopy);
+
     setContentElements((prevState: ContentElements) => ({
       ...prevState,
       headers: [...prevState.headers, headerState],

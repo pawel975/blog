@@ -52,19 +52,20 @@ namespace Blog.Services
 
         public Guid Create(CreateBlogPostDto dto)
         {
+            // TODO: It might be possible to shorten those mappings for each element type
             var blogPost = _mapper.Map<BlogPost>(dto);
 
             IEnumerable<ParagraphDto> paragraphsDtos = dto.Paragraphs;
             IEnumerable<HeaderDto> headerDtos = dto.Headers;
-            IEnumerable<ContentImageDto> contentImageDtos = dto.ContentImages;
             IEnumerable<CodeBlockDto> codeblockDtos = dto.CodeBlocks;
+            IEnumerable<ContentImageDto> contentImageDtos = dto.ContentImages;
 
             List<Paragraph> paragraphs = new List<Paragraph>();
             List<Header> headers = new List<Header>();
-            List<ContentImage> contentImages = new List<ContentImage>(); 
             List<CodeBlock> codeblocks = new List<CodeBlock>();
+            List<ContentImage> contentImages = new List<ContentImage>(); 
 
-            // Paragraphs Map
+            // Paragraphs Maps
             foreach (ParagraphDto paragraphDto in paragraphsDtos)
             {
                 Paragraph paragraph = _mapper.Map<Paragraph>(paragraphDto);
@@ -105,6 +106,10 @@ namespace Blog.Services
             blogPost.Headers.AddRange(headers);
             blogPost.CodeBlocks.AddRange(codeblocks);
             blogPost.ContentImages.AddRange(contentImages);
+
+            // TODO: Validate here if there is correct ordering in elements,
+            // if places are not repeated and if last number equals elements count - 1
+            // Throw exception if it's 
 
             _dbContext.BlogPosts.Add(blogPost);
             _dbContext.SaveChanges();

@@ -64,7 +64,6 @@ builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator
 // Other
 builder.Services.AddSingleton(authenticationSettings); // Enables usage of auth settings in app
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-builder.Services.AddHttpContextAccessor(); // Give access to current http request context
 
 var app = builder.Build();
 

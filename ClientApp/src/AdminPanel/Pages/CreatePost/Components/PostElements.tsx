@@ -6,11 +6,19 @@ interface PostElementsProps {
 }
 
 const PostElements: React.FC<PostElementsProps> = ({ contentElements }) => {
+  const allContentElements = [
+    ...contentElements.paragraphs,
+    ...contentElements.headers,
+    ...contentElements.codeBlocks,
+    ...contentElements.contentImages,
+  ];
+
+  console.log(allContentElements);
   return (
     <CardBody>
-      {/*{contentElements.map((element) => (*/}
-      {/*  <Card></Card>*/}
-      {/*))}*/}
+      {allContentElements.map((element) => (
+        <Card>{element["content"]}</Card>
+      ))}
     </CardBody>
   );
 };

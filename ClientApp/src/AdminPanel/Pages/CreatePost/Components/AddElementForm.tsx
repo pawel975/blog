@@ -1,5 +1,5 @@
 import { Button, ButtonGroup, Card, CardBody, Collapse, Form, FormGroup, Label } from "reactstrap";
-import { BlogPostContentElementType } from "../../../../common/types";
+import { BlogPostContentElementType, CodeBlock, ContentImage, Header, Paragraph } from "../../../../common/types";
 import { useState } from "react";
 import CodeBlockElementForm from "./CodeBlockElementForm";
 import ContentImageElementForm from "./ContentImageElementForm";
@@ -14,7 +14,7 @@ interface AddElementFormProps {
   setContentElements: Function;
 }
 
-const AddElementForm: React.FC<AddElementFormProps> = ({ errors, setContentElements }) => {
+const AddElementForm: React.FC<AddElementFormProps> = ({ errors, contentElements, setContentElements }) => {
   const [isNewElementFormOpen, setIsNewElementFormOpen] = useState<boolean>(false);
   const [clickedNewElementType, setClickedNewElementType] = useState<string | undefined>();
 
@@ -28,17 +28,53 @@ const AddElementForm: React.FC<AddElementFormProps> = ({ errors, setContentEleme
     setClickedNewElementType(targetBtnType);
   };
 
+  const setElementOrderInBlogPost = (element: Paragraph | Header | CodeBlock | ContentImage) => {
+    let elementCount = 0;
+    const allCategories = Object.keys(contentElements);
+    console.log(allCategories);
+    allCategories.forEach((cat: string) => {
+      console.log(cat);
+      console.log(contentElements[cat]);
+      elementCount += contentElements[cat].length;
+    });
+
+    // Sets element order as a last one
+    element.orderInBlogPost = elementCount;
+  };
+
   const renderFormForElementType = (blogPostContentElementType: string) => {
     switch (blogPostContentElementType) {
       case BlogPostContentElementType.PARAGRAPH:
-        return <ParagraphElementForm paragraphsErrors={errors.Paragraphs} setContentElements={setContentElements} />;
+        return (
+          <ParagraphElementForm
+            paragraphsErrors={errors.Paragraphs}
+            setContentElements={setContentElements}
+            setElementOrderInBlogPost={setElementOrderInBlogPost}
+          />
+        );
       case BlogPostContentElementType.HEADER:
-        return <HeaderElementForm headersErrors={errors.Headers} setContentElements={setContentElements} />;
+        return (
+          <HeaderElementForm
+            headersErrors={errors.Headers}
+            setContentElements={setContentElements}
+            setElementOrderInBlogPost={setElementOrderInBlogPost}
+          />
+        );
       case BlogPostContentElementType.CODE_BLOCK:
-        return <CodeBlockElementForm codeBlocksErrors={errors.CodeBlocks} setContentElements={setContentElements} />;
+        return (
+          <CodeBlockElementForm
+            codeBlocksErrors={errors.CodeBlocks}
+            setContentElements={setContentElements}
+            setElementOrderInBlogPost={setElementOrderInBlogPost}
+          />
+        );
       case BlogPostContentElementType.CONTENT_IMAGE:
         return (
-          <ContentImageElementForm contentImagesErrors={errors.ContentImages} setContentElements={setContentElements} />
+          <ContentImageElementForm
+            contentImagesErrors={errors.ContentImages}
+            setContentElements={setContentElements}
+            setElementOrderInBlogPost={setElementOrderInBlogPost}
+          />
         );
       default:
         console.error(`There is no element type with name of - ${blogPostContentElementType}`);

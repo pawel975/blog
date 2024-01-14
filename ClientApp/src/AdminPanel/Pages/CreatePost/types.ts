@@ -1,3 +1,5 @@
+import { CodeBlock, ContentImage, Header, Paragraph } from "../../../common/types";
+
 export interface NestedError {
   index: number;
   propName: string;
@@ -22,8 +24,10 @@ export interface ErrorsObject {
 }
 
 export interface ContentElements {
-  paragraphs: [];
-  headers: [];
-  codeBlocks: [];
-  contentImages: [];
+  paragraphs: Paragraph[];
+  headers: Header[];
+  codeBlocks: CodeBlock[];
+  contentImages: ContentImage[];
+  // TODO: Not sure if i need to delete this
+  [key: string]: any;
 }

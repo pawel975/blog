@@ -6,17 +6,32 @@ import { ContentElements } from "../types";
 interface ParagraphElementFormProps {
   paragraphsErrors: string[];
   setContentElements: Function;
+  setElementOrderInBlogPost: Function;
 }
 
 const initParagraphState: Paragraph = {
   content: "",
+  orderInBlogPost: 0,
 };
 
-const ParagraphElementForm: React.FC<ParagraphElementFormProps> = ({ paragraphsErrors, setContentElements }) => {
+const ParagraphElementForm: React.FC<ParagraphElementFormProps> = ({
+  paragraphsErrors,
+  setContentElements,
+  setElementOrderInBlogPost,
+}) => {
   const [paragraphState, setParagraphState] = useState<Paragraph>(initParagraphState);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+
+    // if (paragraphState.orderInBlogPost === 0) {
+    //   console.error("OrderInBlogPost must be more than 0");
+    // }
+
+    const stateCopy = paragraphState;
+    setElementOrderInBlogPost(stateCopy);
+    setParagraphState(stateCopy);
+
     setContentElements((prevState: ContentElements) => ({
       ...prevState,
       paragraphs: [...prevState.paragraphs, paragraphState],

@@ -17,17 +17,33 @@ namespace Blog.Models.Validators
                 .MinimumLength(30)
                 .MaximumLength(200);
 
-            RuleFor(bp => bp.Paragraphs)
-                .NotEmpty();
+            RuleFor(bp => bp.Paragraphs).NotEmpty();
 
-            RuleFor(bp => bp.Headers)
-                .NotEmpty();
+            RuleForEach(bp => bp.Paragraphs).ChildRules(p =>
+            {
+                p.RuleFor(x => x.OrderInBlogPost).NotEmpty();
+            });
 
-            RuleFor(bp => bp.CodeBlocks)
-                .NotEmpty();
+            RuleFor(bp => bp.Headers).NotEmpty();
 
-            RuleFor(bp => bp.ContentImages)
-                .NotEmpty();
+            RuleForEach(bp => bp.Headers).ChildRules(p =>
+            {
+                p.RuleFor(x => x.OrderInBlogPost).NotEmpty();
+            });
+
+            RuleFor(bp => bp.CodeBlocks).NotEmpty();
+
+            RuleForEach(bp => bp.CodeBlocks).ChildRules(p =>
+            {
+                p.RuleFor(x => x.OrderInBlogPost).NotEmpty();
+            });
+
+            RuleFor(bp => bp.ContentImages).NotEmpty();
+
+            RuleForEach(bp => bp.ContentImages).ChildRules(p =>
+            {
+                p.RuleFor(x => x.OrderInBlogPost).NotEmpty();
+            });
         }
     }
 }
