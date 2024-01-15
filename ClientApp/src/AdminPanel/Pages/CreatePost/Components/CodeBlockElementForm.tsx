@@ -27,9 +27,9 @@ const CodeBlockElementForm: React.FC<CodeBlockElementFormProps> = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    // if (codeBlockState.orderInBlogPost === 0) {
-    //   console.error("OrderInBlogPost must be more than 0");
-    // }
+    if (codeBlockState.orderInBlogPost === 0) {
+      console.error("OrderInBlogPost must be more than 0");
+    }
 
     const stateCopy = codeBlockState;
     setElementOrderInBlogPost(stateCopy);

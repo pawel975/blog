@@ -12,8 +12,6 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements }) => {
     ...contentElements.codeBlocks,
     ...contentElements.contentImages,
   ];
-
-  console.log(allContentElements);
   return (
     <CardBody>
       {allContentElements.map((element) => (

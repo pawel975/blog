@@ -25,9 +25,9 @@ const ContentImageElementForm: React.FC<ContentImageElementFormProps> = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    // if (contentImageState.orderInBlogPost === 0) {
-    //   console.error("OrderInBlogPost must be more than 0");
-    // }
+    if (contentImageState.orderInBlogPost === 0) {
+      console.error("OrderInBlogPost must be more than 0");
+    }
 
     const stateCopy = contentImageState;
     setElementOrderInBlogPost(stateCopy);
