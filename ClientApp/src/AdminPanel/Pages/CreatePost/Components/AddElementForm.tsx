@@ -29,17 +29,14 @@ const AddElementForm: React.FC<AddElementFormProps> = ({ errors, contentElements
   };
 
   const setElementOrderInBlogPost = (element: Paragraph | Header | CodeBlock | ContentImage) => {
-    let elementCount = 0;
+    let elementOrder = 1;
     const allCategories = Object.keys(contentElements);
-    console.log(allCategories);
     allCategories.forEach((cat: string) => {
-      console.log(cat);
-      console.log(contentElements[cat]);
-      elementCount += contentElements[cat].length;
+      elementOrder += contentElements[cat].length;
     });
 
     // Sets element order as a last one
-    element.orderInBlogPost = elementCount;
+    element.orderInBlogPost = elementOrder;
   };
 
   const renderFormForElementType = (blogPostContentElementType: string) => {

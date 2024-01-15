@@ -24,9 +24,9 @@ const ParagraphElementForm: React.FC<ParagraphElementFormProps> = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    // if (paragraphState.orderInBlogPost === 0) {
-    //   console.error("OrderInBlogPost must be more than 0");
-    // }
+    if (paragraphState.orderInBlogPost === 0) {
+      console.error("OrderInBlogPost must be more than 0");
+    }
 
     const stateCopy = paragraphState;
     setElementOrderInBlogPost(stateCopy);

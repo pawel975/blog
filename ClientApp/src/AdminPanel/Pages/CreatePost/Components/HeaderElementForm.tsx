@@ -6,11 +6,6 @@ import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap"
 interface HeaderElementFormProps {
   headersErrors: string[];
   setContentElements: Function;
-}
-
-interface HeaderElementFormProps {
-  headersErrors: string[];
-  setContentElements: Function;
   setElementOrderInBlogPost: Function;
 }
 
@@ -32,9 +27,9 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    // if (headerState.orderInBlogPost === 0) {
-    //   console.error("OrderInBlogPost must be more than 0");
-    // }
+    if (headerState.orderInBlogPost === 0) {
+      console.error("OrderInBlogPost must be more than 0");
+    }
 
     const stateCopy = headerState;
     setElementOrderInBlogPost(stateCopy);

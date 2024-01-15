@@ -55,62 +55,6 @@ namespace Blog.Services
             // TODO: It might be possible to shorten those mappings for each element type
             var blogPost = _mapper.Map<BlogPost>(dto);
 
-            IEnumerable<ParagraphDto> paragraphsDtos = dto.Paragraphs;
-            IEnumerable<HeaderDto> headerDtos = dto.Headers;
-            IEnumerable<CodeBlockDto> codeblockDtos = dto.CodeBlocks;
-            IEnumerable<ContentImageDto> contentImageDtos = dto.ContentImages;
-
-            List<Paragraph> paragraphs = new List<Paragraph>();
-            List<Header> headers = new List<Header>();
-            List<CodeBlock> codeblocks = new List<CodeBlock>();
-            List<ContentImage> contentImages = new List<ContentImage>(); 
-
-            // Paragraphs Maps
-            foreach (ParagraphDto paragraphDto in paragraphsDtos)
-            {
-                Paragraph paragraph = _mapper.Map<Paragraph>(paragraphDto);
-                paragraph.BlogPost = blogPost;
-
-                paragraphs.Add(paragraph);
-            }
-
-            // Headers Map
-            foreach (HeaderDto headerDto in headerDtos)
-            {
-                Header header = _mapper.Map<Header>(headerDto);
-                header.BlogPost = blogPost;
-
-                headers.Add(header);
-            }
-
-            // CodeBlock Map
-            foreach (CodeBlockDto codeblockDto in codeblockDtos)
-            {
-                CodeBlock codeblock = _mapper.Map<CodeBlock>(codeblockDto);
-                codeblock.BlogPost = blogPost;
-
-                codeblocks.Add(codeblock);
-
-            }
-
-            // ContentImage Map
-            foreach (ContentImageDto contentImageDto in contentImageDtos)
-            {
-                ContentImage contentImage = _mapper.Map<ContentImage>(contentImageDto);
-                contentImage.BlogPost = blogPost;
-
-                contentImages.Add(contentImage);
-            }
-
-            blogPost.Paragraphs.AddRange(paragraphs);
-            blogPost.Headers.AddRange(headers);
-            blogPost.CodeBlocks.AddRange(codeblocks);
-            blogPost.ContentImages.AddRange(contentImages);
-
-            // TODO: Validate here if there is correct ordering in elements,
-            // if places are not repeated and if last number equals elements count - 1
-            // Throw exception if it's 
-
             _dbContext.BlogPosts.Add(blogPost);
             _dbContext.SaveChanges();
 
