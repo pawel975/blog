@@ -1,18 +1,20 @@
 import { useState } from "react";
-import { CodeBlock } from "../../../../common/types";
+import { CodeBlock, ContentImage, Header, Paragraph } from "../../../../common/types";
 import { ContentElements } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 
 interface CodeBlockElementFormProps {
   codeBlocksErrors: string[];
   setContentElements: Function;
-  setElementOrderInBlogPost: Function;
+  setElementOrderAsLastOne: (
+    element: Paragraph | Header | CodeBlock | ContentImage
+  ) => Paragraph | Header | CodeBlock | ContentImage;
 }
 
 const initCodeBlockState: CodeBlock = {
   content: "",
   language: "js",
-  orderInBlogPost: 0,
+  orderInBlogPost: null,
 };
 
 const codeBlockLanguages: CodeBlock["language"][] = ["js", "cs", "html", "css"];
@@ -20,27 +22,17 @@ const codeBlockLanguages: CodeBlock["language"][] = ["js", "cs", "html", "css"];
 const CodeBlockElementForm: React.FC<CodeBlockElementFormProps> = ({
   codeBlocksErrors,
   setContentElements,
-  setElementOrderInBlogPost,
+  setElementOrderAsLastOne,
 }) => {
   const [codeBlockState, setCodeBlockState] = useState<CodeBlock>(initCodeBlockState);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    if (codeBlockState.orderInBlogPost === 0) {
-      console.error("OrderInBlogPost must be more than 0");
-    }
-
-    const stateCopy = codeBlockState;
-    setElementOrderInBlogPost(stateCopy);
-    setCodeBlockState(stateCopy);
-
     setContentElements((prevState: ContentElements) => ({
       ...prevState,
-      codeBlocks: [...prevState.codeBlocks, codeBlockState],
+      codeBlocks: [...prevState.codeBlocks, setElementOrderAsLastOne(codeBlockState)],
     }));
-
-    if (codeBlocksErrors.length === 0) setCodeBlockState(initCodeBlockState);
   };
 
   const allCodeBlockLanguages = codeBlockLanguages.map((lang) => (

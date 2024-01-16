@@ -1,43 +1,35 @@
 import { useState } from "react";
 import { FormGroup, Label, Input, Button, Form, FormFeedback } from "reactstrap";
-import { Paragraph } from "../../../../common/types";
+import { CodeBlock, ContentImage, Header, Paragraph } from "../../../../common/types";
 import { ContentElements } from "../types";
 
 interface ParagraphElementFormProps {
   paragraphsErrors: string[];
   setContentElements: Function;
-  setElementOrderInBlogPost: Function;
+  setElementOrderAsLastOne: (
+    element: Paragraph | Header | CodeBlock | ContentImage
+  ) => Paragraph | Header | CodeBlock | ContentImage;
 }
 
 const initParagraphState: Paragraph = {
   content: "",
-  orderInBlogPost: 0,
+  orderInBlogPost: null,
 };
 
 const ParagraphElementForm: React.FC<ParagraphElementFormProps> = ({
   paragraphsErrors,
   setContentElements,
-  setElementOrderInBlogPost,
+  setElementOrderAsLastOne,
 }) => {
   const [paragraphState, setParagraphState] = useState<Paragraph>(initParagraphState);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    if (paragraphState.orderInBlogPost === 0) {
-      console.error("OrderInBlogPost must be more than 0");
-    }
-
-    const stateCopy = paragraphState;
-    setElementOrderInBlogPost(stateCopy);
-    setParagraphState(stateCopy);
-
     setContentElements((prevState: ContentElements) => ({
       ...prevState,
-      paragraphs: [...prevState.paragraphs, paragraphState],
+      headers: [...prevState.paragraphState, setElementOrderAsLastOne(paragraphState)],
     }));
-
-    if (paragraphsErrors.length === 0) setParagraphState(initParagraphState);
   };
 
   return (

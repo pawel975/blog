@@ -1,45 +1,38 @@
 import { useState } from "react";
-import { ContentImage } from "../../../../common/types";
+import { CodeBlock, ContentImage, Header, Paragraph } from "../../../../common/types";
 import { ContentElements } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 
 interface ContentImageElementFormProps {
   contentImagesErrors: string[];
   setContentElements: Function;
-  setElementOrderInBlogPost: Function;
+  setElementOrderAsLastOne: (
+    element: Paragraph | Header | CodeBlock | ContentImage
+  ) => Paragraph | Header | CodeBlock | ContentImage;
 }
 
 const initContentImageState: ContentImage = {
   content: "",
   altText: "",
-  orderInBlogPost: 0,
+  orderInBlogPost: null,
 };
 
 const ContentImageElementForm: React.FC<ContentImageElementFormProps> = ({
   contentImagesErrors,
   setContentElements,
-  setElementOrderInBlogPost,
+  setElementOrderAsLastOne,
 }) => {
   const [contentImageState, setContentImageState] = useState<ContentImage>(initContentImageState);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    if (contentImageState.orderInBlogPost === 0) {
-      console.error("OrderInBlogPost must be more than 0");
-    }
-
-    const stateCopy = contentImageState;
-    setElementOrderInBlogPost(stateCopy);
-    setContentImageState(stateCopy);
-
     setContentElements((prevState: ContentElements) => ({
       ...prevState,
-      contentImages: [...prevState.contentImages, contentImageState],
+      contentImages: [...prevState.contentImages, setElementOrderAsLastOne(contentImageState)],
     }));
-
-    if (contentImagesErrors.length === 0) setContentImageState(initContentImageState);
   };
+
   return (
     <Form onSubmit={handleSubmit}>
       <FormGroup>

@@ -1,18 +1,20 @@
 import { useState } from "react";
-import { Header } from "../../../../common/types";
+import { CodeBlock, ContentImage, Header, Paragraph } from "../../../../common/types";
 import { ContentElements } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 
 interface HeaderElementFormProps {
   headersErrors: string[];
   setContentElements: Function;
-  setElementOrderInBlogPost: Function;
+  setElementOrderAsLastOne: (
+    element: Paragraph | Header | CodeBlock | ContentImage
+  ) => Paragraph | Header | CodeBlock | ContentImage;
 }
 
 const initHeaderState: Header = {
   content: "",
   level: "h1",
-  orderInBlogPost: 0,
+  orderInBlogPost: null,
 };
 
 const headingLevels: Header["level"][] = ["h1", "h2", "h3", "h4", "h5", "h6"];
@@ -20,27 +22,19 @@ const headingLevels: Header["level"][] = ["h1", "h2", "h3", "h4", "h5", "h6"];
 const HeaderElementForm: React.FC<HeaderElementFormProps> = ({
   headersErrors,
   setContentElements,
-  setElementOrderInBlogPost,
+  setElementOrderAsLastOne,
 }) => {
   const [headerState, setHeaderState] = useState<Header>(initHeaderState);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    if (headerState.orderInBlogPost === 0) {
-      console.error("OrderInBlogPost must be more than 0");
-    }
-
-    const stateCopy = headerState;
-    setElementOrderInBlogPost(stateCopy);
-    setHeaderState(stateCopy);
-
     setContentElements((prevState: ContentElements) => ({
       ...prevState,
-      headers: [...prevState.headers, headerState],
+      headers: [...prevState.headers, setElementOrderAsLastOne(headerState)],
     }));
 
-    if (headersErrors.length === 0) setHeaderState(initHeaderState);
+    // if (headersErrors.length === 0) setHeaderState(initHeaderState);
   };
 
   const allHeadingLevelOptions = headingLevels.map((lvl) => (
