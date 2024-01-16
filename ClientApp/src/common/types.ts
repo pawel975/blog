@@ -11,7 +11,7 @@ export enum BlogPostContentElementType {
 
 export interface ContentElement {
   content: string;
-  orderInBlogPost: number;
+  orderInBlogPost: number | null;
 }
 
 export interface Paragraph extends ContentElement {}

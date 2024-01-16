@@ -28,15 +28,28 @@ const AddElementForm: React.FC<AddElementFormProps> = ({ errors, contentElements
     setClickedNewElementType(targetBtnType);
   };
 
-  const setElementOrderInBlogPost = (element: Paragraph | Header | CodeBlock | ContentImage) => {
+  /**
+   *
+   * @param element
+   * @returns copy of element with set OrderInBlogPost as last
+   */
+  const setElementOrderAsLastOne = (
+    element: Paragraph | Header | CodeBlock | ContentImage
+  ): Paragraph | Header | CodeBlock | ContentImage => {
     let elementOrder = 1;
+
+    const elementCopy = Object.assign({}, element);
+
+    // Reads count of elements
     const allCategories = Object.keys(contentElements);
     allCategories.forEach((cat: string) => {
       elementOrder += contentElements[cat].length;
     });
 
     // Sets element order as a last one
-    element.orderInBlogPost = elementOrder;
+    elementCopy.orderInBlogPost = elementOrder;
+
+    return elementCopy;
   };
 
   const renderFormForElementType = (blogPostContentElementType: string) => {
@@ -46,7 +59,7 @@ const AddElementForm: React.FC<AddElementFormProps> = ({ errors, contentElements
           <ParagraphElementForm
             paragraphsErrors={errors.Paragraphs}
             setContentElements={setContentElements}
-            setElementOrderInBlogPost={setElementOrderInBlogPost}
+            setElementOrderAsLastOne={setElementOrderAsLastOne}
           />
         );
       case BlogPostContentElementType.HEADER:
@@ -54,7 +67,7 @@ const AddElementForm: React.FC<AddElementFormProps> = ({ errors, contentElements
           <HeaderElementForm
             headersErrors={errors.Headers}
             setContentElements={setContentElements}
-            setElementOrderInBlogPost={setElementOrderInBlogPost}
+            setElementOrderAsLastOne={setElementOrderAsLastOne}
           />
         );
       case BlogPostContentElementType.CODE_BLOCK:
@@ -62,7 +75,7 @@ const AddElementForm: React.FC<AddElementFormProps> = ({ errors, contentElements
           <CodeBlockElementForm
             codeBlocksErrors={errors.CodeBlocks}
             setContentElements={setContentElements}
-            setElementOrderInBlogPost={setElementOrderInBlogPost}
+            setElementOrderAsLastOne={setElementOrderAsLastOne}
           />
         );
       case BlogPostContentElementType.CONTENT_IMAGE:
@@ -70,7 +83,7 @@ const AddElementForm: React.FC<AddElementFormProps> = ({ errors, contentElements
           <ContentImageElementForm
             contentImagesErrors={errors.ContentImages}
             setContentElements={setContentElements}
-            setElementOrderInBlogPost={setElementOrderInBlogPost}
+            setElementOrderAsLastOne={setElementOrderAsLastOne}
           />
         );
       default:
