@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CodeBlock, ContentImage, Header, Paragraph } from "../../../../common/types";
+import { BlogPostContentElementType, CodeBlock, ContentImage, Header, Paragraph } from "../../../../common/types";
 import { ContentElements } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 
@@ -15,6 +15,7 @@ const initHeaderState: Header = {
   content: "",
   level: "h1",
   orderInBlogPost: null,
+  type: BlogPostContentElementType.HEADER,
 };
 
 const headingLevels: Header["level"][] = ["h1", "h2", "h3", "h4", "h5", "h6"];
@@ -33,8 +34,6 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({
       ...prevState,
       headers: [...prevState.headers, setElementOrderAsLastOne(headerState)],
     }));
-
-    // if (headersErrors.length === 0) setHeaderState(initHeaderState);
   };
 
   const allHeadingLevelOptions = headingLevels.map((lvl) => (

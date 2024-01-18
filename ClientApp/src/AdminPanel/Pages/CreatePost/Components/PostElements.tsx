@@ -13,9 +13,12 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements }) => {
     ...contentElements.contentImages,
   ];
   return (
-    <CardBody>
+    <CardBody className="d-grid gap-2">
       {allContentElements.map((element) => (
-        <Card>{element["content"]}</Card>
+        <Card className="p-2 border border-secondary bg-secondary text-light ">
+          <h6>{element.type}</h6>
+          <p>Content: {element.content}</p>
+        </Card>
       ))}
     </CardBody>
   );
