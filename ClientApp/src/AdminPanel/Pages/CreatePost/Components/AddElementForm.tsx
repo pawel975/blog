@@ -29,7 +29,7 @@ const AddElementForm: React.FC<AddElementFormProps> = ({ errors, contentElements
   };
 
   /**
-   *
+   * Gets element which will be added to blog post and set it's order within this post
    * @param element
    * @returns copy of element with set OrderInBlogPost as last
    */
