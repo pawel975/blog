@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CodeBlock, ContentImage, Header, Paragraph } from "../../../../common/types";
+import { BlogPostContentElementType, CodeBlock, ContentImage, Header, Paragraph } from "../../../../common/types";
 import { ContentElements } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 
@@ -15,6 +15,7 @@ const initContentImageState: ContentImage = {
   content: "",
   altText: "",
   orderInBlogPost: null,
+  type: BlogPostContentElementType.CONTENT_IMAGE,
 };
 
 const ContentImageElementForm: React.FC<ContentImageElementFormProps> = ({

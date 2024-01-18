@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FormGroup, Label, Input, Button, Form, FormFeedback } from "reactstrap";
-import { CodeBlock, ContentImage, Header, Paragraph } from "../../../../common/types";
+import { BlogPostContentElementType, CodeBlock, ContentImage, Header, Paragraph } from "../../../../common/types";
 import { ContentElements } from "../types";
 
 interface ParagraphElementFormProps {
@@ -14,6 +14,7 @@ interface ParagraphElementFormProps {
 const initParagraphState: Paragraph = {
   content: "",
   orderInBlogPost: null,
+  type: BlogPostContentElementType.PARAGRAPH,
 };
 
 const ParagraphElementForm: React.FC<ParagraphElementFormProps> = ({
@@ -28,7 +29,7 @@ const ParagraphElementForm: React.FC<ParagraphElementFormProps> = ({
 
     setContentElements((prevState: ContentElements) => ({
       ...prevState,
-      headers: [...prevState.paragraphState, setElementOrderAsLastOne(paragraphState)],
+      paragraphs: [...prevState.paragraphs, setElementOrderAsLastOne(paragraphState)],
     }));
   };
 
