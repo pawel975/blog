@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Card, CardBody, Collapse, Form, FormGroup, Label } from "reactstrap";
+import { Button, ButtonGroup, Card, CardBody, Collapse, Container, Form, FormGroup, Label } from "reactstrap";
 import { BlogPostContentElementType, CodeBlock, ContentImage, Header, Paragraph } from "../../../../common/types";
 import { useState } from "react";
 import CodeBlockElementForm from "./CodeBlockElementForm";
@@ -91,7 +91,7 @@ const AddElementForm: React.FC<AddElementFormProps> = ({ errors, contentElements
     }
   };
   return (
-    <>
+    <Container className="d-flex flex-column p-0 gap-2">
       <Form>
         <Label>Add elements to post</Label>
         <FormGroup>
@@ -111,7 +111,7 @@ const AddElementForm: React.FC<AddElementFormProps> = ({ errors, contentElements
           </ButtonGroup>
         </FormGroup>
       </Form>
-      <Collapse isOpen={isNewElementFormOpen}>
+      <Collapse className="w-100" isOpen={isNewElementFormOpen}>
         {/* TODO: Make here form to handle elements params, based on choosen element type */}
         <Card>
           <CardBody>
@@ -119,7 +119,7 @@ const AddElementForm: React.FC<AddElementFormProps> = ({ errors, contentElements
           </CardBody>
         </Card>
       </Collapse>
-    </>
+    </Container>
   );
 };
 

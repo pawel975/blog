@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Layout from "../../Layout/Layout";
-import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
+import { Button, Container, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { CodeBlock, ContentImage, Header, Paragraph } from "../../../common/types";
 import AddElementForm from "./Components/AddElementForm";
@@ -102,60 +102,62 @@ const CreatePost: React.FC = () => {
   return (
     <Layout header="Create Post">
       {/* TODO: Move this form to separate file */}
-      <Form>
-        <FormGroup>
-          <Label for="title">Title</Label>
-          <Input
-            invalid={Boolean(errors.Title.length > 0)}
-            id="title"
-            type="text"
-            name="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          {errors.Title.map((errorMsg, index) => (
-            <FormFeedback key={index}>{errorMsg}</FormFeedback>
-          ))}
-        </FormGroup>
+      <Container className="d-flex flex-column align-items-start gap-2">
+        <Form>
+          <FormGroup>
+            <Label for="title">Title</Label>
+            <Input
+              invalid={Boolean(errors.Title.length > 0)}
+              id="title"
+              type="text"
+              name="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            {errors.Title.map((errorMsg, index) => (
+              <FormFeedback key={index}>{errorMsg}</FormFeedback>
+            ))}
+          </FormGroup>
 
-        <FormGroup>
-          <Label for="shortDescription">Short Description</Label>
-          <Input
-            invalid={Boolean(errors.ShortDescription.length > 0)}
-            type="text"
-            id="shortDescription"
-            name="shortDescription"
-            value={shortDescription}
-            onChange={(e) => setShortDescription(e.target.value)}
-          />
-          {errors.ShortDescription.map((errorMsg, index) => (
-            <FormFeedback key={index}>{errorMsg}</FormFeedback>
-          ))}
-        </FormGroup>
+          <FormGroup>
+            <Label for="shortDescription">Short Description</Label>
+            <Input
+              invalid={Boolean(errors.ShortDescription.length > 0)}
+              type="text"
+              id="shortDescription"
+              name="shortDescription"
+              value={shortDescription}
+              onChange={(e) => setShortDescription(e.target.value)}
+            />
+            {errors.ShortDescription.map((errorMsg, index) => (
+              <FormFeedback key={index}>{errorMsg}</FormFeedback>
+            ))}
+          </FormGroup>
 
-        <FormGroup>
-          <Label for="primaryImageSrc">Primary Image Source</Label>
-          <Input
-            invalid={Boolean(errors.PrimaryImageSrc.length > 0)}
-            id="primaryImageSrc"
-            type="text"
-            name="primaryImageSrc"
-            value={primaryImageSrc}
-            onChange={(e) => setPrimaryImageSrc(e.target.value)}
-          />
-          {errors.PrimaryImageSrc.map((errorMsg, index) => (
-            <FormFeedback key={index}>{errorMsg}</FormFeedback>
-          ))}
-        </FormGroup>
-      </Form>
+          <FormGroup>
+            <Label for="primaryImageSrc">Primary Image Source</Label>
+            <Input
+              invalid={Boolean(errors.PrimaryImageSrc.length > 0)}
+              id="primaryImageSrc"
+              type="text"
+              name="primaryImageSrc"
+              value={primaryImageSrc}
+              onChange={(e) => setPrimaryImageSrc(e.target.value)}
+            />
+            {errors.PrimaryImageSrc.map((errorMsg, index) => (
+              <FormFeedback key={index}>{errorMsg}</FormFeedback>
+            ))}
+          </FormGroup>
+        </Form>
 
-      <AddElementForm errors={errors} contentElements={contentElements} setContentElements={setContentElements} />
+        <AddElementForm errors={errors} contentElements={contentElements} setContentElements={setContentElements} />
 
-      <PostElements contentElements={contentElements} />
+        <PostElements contentElements={contentElements} />
 
-      <Button onClick={handleSubmit} color="primary">
-        Create Post
-      </Button>
+        <Button onClick={handleSubmit} color="primary">
+          Create Post
+        </Button>
+      </Container>
     </Layout>
   );
 };

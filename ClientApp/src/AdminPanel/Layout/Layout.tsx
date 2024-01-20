@@ -11,12 +11,12 @@ const Layout: React.FC<LayoutProps> = ({ children, header }) => {
   return (
     <div>
       <AdminNavMenu />
-      <Container className="d-flex flex-column gap-2 align-items-start" tag="main">
+      <Container className="d-flex flex-column align gap-2 pb-4" tag="main">
         <header>
           <h1>{header}</h1>
+          <hr></hr>
         </header>
-        <hr></hr>
-        {children}
+        <div>{children}</div>
       </Container>
     </div>
   );
