@@ -6,6 +6,8 @@ interface PostElementsProps {
 }
 
 const PostElements: React.FC<PostElementsProps> = ({ contentElements }) => {
+  const NOT_AVAILABLE = "N/A";
+
   const allContentElements = [
     ...contentElements.paragraphs,
     ...contentElements.headers,
@@ -13,11 +15,11 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements }) => {
     ...contentElements.contentImages,
   ];
   return (
-    <CardBody className="d-grid gap-2">
-      {allContentElements.map((element) => (
-        <Card className="p-2 border border-secondary bg-secondary text-light ">
-          <h6>{element.type}</h6>
-          <p>Content: {element.content}</p>
+    <CardBody className="w-100 d-flex flex-column align-items-start gap-2">
+      {allContentElements.map((element, index) => (
+        <Card key={element.type + index} className="p-3 text-dark">
+          <h6>Type: {element.type || NOT_AVAILABLE}</h6>
+          <p>Content: {element.content || NOT_AVAILABLE}</p>
         </Card>
       ))}
     </CardBody>
