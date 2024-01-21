@@ -2,8 +2,8 @@ import { Alert, Table } from "reactstrap";
 import ActionButtons from "../ActionButtons/ActionButtons";
 import { useNavigate } from "react-router-dom";
 import "./PostsTable.css";
-import formatTableCellValue from "./helpers/formatTableCellValue";
 import isCellValueObject from "./helpers/isCellValueObject";
+import shortenLongString from "../../../CreatePost/helpers/shortenLongString";
 
 interface PostsTableInterface {
   posts: any[];
@@ -40,7 +40,7 @@ const PostsTable: React.FC<PostsTableInterface> = ({ posts, setPosts }) => {
     <tr key={post.id}>
       {TableHeadings.map((heading, index) => {
         const cellValue = post[heading];
-        return !isCellValueObject(cellValue) && <td key={index}>{formatTableCellValue(cellValue)}</td>;
+        return !isCellValueObject(cellValue) && <td key={index}>{shortenLongString(cellValue)}</td>;
       })}
       <td>
         <ActionButtons postId={post.id} deleteHandler={handleDeletePostWithID} editHandler={handleEditPostWithID} />

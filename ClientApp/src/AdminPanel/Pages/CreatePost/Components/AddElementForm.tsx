@@ -1,5 +1,5 @@
 import { Button, ButtonGroup, Card, CardBody, Collapse, Container, Form, FormGroup, Label } from "reactstrap";
-import { BlogPostContentElementType, CodeBlock, ContentImage, Header, Paragraph } from "../../../../common/types";
+import { BlogPostContentElementType, GeneralContentElement } from "../../../../common/types";
 import { useState } from "react";
 import CodeBlockElementForm from "./CodeBlockElementForm";
 import ContentImageElementForm from "./ContentImageElementForm";
@@ -33,9 +33,7 @@ const AddElementForm: React.FC<AddElementFormProps> = ({ errors, contentElements
    * @param element
    * @returns copy of element with set OrderInBlogPost as last
    */
-  const setElementOrderAsLastOne = (
-    element: Paragraph | Header | CodeBlock | ContentImage
-  ): Paragraph | Header | CodeBlock | ContentImage => {
+  const setElementOrderAsLastOne = (element: GeneralContentElement): GeneralContentElement => {
     let elementOrder = 1;
 
     const elementCopy = Object.assign({}, element);
@@ -91,11 +89,11 @@ const AddElementForm: React.FC<AddElementFormProps> = ({ errors, contentElements
     }
   };
   return (
-    <Container className="d-flex flex-column p-0 gap-2">
+    <Container className="d-flex flex-column p-0">
       <Form>
         <Label>Add elements to post</Label>
         <FormGroup>
-          <ButtonGroup className="mb-2">
+          <ButtonGroup>
             <Button id={BlogPostContentElementType.HEADER} onClick={handleNewElementBtnClick}>
               Header
             </Button>
