@@ -1,4 +1,3 @@
-import React, { ReactNode } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import "./custom.css";
 import NotFoundPage from "./components/NotFoundPage/NotFoundPage";
@@ -18,11 +17,7 @@ const App = () => {
       {/* Routes for blog */}
       <Route path="blog">
         <Route path="*" element={<NotFoundPage homePage="/blog" />} />
-        <Route
-          index={true}
-          path="/blog"
-          element={<Navigate to="/blog/feed" />}
-        ></Route>
+        <Route index={true} path="/blog" element={<Navigate to="/blog/feed" />}></Route>
 
         <Route path="feed">
           <Route index={true} element={<Feed />}></Route>
@@ -32,11 +27,7 @@ const App = () => {
       {/* Routes for admin panel */}
       <Route path="admin-panel">
         <Route path="*" element={<NotFoundPage homePage="/admin-panel" />} />
-        <Route
-          index={true}
-          path="/admin-panel"
-          element={<Navigate to="/admin-panel/dashboard" />}
-        ></Route>
+        <Route index={true} path="/admin-panel" element={<Navigate to="/admin-panel/dashboard" />}></Route>
 
         <Route path="dashboard">
           <Route index={true} element={<Dashboard />}></Route>

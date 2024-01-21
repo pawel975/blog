@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { FormGroup, Label, Input, Button, Form, FormFeedback } from "reactstrap";
-import { BlogPostContentElementType, CodeBlock, ContentImage, Header, Paragraph } from "../../../../common/types";
+import { BlogPostContentElementType, GeneralContentElement, Paragraph } from "../../../../common/types";
 import { ContentElements } from "../types";
 
 interface ParagraphElementFormProps {
   paragraphsErrors: string[];
   setContentElements: Function;
-  setElementOrderAsLastOne: (
-    element: Paragraph | Header | CodeBlock | ContentImage
-  ) => Paragraph | Header | CodeBlock | ContentImage;
+  setElementOrderAsLastOne: (element: GeneralContentElement) => GeneralContentElement;
 }
 
 const initParagraphState: Paragraph = {

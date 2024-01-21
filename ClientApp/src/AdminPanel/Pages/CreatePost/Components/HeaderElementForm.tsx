@@ -1,14 +1,12 @@
 import { useState } from "react";
-import { BlogPostContentElementType, CodeBlock, ContentImage, Header, Paragraph } from "../../../../common/types";
+import { BlogPostContentElementType, GeneralContentElement, Header } from "../../../../common/types";
 import { ContentElements } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 
 interface HeaderElementFormProps {
   headersErrors: string[];
   setContentElements: Function;
-  setElementOrderAsLastOne: (
-    element: Paragraph | Header | CodeBlock | ContentImage
-  ) => Paragraph | Header | CodeBlock | ContentImage;
+  setElementOrderAsLastOne: (element: GeneralContentElement) => GeneralContentElement;
 }
 
 const initHeaderState: Header = {

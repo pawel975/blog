@@ -30,3 +30,5 @@ export interface CodeBlock extends ContentElement {
 export interface ContentImage extends ContentElement {
   altText: string;
 }
+
+export type GeneralContentElement = Paragraph | Header | CodeBlock | ContentImage;
