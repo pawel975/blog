@@ -152,7 +152,7 @@ const CreatePost: React.FC = () => {
 
         <AddElementForm errors={errors} contentElements={contentElements} setContentElements={setContentElements} />
 
-        <PostElements contentElements={contentElements} />
+        <PostElements contentElements={contentElements} setContentElements={setContentElements} />
 
         <Button onClick={handleSubmit} color="primary">
           Create Post

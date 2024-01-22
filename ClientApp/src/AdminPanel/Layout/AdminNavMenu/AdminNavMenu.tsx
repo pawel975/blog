@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import "./AdminNavMenu.css";
 import combinePathWithAdminRoot from "./utils";
 import { adminNavMenuRoutes } from "./AdminNavMenuRoutes";
+import capitalizeWord from "../../../common/helpers/capitalizeWord";
 
 const AdminNavMenu: React.FC = () => {
   const [collapsed, setCollapsed] = useState(true);
@@ -20,7 +21,7 @@ const AdminNavMenu: React.FC = () => {
     <NavItem key={index}>
       <NavLink tag={Link} className="text-dark" to={combinePathWithAdminRoot(route)}>
         {/* Capitalized name of route */}
-        {route.slice(0, 1).toUpperCase() + route.slice(1)}
+        {capitalizeWord(route)}
       </NavLink>
     </NavItem>
   ));

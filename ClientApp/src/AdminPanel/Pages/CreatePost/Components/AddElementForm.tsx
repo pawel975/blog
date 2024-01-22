@@ -34,7 +34,7 @@ const AddElementForm: React.FC<AddElementFormProps> = ({ errors, contentElements
    * @returns copy of element with set OrderInBlogPost as last
    */
   const setElementOrderAsLastOne = (element: GeneralContentElement): GeneralContentElement => {
-    let elementOrder = 1;
+    let elementOrder = 0;
 
     const elementCopy = Object.assign({}, element);
 

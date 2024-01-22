@@ -32,3 +32,5 @@ export interface ContentImage extends ContentElement {
 }
 
 export type GeneralContentElement = Paragraph | Header | CodeBlock | ContentImage;
+
+export type IndexedGeneralContentElement = GeneralContentElement & { [property: string]: any };
