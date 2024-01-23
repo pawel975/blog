@@ -3,6 +3,7 @@ import { ContentElements } from "../types";
 import { ContentElement, GeneralContentElement, IndexedGeneralContentElement } from "../../../../common/types";
 import SinglePostElement from "./SinglePostElement";
 import { SetStateAction } from "react";
+import unCapitalizeWord from "../../../../common/helpers/unCapitalizeWord";
 
 interface PostElementsProps {
   contentElements: ContentElements;
@@ -15,17 +16,18 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements, setContent
   };
 
   const flatContentElements = (contentElements: ContentElements): GeneralContentElement[] => {
-    //TODO: desctructure all content element types automatically
-    return sortElementsByOrderInBlogPost([
-      ...contentElements.paragraphs,
-      ...contentElements.headers,
-      ...contentElements.codeBlocks,
-      ...contentElements.contentImages,
-    ]);
+    const contentElementsTypes = Object.keys(contentElements);
+    const flattenContentElementsArray: GeneralContentElement[] = [];
+
+    contentElementsTypes.forEach((type) => {
+      flattenContentElementsArray.push(...contentElements[type]);
+    });
+
+    return sortElementsByOrderInBlogPost(flattenContentElementsArray);
   };
 
-  const segregateContentElementTypes = (elements: IndexedGeneralContentElement[]): ContentElements => {
-    const segregatedContentElements: ContentElements = {
+  const groupContentElements = (elements: IndexedGeneralContentElement[]): ContentElements => {
+    const groupedContentElements: ContentElements = {
       paragraphs: [],
       headers: [],
       codeBlocks: [],
@@ -33,10 +35,15 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements, setContent
     };
     elements.forEach((element) => {
       //TODO: make error handling here
-      const type = element.type[0].toLowerCase() + element.type.slice(1) + "s";
-      segregatedContentElements[type].push(element);
+      const elementType = unCapitalizeWord(element.type) + "s";
+
+      if (!groupedContentElements.hasOwnProperty(elementType)) {
+        console.error(`Cannot find property of - ${elementType}, in ContentElements`);
+      }
+
+      groupedContentElements[elementType].push(element);
     });
-    return segregatedContentElements;
+    return groupedContentElements;
   };
 
   // TODO: change any
@@ -48,7 +55,7 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements, setContent
       const allContentElements = flatContentElements(contentElements);
       const targetElementId = String((e.target as HTMLButtonElement).id);
 
-      // First element in blog post
+      // First element to swap in blog post
       const firstElementToSwap = allContentElements.find((el) => el.id === targetElementId);
 
       if (!firstElementToSwap) {
@@ -57,7 +64,7 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements, setContent
 
       const firstElementOrderInblogPost = firstElementToSwap.orderInBlogPost;
 
-      // Second Element in blog post
+      // Second Element to swap in blog post
       const secondElementOrderInBlogPost =
         direction === "up" ? firstElementToSwap.orderInBlogPost! - 1 : firstElementToSwap.orderInBlogPost! + 1;
       const secondElementToSwap = allContentElements.find((el) => el.orderInBlogPost === secondElementOrderInBlogPost);
@@ -66,16 +73,12 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements, setContent
         throw new Error(`Cannot find element to swap with id of: ${targetElementId}`);
       }
 
-      // // Indeces of elements to swap
-      // const firstElementToSwapIndex = allContentElements.indexOf(firstElementToSwap);
-      // const secondElementToSwapIndex = allContentElements.indexOf(secondElementToSwap);
-
       // Swap order in blog post for both elements
       let tempOrderInBlogPost = firstElementOrderInblogPost;
       firstElementToSwap.orderInBlogPost = secondElementOrderInBlogPost;
       secondElementToSwap.orderInBlogPost = tempOrderInBlogPost;
 
-      setContentElements(segregateContentElementTypes(allContentElements));
+      setContentElements(groupContentElements(allContentElements));
     } catch (err) {
       console.error(err);
     }
@@ -90,8 +93,7 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements, setContent
       {!flatContentElements(contentElements).length && <Alert color="info">There is not any element in post yet</Alert>}
 
       <CardBody className="w-50 d-flex flex-column gap-2">
-        {flatContentElements(contentElements).map((element, index) => {
-          console.log(element);
+        {flatContentElements(contentElements).map((element) => {
           return (
             <SinglePostElement
               elementProps={element}
