@@ -1,6 +1,6 @@
 import { Alert, CardBody, Container } from "reactstrap";
 import { ContentElements } from "../types";
-import { ContentElement, GeneralContentElement } from "../../../../common/types";
+import { ContentElement, GeneralContentElement, IndexedGeneralContentElement } from "../../../../common/types";
 import SinglePostElement from "./SinglePostElement";
 import { SetStateAction } from "react";
 
@@ -24,13 +24,20 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements, setContent
     ]);
   };
 
-  // const segregateContentElementTypes = (elements: IndexedGeneralContentElement[]): ContentElements => {
-  //   const segregatedContentElements: ContentElements = {};
-  //   elements.forEach(element => {
-  //     if (segregateContentElementTypes[element.type.toLowerCase()])
-  //   })
-  //   return segregatedContentElements;
-  // };
+  const segregateContentElementTypes = (elements: IndexedGeneralContentElement[]): ContentElements => {
+    const segregatedContentElements: ContentElements = {
+      paragraphs: [],
+      headers: [],
+      codeBlocks: [],
+      contentImages: [],
+    };
+    elements.forEach((element) => {
+      //TODO: make error handling here
+      const type = element.type[0].toLowerCase() + element.type.slice(1) + "s";
+      segregatedContentElements[type].push(element);
+    });
+    return segregatedContentElements;
+  };
 
   // TODO: change any
   const handleChangeElementPositionButtonClick = (
@@ -38,15 +45,37 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements, setContent
     direction: "up" | "down"
   ): void => {
     try {
-      const targetElementIndex = Number((e.target as HTMLButtonElement).id);
-      const firstElement = flatContentElements(contentElements).find((el) => el.orderInBlogPost! > -1);
-      // Swap elements
-      const arrCopy = flatContentElements(contentElements);
-      const secondElementIndex: number = direction === "up" ? targetElementIndex - 1 : targetElementIndex + 1;
+      const allContentElements = flatContentElements(contentElements);
+      const targetElementId = String((e.target as HTMLButtonElement).id);
 
-      let tempOrderInBlogPost = arrCopy[targetElementIndex].orderInBlogPost;
-      arrCopy[targetElementIndex].orderInBlogPost = arrCopy[secondElementIndex].orderInBlogPost;
-      arrCopy[secondElementIndex].orderInBlogPost = tempOrderInBlogPost;
+      // First element in blog post
+      const firstElementToSwap = allContentElements.find((el) => el.id === targetElementId);
+
+      if (!firstElementToSwap) {
+        throw new Error(`Cannot find element to swap with id of: ${targetElementId}`);
+      }
+
+      const firstElementOrderInblogPost = firstElementToSwap.orderInBlogPost;
+
+      // Second Element in blog post
+      const secondElementOrderInBlogPost =
+        direction === "up" ? firstElementToSwap.orderInBlogPost! - 1 : firstElementToSwap.orderInBlogPost! + 1;
+      const secondElementToSwap = allContentElements.find((el) => el.orderInBlogPost === secondElementOrderInBlogPost);
+
+      if (!secondElementToSwap) {
+        throw new Error(`Cannot find element to swap with id of: ${targetElementId}`);
+      }
+
+      // // Indeces of elements to swap
+      // const firstElementToSwapIndex = allContentElements.indexOf(firstElementToSwap);
+      // const secondElementToSwapIndex = allContentElements.indexOf(secondElementToSwap);
+
+      // Swap order in blog post for both elements
+      let tempOrderInBlogPost = firstElementOrderInblogPost;
+      firstElementToSwap.orderInBlogPost = secondElementOrderInBlogPost;
+      secondElementToSwap.orderInBlogPost = tempOrderInBlogPost;
+
+      setContentElements(segregateContentElementTypes(allContentElements));
     } catch (err) {
       console.error(err);
     }
