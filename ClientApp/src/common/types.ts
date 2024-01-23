@@ -13,6 +13,7 @@ export interface ContentElement {
   content: string;
   orderInBlogPost: number | null;
   type: string;
+  id: string;
 }
 
 export interface Paragraph extends ContentElement {}

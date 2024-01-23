@@ -7,14 +7,12 @@ import { GoArrowUp as UpIcon, GoArrowDown as DownIcon } from "react-icons/go";
 
 interface SinglePostElementInterface {
   elementProps: IndexedGeneralContentElement;
-  key: string | number;
   id: string;
   handleChangeElementPositionButtonClick: (e: any, direction: "up" | "down") => void;
 }
 
 const SinglePostElement: React.FC<SinglePostElementInterface> = ({
   elementProps,
-  key,
   id,
   handleChangeElementPositionButtonClick,
 }) => {
@@ -24,7 +22,7 @@ const SinglePostElement: React.FC<SinglePostElementInterface> = ({
   const elementPropsNames = Object.keys(elementProps).filter((name) => name !== "type");
 
   return (
-    <div className="d-flex align-items-start gap-1">
+    <div key={id} className="d-flex align-items-start gap-1">
       <ButtonGroup vertical>
         <Button id={id} onClick={(e) => handleChangeElementPositionButtonClick(e, "up")} className="border">
           <UpIcon style={{ pointerEvents: "none" }} size="1.2rem" />
@@ -33,7 +31,7 @@ const SinglePostElement: React.FC<SinglePostElementInterface> = ({
           <DownIcon style={{ pointerEvents: "none" }} size="1.2rem" />
         </Button>
       </ButtonGroup>
-      <Card key={key} className="w-100 p-3 m-auto text-dark">
+      <Card className="w-100 p-3 m-auto text-dark">
         <div className="d-flex justify-content-between align-items-center">
           <h6 className="mb-0">
             <strong>Type:</strong> {shortenLongString(type)}
@@ -48,11 +46,11 @@ const SinglePostElement: React.FC<SinglePostElementInterface> = ({
           </Dropdown>
         </div>
         <hr />
-        {elementPropsNames.map((name) => {
+        {elementPropsNames.map((name, index) => {
           const propName = name;
           const propValue = String(elementProps[`${name}`]);
           return (
-            <p className="m-0">
+            <p key={index} className="m-0">
               <strong>{capitalizeWord(propName)}</strong>: {shortenLongString(propValue)}
             </p>
           );

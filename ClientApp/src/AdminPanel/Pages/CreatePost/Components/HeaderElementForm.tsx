@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BlogPostContentElementType, GeneralContentElement, Header } from "../../../../common/types";
 import { ContentElements } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
@@ -14,6 +14,7 @@ const initHeaderState: Header = {
   level: "h1",
   orderInBlogPost: null,
   type: BlogPostContentElementType.HEADER,
+  id: "",
 };
 
 const headingLevels: Header["level"][] = ["h1", "h2", "h3", "h4", "h5", "h6"];
@@ -28,11 +29,23 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
+    setHeaderState((prevState) => ({
+      ...prevState,
+      id: crypto.randomUUID(),
+    }));
+
     setContentElements((prevState: ContentElements) => ({
       ...prevState,
       headers: [...prevState.headers, setElementOrderAsLastOne(headerState)],
     }));
   };
+
+  useEffect(() => {
+    setHeaderState((prevState) => ({
+      ...prevState,
+      id: crypto.randomUUID(),
+    }));
+  }, []);
 
   const allHeadingLevelOptions = headingLevels.map((lvl) => (
     <option key={lvl} value={lvl}>

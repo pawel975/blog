@@ -1,8 +1,8 @@
 import { Alert, CardBody, Container } from "reactstrap";
 import { ContentElements } from "../types";
-import { ContentElement, GeneralContentElement, IndexedGeneralContentElement } from "../../../../common/types";
+import { ContentElement, GeneralContentElement } from "../../../../common/types";
 import SinglePostElement from "./SinglePostElement";
-import { SetStateAction, useState } from "react";
+import { SetStateAction } from "react";
 
 interface PostElementsProps {
   contentElements: ContentElements;
@@ -61,14 +61,16 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements, setContent
       {!flatContentElements(contentElements).length && <Alert color="info">There is not any element in post yet</Alert>}
 
       <CardBody className="w-50 d-flex flex-column gap-2">
-        {flatContentElements(contentElements).map((element, index) => (
-          <SinglePostElement
-            elementProps={element}
-            key={index}
-            id={String(element.orderInBlogPost)}
-            handleChangeElementPositionButtonClick={handleChangeElementPositionButtonClick}
-          />
-        ))}
+        {flatContentElements(contentElements).map((element, index) => {
+          console.log(element);
+          return (
+            <SinglePostElement
+              elementProps={element}
+              id={element.id}
+              handleChangeElementPositionButtonClick={handleChangeElementPositionButtonClick}
+            />
+          );
+        })}
       </CardBody>
     </Container>
   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormGroup, Label, Input, Button, Form, FormFeedback } from "reactstrap";
 import { BlogPostContentElementType, GeneralContentElement, Paragraph } from "../../../../common/types";
 import { ContentElements } from "../types";
@@ -13,6 +13,7 @@ const initParagraphState: Paragraph = {
   content: "",
   orderInBlogPost: null,
   type: BlogPostContentElementType.PARAGRAPH,
+  id: crypto.randomUUID(),
 };
 
 const ParagraphElementForm: React.FC<ParagraphElementFormProps> = ({
@@ -25,11 +26,23 @@ const ParagraphElementForm: React.FC<ParagraphElementFormProps> = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
+    setParagraphState((prevState) => ({
+      ...prevState,
+      id: crypto.randomUUID(),
+    }));
+
     setContentElements((prevState: ContentElements) => ({
       ...prevState,
       paragraphs: [...prevState.paragraphs, setElementOrderAsLastOne(paragraphState)],
     }));
   };
+
+  useEffect(() => {
+    setParagraphState((prevState) => ({
+      ...prevState,
+      id: crypto.randomUUID(),
+    }));
+  }, []);
 
   return (
     <Form onSubmit={handleSubmit}>
