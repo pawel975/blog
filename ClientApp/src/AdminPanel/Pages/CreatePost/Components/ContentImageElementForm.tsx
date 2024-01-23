@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BlogPostContentElementType, ContentImage, GeneralContentElement } from "../../../../common/types";
 import { ContentElements } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
@@ -14,6 +14,7 @@ const initContentImageState: ContentImage = {
   altText: "",
   orderInBlogPost: null,
   type: BlogPostContentElementType.CONTENT_IMAGE,
+  id: "",
 };
 
 const ContentImageElementForm: React.FC<ContentImageElementFormProps> = ({
@@ -26,11 +27,23 @@ const ContentImageElementForm: React.FC<ContentImageElementFormProps> = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
+    setContentImageState((prevState) => ({
+      ...prevState,
+      id: crypto.randomUUID(),
+    }));
+
     setContentElements((prevState: ContentElements) => ({
       ...prevState,
       contentImages: [...prevState.contentImages, setElementOrderAsLastOne(contentImageState)],
     }));
   };
+
+  useEffect(() => {
+    setContentImageState((prevState) => ({
+      ...prevState,
+      id: crypto.randomUUID(),
+    }));
+  }, []);
 
   return (
     <Form onSubmit={handleSubmit}>

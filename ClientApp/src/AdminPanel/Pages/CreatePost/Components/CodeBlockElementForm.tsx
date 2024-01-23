@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BlogPostContentElementType, CodeBlock, GeneralContentElement } from "../../../../common/types";
 import { ContentElements } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
@@ -14,6 +14,7 @@ const initCodeBlockState: CodeBlock = {
   language: "js",
   orderInBlogPost: null,
   type: BlogPostContentElementType.CODE_BLOCK,
+  id: "",
 };
 
 const codeBlockLanguages: CodeBlock["language"][] = ["js", "cs", "html", "css"];
@@ -28,11 +29,23 @@ const CodeBlockElementForm: React.FC<CodeBlockElementFormProps> = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
+    setCodeBlockState((prevState) => ({
+      ...prevState,
+      id: crypto.randomUUID(),
+    }));
+
     setContentElements((prevState: ContentElements) => ({
       ...prevState,
       codeBlocks: [...prevState.codeBlocks, setElementOrderAsLastOne(codeBlockState)],
     }));
   };
+
+  useEffect(() => {
+    setCodeBlockState((prevState) => ({
+      ...prevState,
+      id: crypto.randomUUID(),
+    }));
+  }, []);
 
   const allCodeBlockLanguages = codeBlockLanguages.map((lang) => (
     <option key={lang} value={lang}>
