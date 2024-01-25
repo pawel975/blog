@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { BlogPostContentElementType, CodeBlock, GeneralContentElement } from "../../../../common/types";
-import { ContentElements } from "../types";
+import { ContentElements, ErrorMessages, NestedError } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 
 interface CodeBlockElementFormProps {
@@ -25,9 +25,18 @@ const CodeBlockElementForm: React.FC<CodeBlockElementFormProps> = ({
   setElementOrderAsLastOne,
 }) => {
   const [codeBlockState, setCodeBlockState] = useState<CodeBlock>(initCodeBlockState);
+  const [submitFormErrors, setSubmitFormErrors] = useState<string[]>([]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+
+    // Clear errors
+    setSubmitFormErrors([]);
+
+    if (codeBlockState.content.length === 0) {
+      setSubmitFormErrors([...submitFormErrors, ErrorMessages.ContentRequired]);
+      return;
+    }
 
     setCodeBlockState((prevState) => ({
       ...prevState,
@@ -59,7 +68,7 @@ const CodeBlockElementForm: React.FC<CodeBlockElementFormProps> = ({
         <Label for="content">Content</Label>
         <Input
           className="mb-2"
-          invalid={Boolean(codeBlocksErrors.length > 0)}
+          invalid={Boolean(codeBlocksErrors.length > 0 || submitFormErrors.length > 0)}
           id="content"
           type="text"
           name="content"
@@ -67,6 +76,9 @@ const CodeBlockElementForm: React.FC<CodeBlockElementFormProps> = ({
           onChange={(e) => setCodeBlockState((prevState) => ({ ...prevState, content: e.target.value }))}
         />
         {codeBlocksErrors.map((errorMsg, index) => (
+          <FormFeedback key={index}>{errorMsg}</FormFeedback>
+        ))}
+        {submitFormErrors.map((errorMsg, index) => (
           <FormFeedback key={index}>{errorMsg}</FormFeedback>
         ))}
       </FormGroup>
@@ -86,7 +98,6 @@ const CodeBlockElementForm: React.FC<CodeBlockElementFormProps> = ({
         >
           {allCodeBlockLanguages}
         </Input>
-
         {codeBlocksErrors.map((errorMsg, index) => (
           <FormFeedback key={index}>{errorMsg}</FormFeedback>
         ))}

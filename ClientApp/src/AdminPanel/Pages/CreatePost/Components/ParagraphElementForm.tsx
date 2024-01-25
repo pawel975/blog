@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 import { FormGroup, Label, Input, Button, Form, FormFeedback } from "reactstrap";
 import { BlogPostContentElementType, GeneralContentElement, Paragraph } from "../../../../common/types";
-import { ContentElements } from "../types";
+import { ContentElements, ErrorMessages } from "../types";
 
 interface ParagraphElementFormProps {
   paragraphsErrors: string[];
   setContentElements: Function;
   setElementOrderAsLastOne: (element: GeneralContentElement) => GeneralContentElement;
+}
+
+interface ParagraphError {
+  fieldName: "content";
+  message: string;
 }
 
 const initParagraphState: Paragraph = {
@@ -22,9 +27,21 @@ const ParagraphElementForm: React.FC<ParagraphElementFormProps> = ({
   setElementOrderAsLastOne,
 }) => {
   const [paragraphState, setParagraphState] = useState<Paragraph>(initParagraphState);
+  const [submitFormErrors, setSubmitFormErrors] = useState<ParagraphError[]>([]);
+
+  const getErrorsByFieldName = (errors: ParagraphError[], fieldName: ParagraphError["fieldName"]) =>
+    errors.filter((err) => err.fieldName === fieldName);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+
+    // Clear errors
+    setSubmitFormErrors([]);
+
+    if (paragraphState.content.length === 0) {
+      setSubmitFormErrors([...submitFormErrors, { fieldName: "content", message: ErrorMessages.ContentRequired }]);
+      return;
+    }
 
     setParagraphState((prevState) => ({
       ...prevState,
@@ -35,6 +52,8 @@ const ParagraphElementForm: React.FC<ParagraphElementFormProps> = ({
       ...prevState,
       paragraphs: [...prevState.paragraphs, setElementOrderAsLastOne(paragraphState)],
     }));
+
+    setParagraphState(initParagraphState);
   };
 
   useEffect(() => {
@@ -50,17 +69,23 @@ const ParagraphElementForm: React.FC<ParagraphElementFormProps> = ({
         <Label for="content">Content</Label>
         <Input
           className="mb-2"
-          invalid={Boolean(paragraphsErrors.length > 0)}
+          invalid={Boolean(paragraphsErrors.length > 0 || getErrorsByFieldName(submitFormErrors, "content").length > 0)}
           id="content"
           type="text"
           name="content"
           value={paragraphState.content}
           onChange={(e) => setParagraphState((prevState) => ({ ...prevState, content: e.target.value }))}
         />
-        {paragraphsErrors.map((errorMsg, index) => (
-          <FormFeedback key={index}>{errorMsg}</FormFeedback>
+        {getErrorsByFieldName(submitFormErrors, "content").map((err, index) => (
+          <FormFeedback key={index}>{err.message}</FormFeedback>
         ))}
       </FormGroup>
+      {/* TODO: create custom css class that will make same color as form feedback, outside form */}
+      {paragraphsErrors.map((errorMsg, index) => (
+        <div className="invalid-feedback" key={index}>
+          {errorMsg}
+        </div>
+      ))}
       <Button color="info">Add element</Button>
     </Form>
   );

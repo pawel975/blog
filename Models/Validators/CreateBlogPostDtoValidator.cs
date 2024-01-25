@@ -22,6 +22,7 @@ namespace Blog.Models.Validators
             RuleForEach(bp => bp.Paragraphs).ChildRules(p =>
             {
                 p.RuleFor(x => x.OrderInBlogPost).GreaterThan(-1);
+                p.RuleFor(x => x.Content).NotEmpty();
             });
 
             RuleFor(bp => bp.Headers).NotEmpty();
@@ -29,20 +30,23 @@ namespace Blog.Models.Validators
             RuleForEach(bp => bp.Headers).ChildRules(p =>
             {
                 p.RuleFor(x => x.OrderInBlogPost).GreaterThan(-1);
-            });
+                p.RuleFor(x => x.Content).NotEmpty();
+                p.RuleFor(x => x.Level).NotEmpty();
 
-            RuleFor(bp => bp.CodeBlocks).NotEmpty();
+            });
 
             RuleForEach(bp => bp.CodeBlocks).ChildRules(p =>
             {
                 p.RuleFor(x => x.OrderInBlogPost).GreaterThan(-1);
+                p.RuleFor(x => x.Content).NotEmpty();
+                p.RuleFor(x => x.Language).NotEmpty();
             });
-
-            RuleFor(bp => bp.ContentImages).NotEmpty();
 
             RuleForEach(bp => bp.ContentImages).ChildRules(p =>
             {
                 p.RuleFor(x => x.OrderInBlogPost).GreaterThan(-1);
+                p.RuleFor(x => x.Content).NotEmpty();
+                p.RuleFor(x => x.AltText).NotEmpty();
             });
         }
     }

@@ -22,7 +22,7 @@ const SinglePostElement: React.FC<SinglePostElementInterface> = ({
   const elementPropsNames = Object.keys(elementProps).filter((name) => name !== "type");
 
   return (
-    <div key={id} id={id} className="d-flex align-items-start gap-1">
+    <div id={id} className="d-flex align-items-start gap-1">
       <ButtonGroup vertical>
         <Button id={id} onClick={(e) => handleChangeElementPositionButtonClick(e, "up")} className="border">
           <UpIcon style={{ pointerEvents: "none" }} size="1.2rem" />

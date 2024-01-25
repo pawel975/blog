@@ -34,7 +34,6 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements, setContent
       contentImages: [],
     };
     elements.forEach((element) => {
-      //TODO: make error handling here
       const elementType = unCapitalizeWord(element.type) + "s";
 
       if (!groupedContentElements.hasOwnProperty(elementType)) {
@@ -46,7 +45,6 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements, setContent
     return groupedContentElements;
   };
 
-  // TODO: change any
   const handleChangeElementPositionButtonClick = (
     e: React.MouseEvent<HTMLButtonElement>,
     direction: "up" | "down"
@@ -96,6 +94,7 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements, setContent
         {flatContentElements(contentElements).map((element) => {
           return (
             <SinglePostElement
+              key={element.id}
               elementProps={element}
               id={element.id}
               handleChangeElementPositionButtonClick={handleChangeElementPositionButtonClick}

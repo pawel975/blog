@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 import { BlogPostContentElementType, GeneralContentElement, Header } from "../../../../common/types";
-import { ContentElements } from "../types";
+import { ContentElements, ErrorMessages } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 
 interface HeaderElementFormProps {
   headersErrors: string[];
   setContentElements: Function;
   setElementOrderAsLastOne: (element: GeneralContentElement) => GeneralContentElement;
+}
+
+interface HeaderError {
+  fieldName: "content";
+  message: string;
 }
 
 const initHeaderState: Header = {
@@ -25,9 +30,21 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({
   setElementOrderAsLastOne,
 }) => {
   const [headerState, setHeaderState] = useState<Header>(initHeaderState);
+  const [submitFormErrors, setSubmitFormErrors] = useState<HeaderError[]>([]);
+
+  const getErrorsByFieldName = (errors: HeaderError[], fieldName: HeaderError["fieldName"]) =>
+    errors.filter((err) => err.fieldName === fieldName);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+
+    // Clear errors
+    setSubmitFormErrors([]);
+
+    if (headerState.content.length === 0) {
+      setSubmitFormErrors([...submitFormErrors, { fieldName: "content", message: ErrorMessages.ContentRequired }]);
+      return;
+    }
 
     setHeaderState((prevState) => ({
       ...prevState,
@@ -38,6 +55,8 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({
       ...prevState,
       headers: [...prevState.headers, setElementOrderAsLastOne(headerState)],
     }));
+
+    setHeaderState(initHeaderState);
   };
 
   useEffect(() => {
@@ -59,15 +78,16 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({
         <Label for="content">Content</Label>
         <Input
           className="mb-2"
-          invalid={Boolean(headersErrors.length > 0)}
+          invalid={Boolean(headersErrors.length > 0 || getErrorsByFieldName(submitFormErrors, "content").length > 0)}
           id="content"
           type="text"
           name="content"
           value={headerState.content}
           onChange={(e) => setHeaderState((prevState) => ({ ...prevState, content: e.target.value }))}
         />
-        {headersErrors.map((errorMsg, index) => (
-          <FormFeedback key={index}>{errorMsg}</FormFeedback>
+
+        {getErrorsByFieldName(submitFormErrors, "content").map((err, index) => (
+          <FormFeedback key={index}>{err.message}</FormFeedback>
         ))}
       </FormGroup>
 
@@ -75,7 +95,7 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({
         <Label for="level">Heading level</Label>
         <Input
           className="mb-2"
-          invalid={Boolean(headersErrors.length > 0)}
+          invalid={Boolean(headersErrors.length > 0 || submitFormErrors.length > 0)}
           id="level"
           type="select"
           name="level"
@@ -84,11 +104,14 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({
         >
           {allHeadingLevelOptions}
         </Input>
-
-        {headersErrors.map((errorMsg, index) => (
-          <FormFeedback key={index}>{errorMsg}</FormFeedback>
-        ))}
       </FormGroup>
+      {/* TODO: create custom css class that will make same color as form feedback, outside form */}
+      {headersErrors.map((errorMsg, index) => (
+        <div className="invalid-feedback" key={index}>
+          {errorMsg}
+        </div>
+      ))}
+
       <Button color="info">Add element</Button>
     </Form>
   );
