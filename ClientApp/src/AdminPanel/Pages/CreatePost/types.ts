@@ -31,3 +31,8 @@ export interface ContentElements {
   // TODO: Not sure if i need to delete this
   [key: string]: any;
 }
+
+export const enum ErrorMessages {
+  ContentRequired = "Content is required",
+  AltTextRequired = "Alt text is required",
+}

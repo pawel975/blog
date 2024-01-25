@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { BlogPostContentElementType, ContentImage, GeneralContentElement } from "../../../../common/types";
-import { ContentElements } from "../types";
+import { ContentElements, ErrorMessages } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 
 interface ContentImageElementFormProps {
@@ -23,9 +23,22 @@ const ContentImageElementForm: React.FC<ContentImageElementFormProps> = ({
   setElementOrderAsLastOne,
 }) => {
   const [contentImageState, setContentImageState] = useState<ContentImage>(initContentImageState);
+  const [submitFormErrors, setSubmitFormErrors] = useState<string[]>([]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+
+    // Clear errors
+    setSubmitFormErrors([]);
+
+    if (contentImageState.content.length === 0) {
+      setSubmitFormErrors([...submitFormErrors, ErrorMessages.ContentRequired]);
+      return;
+    }
+    if (contentImageState.altText.length === 0) {
+      setSubmitFormErrors([...submitFormErrors, ErrorMessages.AltTextRequired]);
+      return;
+    }
 
     setContentImageState((prevState) => ({
       ...prevState,
@@ -51,7 +64,7 @@ const ContentImageElementForm: React.FC<ContentImageElementFormProps> = ({
         <Label for="content">Content</Label>
         <Input
           className="mb-2"
-          invalid={Boolean(contentImagesErrors.length > 0)}
+          invalid={Boolean(contentImagesErrors.length > 0 || submitFormErrors.length > 0)}
           id="content"
           type="text"
           name="content"
@@ -61,13 +74,16 @@ const ContentImageElementForm: React.FC<ContentImageElementFormProps> = ({
         {contentImagesErrors.map((errorMsg, index) => (
           <FormFeedback key={index}>{errorMsg}</FormFeedback>
         ))}
+        {submitFormErrors.map((errorMsg, index) => (
+          <FormFeedback key={index}>{errorMsg}</FormFeedback>
+        ))}
       </FormGroup>
 
       <FormGroup>
         <Label for="alt-text">Alt Text</Label>
         <Input
           className="mb-2"
-          invalid={Boolean(contentImagesErrors.length > 0)}
+          invalid={Boolean(contentImagesErrors.length > 0 || submitFormErrors.length > 0)}
           id="alt-text"
           type="text"
           name="alt-text"
@@ -75,6 +91,9 @@ const ContentImageElementForm: React.FC<ContentImageElementFormProps> = ({
           onChange={(e) => setContentImageState((prevState) => ({ ...prevState, altText: e.target.value }))}
         />
         {contentImagesErrors.map((errorMsg, index) => (
+          <FormFeedback key={index}>{errorMsg}</FormFeedback>
+        ))}
+        {submitFormErrors.map((errorMsg, index) => (
           <FormFeedback key={index}>{errorMsg}</FormFeedback>
         ))}
       </FormGroup>
