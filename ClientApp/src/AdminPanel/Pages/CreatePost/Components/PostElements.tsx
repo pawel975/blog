@@ -82,6 +82,13 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements, setContent
     }
   };
 
+  const handleElementDelete = (e: React.MouseEvent<HTMLElement>): void => {
+    const targetId = (e.target as HTMLElement).id;
+    setContentElements(
+      groupContentElements(flatContentElements(contentElements).filter((element) => element.id !== targetId))
+    );
+  };
+
   return (
     <Container className="w-100 p-0 d-flex flex-column gap-1 mt-2">
       <div>
@@ -98,6 +105,7 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements, setContent
               elementProps={element}
               id={element.id}
               handleChangeElementPositionButtonClick={handleChangeElementPositionButtonClick}
+              handleElementDelete={handleElementDelete}
             />
           );
         })}

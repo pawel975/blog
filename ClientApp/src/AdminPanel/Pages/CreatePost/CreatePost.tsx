@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Layout from "../../Layout/Layout";
-import { Button, Container, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
+import { Alert, Button, Container, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { CodeBlock, ContentImage, Header, Paragraph } from "../../../common/types";
 import AddElementForm from "./Components/AddElementForm";
 import parseContentElementsNestedErrors from "./helpers/parseContentElementsNestedErrors";
 import { ContentElements, ErrorsObject } from "./types";
 import PostElements from "./Components/PostElements";
+import CreatePostErrors from "./Components/CreatePostErrors";
 
 interface FormData {
   title: string;
@@ -90,7 +91,6 @@ const CreatePost: React.FC = () => {
 
         try {
           const parsedErrors = parseContentElementsNestedErrors(errorCategories);
-          console.log(parsedErrors, "parsedErrors");
           if (parsedErrors) setErrors((prevState) => ({ ...prevState, ...parsedErrors }));
 
           console.error("Failed to create post:", errorCategories);
@@ -150,9 +150,13 @@ const CreatePost: React.FC = () => {
           </FormGroup>
         </Form>
 
-        <AddElementForm errors={errors} contentElements={contentElements} setContentElements={setContentElements} />
+        <AddElementForm contentElements={contentElements} setContentElements={setContentElements} />
 
         <PostElements contentElements={contentElements} setContentElements={setContentElements} />
+
+        <CreatePostErrors
+          errors={[...errors.Paragraphs, ...errors.Headers, ...errors.CodeBlocks, ...errors.ContentImages]}
+        />
 
         <Button onClick={handleSubmit} color="primary">
           Create Post

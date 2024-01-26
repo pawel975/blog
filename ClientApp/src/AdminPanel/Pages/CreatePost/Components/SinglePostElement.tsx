@@ -8,18 +8,23 @@ import { GoArrowUp as UpIcon, GoArrowDown as DownIcon } from "react-icons/go";
 interface SinglePostElementInterface {
   elementProps: IndexedGeneralContentElement;
   id: string;
+  // TODO: change any
   handleChangeElementPositionButtonClick: (e: any, direction: "up" | "down") => void;
+  handleElementDelete: (e: any) => void;
 }
 
 const SinglePostElement: React.FC<SinglePostElementInterface> = ({
   elementProps,
   id,
   handleChangeElementPositionButtonClick,
+  handleElementDelete,
 }) => {
   const { type } = elementProps;
   const [areOptionsOpen, setAreOptionsOpen] = useState<boolean>(false);
   const toggleOptions = () => setAreOptionsOpen(!areOptionsOpen);
-  const elementPropsNames = Object.keys(elementProps).filter((name) => name !== "type");
+  const elementPropsNames = Object.keys(elementProps).filter(
+    (name) => !["type", "id", "orderInBlogPost"].includes(name)
+  );
 
   return (
     <div id={id} className="d-flex align-items-start gap-1">
@@ -41,7 +46,9 @@ const SinglePostElement: React.FC<SinglePostElementInterface> = ({
               Options
             </DropdownToggle>
             <DropdownMenu>
-              <DropdownItem>Delete</DropdownItem>
+              <DropdownItem id={id} onClick={(e) => handleElementDelete(e)}>
+                Delete
+              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </div>
