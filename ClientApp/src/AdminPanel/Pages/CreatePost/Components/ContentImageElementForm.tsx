@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BlogPostContentElementType, ContentImage, GeneralContentElement } from "../../../../common/types";
 import { ContentElements, ErrorMessages } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
@@ -14,19 +14,19 @@ interface ContentImageError {
   message: string;
 }
 
-const initContentImageState: ContentImage = {
-  content: "",
-  altText: "",
-  orderInBlogPost: null,
-  type: BlogPostContentElementType.CONTENT_IMAGE,
-  id: "",
-};
-
 const ContentImageElementForm: React.FC<ContentImageElementFormProps> = ({
   setContentElements,
   setElementOrderAsLastOne,
 }) => {
-  const [contentImageState, setContentImageState] = useState<ContentImage>(initContentImageState);
+  const initState: ContentImage = {
+    content: "",
+    altText: "",
+    orderInBlogPost: null,
+    type: BlogPostContentElementType.CONTENT_IMAGE,
+    id: crypto.randomUUID(),
+  };
+
+  const [state, setState] = useState<ContentImage>(initState);
   const [submitFormErrors, setSubmitFormErrors] = useState<ContentImageError[]>([]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -37,35 +37,24 @@ const ContentImageElementForm: React.FC<ContentImageElementFormProps> = ({
 
     const tempSubmitErrors: ContentImageError[] = [...submitFormErrors];
 
-    if (contentImageState.content.length === 0) {
+    if (state.content.length === 0) {
       tempSubmitErrors.push({ errorType: "content", message: ErrorMessages.ContentRequired });
     }
-    if (contentImageState.altText.length === 0) {
+    if (state.altText.length === 0) {
       tempSubmitErrors.push({ errorType: "altText", message: ErrorMessages.AltTextRequired });
     }
 
-    if (tempSubmitErrors.length > 0) {
-      setSubmitFormErrors(tempSubmitErrors);
-      return;
-    }
+    setSubmitFormErrors(tempSubmitErrors);
 
-    setContentImageState((prevState) => ({
-      ...prevState,
-      id: crypto.randomUUID(),
-    }));
+    if (tempSubmitErrors.length > 0) return;
 
     setContentElements((prevState: ContentElements) => ({
       ...prevState,
-      contentImages: [...prevState.contentImages, setElementOrderAsLastOne(contentImageState)],
+      contentImages: [...prevState.contentImages, setElementOrderAsLastOne(state)],
     }));
-  };
 
-  useEffect(() => {
-    setContentImageState((prevState) => ({
-      ...prevState,
-      id: crypto.randomUUID(),
-    }));
-  }, []);
+    setState(initState);
+  };
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -77,8 +66,8 @@ const ContentImageElementForm: React.FC<ContentImageElementFormProps> = ({
           id="content"
           type="text"
           name="content"
-          value={contentImageState.content}
-          onChange={(e) => setContentImageState((prevState) => ({ ...prevState, content: e.target.value }))}
+          value={state.content}
+          onChange={(e) => setState((prevState) => ({ ...prevState, content: e.target.value }))}
         />
         {getErrorsByFieldName(submitFormErrors, "content").map((err, index) => (
           <FormFeedback key={index}>{err.message}</FormFeedback>
@@ -93,8 +82,8 @@ const ContentImageElementForm: React.FC<ContentImageElementFormProps> = ({
           id="alt-text"
           type="text"
           name="alt-text"
-          value={contentImageState.altText}
-          onChange={(e) => setContentImageState((prevState) => ({ ...prevState, altText: e.target.value }))}
+          value={state.altText}
+          onChange={(e) => setState((prevState) => ({ ...prevState, altText: e.target.value }))}
         />
         {getErrorsByFieldName(submitFormErrors, "altText").map((err, index) => (
           <FormFeedback key={index}>{err.message}</FormFeedback>

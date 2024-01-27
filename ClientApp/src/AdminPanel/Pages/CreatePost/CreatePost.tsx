@@ -3,10 +3,10 @@ import axios from "axios";
 import Layout from "../../Layout/Layout";
 import { Button, Container, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 import { useNavigate } from "react-router-dom";
-import { CodeBlock, ContentImage, Header, Paragraph } from "../../../common/types";
+import { CodeBlock, ContentElements, ContentImage, Header, Paragraph } from "../../../common/types";
 import AddElementForm from "./Components/AddElementForm";
 import parseContentElementsNestedErrors from "./helpers/parseContentElementsNestedErrors";
-import { ContentElements, ErrorsObject } from "./types";
+import { ErrorsObject } from "./types";
 import PostElements from "./Components/PostElements";
 import CreatePostErrors from "./Components/CreatePostErrors";
 
