@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { FormGroup, Label, Input, Button, Form, FormFeedback } from "reactstrap";
 import { BlogPostContentElementType, GeneralContentElement, Paragraph } from "../../../../common/types";
 import { ContentElements, ErrorMessages } from "../types";
+import getErrorsByFieldName from "../helpers/getErrorsByFieldName";
 
 interface ParagraphElementFormProps {
   setContentElements: Function;
@@ -9,7 +10,7 @@ interface ParagraphElementFormProps {
 }
 
 interface ParagraphError {
-  fieldName: "content";
+  errorType: "content";
   message: string;
 }
 
@@ -27,17 +28,14 @@ const ParagraphElementForm: React.FC<ParagraphElementFormProps> = ({
   const [paragraphState, setParagraphState] = useState<Paragraph>(initParagraphState);
   const [submitFormErrors, setSubmitFormErrors] = useState<ParagraphError[]>([]);
 
-  const getErrorsByFieldName = (errors: ParagraphError[], fieldName: ParagraphError["fieldName"]) =>
-    errors.filter((err) => err.fieldName === fieldName);
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
     // Clear errors
-    setSubmitFormErrors([]);
+    setSubmitFormErrors(submitFormErrors.splice(0));
 
     if (paragraphState.content.length === 0) {
-      setSubmitFormErrors([...submitFormErrors, { fieldName: "content", message: ErrorMessages.ContentRequired }]);
+      setSubmitFormErrors([...submitFormErrors, { errorType: "content", message: ErrorMessages.ContentRequired }]);
       return;
     }
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { BlogPostContentElementType, GeneralContentElement, Header } from "../../../../common/types";
 import { ContentElements, ErrorMessages } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
+import getErrorsByFieldName from "../helpers/getErrorsByFieldName";
 
 interface HeaderElementFormProps {
   setContentElements: Function;
@@ -9,7 +10,7 @@ interface HeaderElementFormProps {
 }
 
 interface HeaderError {
-  fieldName: "content";
+  errorType: "content" | "level";
   message: string;
 }
 
@@ -27,17 +28,14 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({ setContentElement
   const [headerState, setHeaderState] = useState<Header>(initHeaderState);
   const [submitFormErrors, setSubmitFormErrors] = useState<HeaderError[]>([]);
 
-  const getErrorsByFieldName = (errors: HeaderError[], fieldName: HeaderError["fieldName"]) =>
-    errors.filter((err) => err.fieldName === fieldName);
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
     // Clear errors
-    setSubmitFormErrors([]);
+    setSubmitFormErrors(submitFormErrors.splice(0));
 
     if (headerState.content.length === 0) {
-      setSubmitFormErrors([...submitFormErrors, { fieldName: "content", message: ErrorMessages.ContentRequired }]);
+      setSubmitFormErrors([...submitFormErrors, { errorType: "content", message: ErrorMessages.ContentRequired }]);
       return;
     }
 
@@ -73,7 +71,7 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({ setContentElement
         <Label for="content">Content</Label>
         <Input
           className="mb-2"
-          invalid={Boolean(getErrorsByFieldName(submitFormErrors, "content").length > 0)}
+          invalid={getErrorsByFieldName(submitFormErrors, "content").length > 0}
           id="content"
           type="text"
           name="content"
@@ -90,7 +88,7 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({ setContentElement
         <Label for="level">Heading level</Label>
         <Input
           className="mb-2"
-          invalid={Boolean(submitFormErrors.length > 0)}
+          invalid={getErrorsByFieldName(submitFormErrors, "level").length > 0}
           id="level"
           type="select"
           name="level"
