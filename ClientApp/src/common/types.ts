@@ -35,3 +35,12 @@ export interface ContentImage extends ContentElement {
 export type GeneralContentElement = Paragraph | Header | CodeBlock | ContentImage;
 
 export type IndexedGeneralContentElement = GeneralContentElement & { [property: string]: any };
+
+export interface ContentElements {
+  paragraphs: Paragraph[];
+  headers: Header[];
+  codeBlocks: CodeBlock[];
+  contentImages: ContentImage[];
+  // TODO: Not sure if i need to delete this
+  [key: string]: any;
+}
