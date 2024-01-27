@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FormGroup, Label, Input, Button, Form, FormFeedback } from "reactstrap";
 import { BlogPostContentElementType, GeneralContentElement, Paragraph } from "../../../../common/types";
 import { ContentElements, ErrorMessages } from "../types";
@@ -14,18 +14,18 @@ interface ParagraphError {
   message: string;
 }
 
-const initParagraphState: Paragraph = {
-  content: "",
-  orderInBlogPost: null,
-  type: BlogPostContentElementType.PARAGRAPH,
-  id: crypto.randomUUID(),
-};
-
 const ParagraphElementForm: React.FC<ParagraphElementFormProps> = ({
   setContentElements,
   setElementOrderAsLastOne,
 }) => {
-  const [paragraphState, setParagraphState] = useState<Paragraph>(initParagraphState);
+  const initState: Paragraph = {
+    content: "",
+    orderInBlogPost: null,
+    type: BlogPostContentElementType.PARAGRAPH,
+    id: crypto.randomUUID(),
+  };
+
+  const [state, setState] = useState<Paragraph>(initState);
   const [submitFormErrors, setSubmitFormErrors] = useState<ParagraphError[]>([]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -34,30 +34,18 @@ const ParagraphElementForm: React.FC<ParagraphElementFormProps> = ({
     // Clear errors
     setSubmitFormErrors(submitFormErrors.splice(0));
 
-    if (paragraphState.content.length === 0) {
+    if (state.content.length === 0) {
       setSubmitFormErrors([...submitFormErrors, { errorType: "content", message: ErrorMessages.ContentRequired }]);
       return;
     }
 
-    setParagraphState((prevState) => ({
-      ...prevState,
-      id: crypto.randomUUID(),
-    }));
-
     setContentElements((prevState: ContentElements) => ({
       ...prevState,
-      paragraphs: [...prevState.paragraphs, setElementOrderAsLastOne(paragraphState)],
+      paragraphs: [...prevState.paragraphs, setElementOrderAsLastOne(state)],
     }));
 
-    setParagraphState(initParagraphState);
+    setState(initState);
   };
-
-  useEffect(() => {
-    setParagraphState((prevState) => ({
-      ...prevState,
-      id: crypto.randomUUID(),
-    }));
-  }, []);
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -69,8 +57,8 @@ const ParagraphElementForm: React.FC<ParagraphElementFormProps> = ({
           id="content"
           type="text"
           name="content"
-          value={paragraphState.content}
-          onChange={(e) => setParagraphState((prevState) => ({ ...prevState, content: e.target.value }))}
+          value={state.content}
+          onChange={(e) => setState((prevState) => ({ ...prevState, content: e.target.value }))}
         />
         {getErrorsByFieldName(submitFormErrors, "content").map((err, index) => (
           <FormFeedback key={index}>{err.message}</FormFeedback>
