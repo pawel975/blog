@@ -45,6 +45,14 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements, setContent
     return groupedContentElements;
   };
 
+  const updateOrderOfContentElements = (elements: GeneralContentElement[]): GeneralContentElement[] => {
+    const updateOrderElements = elements.map((element, index) => {
+      element.orderInBlogPost = index;
+      return element;
+    });
+    return updateOrderElements;
+  };
+
   const handleChangeElementPositionButtonClick = (
     e: React.MouseEvent<HTMLButtonElement>,
     direction: "up" | "down"
@@ -85,7 +93,9 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements, setContent
   const handleElementDelete = (e: React.MouseEvent<HTMLElement>): void => {
     const targetId = (e.target as HTMLElement).id;
     setContentElements(
-      groupContentElements(flatContentElements(contentElements).filter((element) => element.id !== targetId))
+      groupContentElements(
+        updateOrderOfContentElements(flatContentElements(contentElements).filter((element) => element.id !== targetId))
+      )
     );
   };
 

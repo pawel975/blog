@@ -24,9 +24,7 @@ const SinglePostElement: React.FC<SinglePostElementInterface> = ({
   const { type } = elementProps;
   const [areOptionsOpen, setAreOptionsOpen] = useState<boolean>(false);
   const toggleOptions = () => setAreOptionsOpen(!areOptionsOpen);
-  const elementPropsNames = Object.keys(elementProps).filter(
-    (name) => !["type", "id", "orderInBlogPost"].includes(name)
-  );
+  const elementPropsNames = Object.keys(elementProps).filter((name) => !["type"].includes(name));
 
   return (
     <div id={id} className="d-flex align-items-start gap-1">
