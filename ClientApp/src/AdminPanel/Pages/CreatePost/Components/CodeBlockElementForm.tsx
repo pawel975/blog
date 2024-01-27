@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
 import { BlogPostContentElementType, CodeBlock, GeneralContentElement } from "../../../../common/types";
-import { ContentElements, ErrorMessages, NestedError } from "../types";
+import { ContentElements, ErrorMessages } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
+import getErrorsByFieldName from "../helpers/getErrorsByFieldName";
 
 interface CodeBlockElementFormProps {
   setContentElements: Function;
   setElementOrderAsLastOne: (element: GeneralContentElement) => GeneralContentElement;
+}
+
+interface CodeBlockError {
+  errorType: "content" | "language";
+  message: string;
 }
 
 const initCodeBlockState: CodeBlock = {
@@ -23,16 +29,16 @@ const CodeBlockElementForm: React.FC<CodeBlockElementFormProps> = ({
   setElementOrderAsLastOne,
 }) => {
   const [codeBlockState, setCodeBlockState] = useState<CodeBlock>(initCodeBlockState);
-  const [submitFormErrors, setSubmitFormErrors] = useState<string[]>([]);
+  const [submitFormErrors, setSubmitFormErrors] = useState<CodeBlockError[]>([]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
     // Clear errors
-    setSubmitFormErrors([]);
+    setSubmitFormErrors(submitFormErrors.splice(0));
 
     if (codeBlockState.content.length === 0) {
-      setSubmitFormErrors([...submitFormErrors, ErrorMessages.ContentRequired]);
+      setSubmitFormErrors([...submitFormErrors, { errorType: "content", message: ErrorMessages.ContentRequired }]);
       return;
     }
 
@@ -66,15 +72,15 @@ const CodeBlockElementForm: React.FC<CodeBlockElementFormProps> = ({
         <Label for="content">Content</Label>
         <Input
           className="mb-2"
-          invalid={Boolean(submitFormErrors.length > 0)}
+          invalid={getErrorsByFieldName(submitFormErrors, "content").length > 0}
           id="content"
           type="text"
           name="content"
           value={codeBlockState.content}
           onChange={(e) => setCodeBlockState((prevState) => ({ ...prevState, content: e.target.value }))}
         />
-        {submitFormErrors.map((errorMsg, index) => (
-          <FormFeedback key={index}>{errorMsg}</FormFeedback>
+        {getErrorsByFieldName(submitFormErrors, "content").map((err, index) => (
+          <FormFeedback key={index}>{err.message}</FormFeedback>
         ))}
       </FormGroup>
 
@@ -82,7 +88,7 @@ const CodeBlockElementForm: React.FC<CodeBlockElementFormProps> = ({
         <Label for="language">Language</Label>
         <Input
           className="mb-2"
-          invalid={Boolean(submitFormErrors.length > 0)}
+          invalid={getErrorsByFieldName(submitFormErrors, "language").length > 0}
           id="language"
           type="select"
           name="language"

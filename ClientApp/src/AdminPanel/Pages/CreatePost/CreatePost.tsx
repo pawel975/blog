@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Layout from "../../Layout/Layout";
-import { Alert, Button, Container, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
+import { Button, Container, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { CodeBlock, ContentImage, Header, Paragraph } from "../../../common/types";
 import AddElementForm from "./Components/AddElementForm";
