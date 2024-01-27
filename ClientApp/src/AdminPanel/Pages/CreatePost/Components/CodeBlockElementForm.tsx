@@ -4,7 +4,6 @@ import { ContentElements, ErrorMessages, NestedError } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 
 interface CodeBlockElementFormProps {
-  codeBlocksErrors: string[];
   setContentElements: Function;
   setElementOrderAsLastOne: (element: GeneralContentElement) => GeneralContentElement;
 }
@@ -20,7 +19,6 @@ const initCodeBlockState: CodeBlock = {
 const codeBlockLanguages: CodeBlock["language"][] = ["js", "cs", "html", "css"];
 
 const CodeBlockElementForm: React.FC<CodeBlockElementFormProps> = ({
-  codeBlocksErrors,
   setContentElements,
   setElementOrderAsLastOne,
 }) => {
@@ -68,16 +66,13 @@ const CodeBlockElementForm: React.FC<CodeBlockElementFormProps> = ({
         <Label for="content">Content</Label>
         <Input
           className="mb-2"
-          invalid={Boolean(codeBlocksErrors.length > 0 || submitFormErrors.length > 0)}
+          invalid={Boolean(submitFormErrors.length > 0)}
           id="content"
           type="text"
           name="content"
           value={codeBlockState.content}
           onChange={(e) => setCodeBlockState((prevState) => ({ ...prevState, content: e.target.value }))}
         />
-        {codeBlocksErrors.map((errorMsg, index) => (
-          <FormFeedback key={index}>{errorMsg}</FormFeedback>
-        ))}
         {submitFormErrors.map((errorMsg, index) => (
           <FormFeedback key={index}>{errorMsg}</FormFeedback>
         ))}
@@ -87,7 +82,7 @@ const CodeBlockElementForm: React.FC<CodeBlockElementFormProps> = ({
         <Label for="language">Language</Label>
         <Input
           className="mb-2"
-          invalid={Boolean(codeBlocksErrors.length > 0)}
+          invalid={Boolean(submitFormErrors.length > 0)}
           id="language"
           type="select"
           name="language"
@@ -98,9 +93,6 @@ const CodeBlockElementForm: React.FC<CodeBlockElementFormProps> = ({
         >
           {allCodeBlockLanguages}
         </Input>
-        {codeBlocksErrors.map((errorMsg, index) => (
-          <FormFeedback key={index}>{errorMsg}</FormFeedback>
-        ))}
       </FormGroup>
       <Button color="info">Add element</Button>
     </Form>

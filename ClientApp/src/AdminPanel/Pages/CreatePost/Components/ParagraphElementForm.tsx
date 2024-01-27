@@ -4,7 +4,6 @@ import { BlogPostContentElementType, GeneralContentElement, Paragraph } from "..
 import { ContentElements, ErrorMessages } from "../types";
 
 interface ParagraphElementFormProps {
-  paragraphsErrors: string[];
   setContentElements: Function;
   setElementOrderAsLastOne: (element: GeneralContentElement) => GeneralContentElement;
 }
@@ -22,7 +21,6 @@ const initParagraphState: Paragraph = {
 };
 
 const ParagraphElementForm: React.FC<ParagraphElementFormProps> = ({
-  paragraphsErrors,
   setContentElements,
   setElementOrderAsLastOne,
 }) => {
@@ -69,7 +67,7 @@ const ParagraphElementForm: React.FC<ParagraphElementFormProps> = ({
         <Label for="content">Content</Label>
         <Input
           className="mb-2"
-          invalid={Boolean(paragraphsErrors.length > 0 || getErrorsByFieldName(submitFormErrors, "content").length > 0)}
+          invalid={getErrorsByFieldName(submitFormErrors, "content").length > 0}
           id="content"
           type="text"
           name="content"
@@ -80,12 +78,6 @@ const ParagraphElementForm: React.FC<ParagraphElementFormProps> = ({
           <FormFeedback key={index}>{err.message}</FormFeedback>
         ))}
       </FormGroup>
-      {/* TODO: create custom css class that will make same color as form feedback, outside form */}
-      {paragraphsErrors.map((errorMsg, index) => (
-        <div className="invalid-feedback" key={index}>
-          {errorMsg}
-        </div>
-      ))}
       <Button color="info">Add element</Button>
     </Form>
   );

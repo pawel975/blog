@@ -4,7 +4,6 @@ import { ContentElements, ErrorMessages } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 
 interface ContentImageElementFormProps {
-  contentImagesErrors: string[];
   setContentElements: Function;
   setElementOrderAsLastOne: (element: GeneralContentElement) => GeneralContentElement;
 }
@@ -18,7 +17,6 @@ const initContentImageState: ContentImage = {
 };
 
 const ContentImageElementForm: React.FC<ContentImageElementFormProps> = ({
-  contentImagesErrors,
   setContentElements,
   setElementOrderAsLastOne,
 }) => {
@@ -64,16 +62,13 @@ const ContentImageElementForm: React.FC<ContentImageElementFormProps> = ({
         <Label for="content">Content</Label>
         <Input
           className="mb-2"
-          invalid={Boolean(contentImagesErrors.length > 0 || submitFormErrors.length > 0)}
+          invalid={Boolean(submitFormErrors.length > 0)}
           id="content"
           type="text"
           name="content"
           value={contentImageState.content}
           onChange={(e) => setContentImageState((prevState) => ({ ...prevState, content: e.target.value }))}
         />
-        {contentImagesErrors.map((errorMsg, index) => (
-          <FormFeedback key={index}>{errorMsg}</FormFeedback>
-        ))}
         {submitFormErrors.map((errorMsg, index) => (
           <FormFeedback key={index}>{errorMsg}</FormFeedback>
         ))}
@@ -83,16 +78,13 @@ const ContentImageElementForm: React.FC<ContentImageElementFormProps> = ({
         <Label for="alt-text">Alt Text</Label>
         <Input
           className="mb-2"
-          invalid={Boolean(contentImagesErrors.length > 0 || submitFormErrors.length > 0)}
+          invalid={Boolean(submitFormErrors.length > 0)}
           id="alt-text"
           type="text"
           name="alt-text"
           value={contentImageState.altText}
           onChange={(e) => setContentImageState((prevState) => ({ ...prevState, altText: e.target.value }))}
         />
-        {contentImagesErrors.map((errorMsg, index) => (
-          <FormFeedback key={index}>{errorMsg}</FormFeedback>
-        ))}
         {submitFormErrors.map((errorMsg, index) => (
           <FormFeedback key={index}>{errorMsg}</FormFeedback>
         ))}

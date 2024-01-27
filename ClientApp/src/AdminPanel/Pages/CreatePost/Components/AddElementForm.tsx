@@ -6,19 +6,17 @@ import ContentImageElementForm from "./ContentImageElementForm";
 import HeaderElementForm from "./HeaderElementForm";
 import ParagraphElementForm from "./ParagraphElementForm";
 import FormLayout from "./FormLayout";
-import { ContentElements, ErrorsObject } from "../types";
+import { ContentElements } from "../types";
 
 interface AddElementFormProps {
-  errors: ErrorsObject;
   contentElements: ContentElements;
   setContentElements: Function;
 }
 
-const AddElementForm: React.FC<AddElementFormProps> = ({ errors, contentElements, setContentElements }) => {
+const AddElementForm: React.FC<AddElementFormProps> = ({ contentElements, setContentElements }) => {
   const [isNewElementFormOpen, setIsNewElementFormOpen] = useState<boolean>(false);
   const [clickedNewElementType, setClickedNewElementType] = useState<string | undefined>();
 
-  //TODO: Desctructure contentElements and pass in props prop of this object to each type of element
   const handleNewElementBtnClick = (e: React.MouseEvent<HTMLElement>): void => {
     const targetBtnType = (e.target as HTMLButtonElement).id;
 
@@ -55,7 +53,6 @@ const AddElementForm: React.FC<AddElementFormProps> = ({ errors, contentElements
       case BlogPostContentElementType.PARAGRAPH:
         return (
           <ParagraphElementForm
-            paragraphsErrors={errors.Paragraphs}
             setContentElements={setContentElements}
             setElementOrderAsLastOne={setElementOrderAsLastOne}
           />
@@ -63,7 +60,6 @@ const AddElementForm: React.FC<AddElementFormProps> = ({ errors, contentElements
       case BlogPostContentElementType.HEADER:
         return (
           <HeaderElementForm
-            headersErrors={errors.Headers}
             setContentElements={setContentElements}
             setElementOrderAsLastOne={setElementOrderAsLastOne}
           />
@@ -71,7 +67,6 @@ const AddElementForm: React.FC<AddElementFormProps> = ({ errors, contentElements
       case BlogPostContentElementType.CODE_BLOCK:
         return (
           <CodeBlockElementForm
-            codeBlocksErrors={errors.CodeBlocks}
             setContentElements={setContentElements}
             setElementOrderAsLastOne={setElementOrderAsLastOne}
           />
@@ -79,7 +74,6 @@ const AddElementForm: React.FC<AddElementFormProps> = ({ errors, contentElements
       case BlogPostContentElementType.CONTENT_IMAGE:
         return (
           <ContentImageElementForm
-            contentImagesErrors={errors.ContentImages}
             setContentElements={setContentElements}
             setElementOrderAsLastOne={setElementOrderAsLastOne}
           />
@@ -89,7 +83,7 @@ const AddElementForm: React.FC<AddElementFormProps> = ({ errors, contentElements
     }
   };
   return (
-    <Container className="d-flex flex-column p-0">
+    <Container className="d-flex flex-column p-0 gap-2">
       <Form>
         <Label>Add elements to post</Label>
         <FormGroup>

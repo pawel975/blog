@@ -4,7 +4,6 @@ import { ContentElements, ErrorMessages } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 
 interface HeaderElementFormProps {
-  headersErrors: string[];
   setContentElements: Function;
   setElementOrderAsLastOne: (element: GeneralContentElement) => GeneralContentElement;
 }
@@ -24,11 +23,7 @@ const initHeaderState: Header = {
 
 const headingLevels: Header["level"][] = ["h1", "h2", "h3", "h4", "h5", "h6"];
 
-const HeaderElementForm: React.FC<HeaderElementFormProps> = ({
-  headersErrors,
-  setContentElements,
-  setElementOrderAsLastOne,
-}) => {
+const HeaderElementForm: React.FC<HeaderElementFormProps> = ({ setContentElements, setElementOrderAsLastOne }) => {
   const [headerState, setHeaderState] = useState<Header>(initHeaderState);
   const [submitFormErrors, setSubmitFormErrors] = useState<HeaderError[]>([]);
 
@@ -78,7 +73,7 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({
         <Label for="content">Content</Label>
         <Input
           className="mb-2"
-          invalid={Boolean(headersErrors.length > 0 || getErrorsByFieldName(submitFormErrors, "content").length > 0)}
+          invalid={Boolean(getErrorsByFieldName(submitFormErrors, "content").length > 0)}
           id="content"
           type="text"
           name="content"
@@ -95,7 +90,7 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({
         <Label for="level">Heading level</Label>
         <Input
           className="mb-2"
-          invalid={Boolean(headersErrors.length > 0 || submitFormErrors.length > 0)}
+          invalid={Boolean(submitFormErrors.length > 0)}
           id="level"
           type="select"
           name="level"
@@ -105,13 +100,6 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({
           {allHeadingLevelOptions}
         </Input>
       </FormGroup>
-      {/* TODO: create custom css class that will make same color as form feedback, outside form */}
-      {headersErrors.map((errorMsg, index) => (
-        <div className="invalid-feedback" key={index}>
-          {errorMsg}
-        </div>
-      ))}
-
       <Button color="info">Add element</Button>
     </Form>
   );
