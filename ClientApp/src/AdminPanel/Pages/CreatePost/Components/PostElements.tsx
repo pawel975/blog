@@ -57,7 +57,7 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements, setContent
       const firstElementToSwap = allContentElements.find((el) => el.id === targetElementId);
 
       if (!firstElementToSwap) {
-        throw new Error(`Cannot find element to swap with id of: ${targetElementId}`);
+        throw new Error(`Cannot find element to swap`);
       }
 
       const firstElementOrderInblogPost = firstElementToSwap.orderInBlogPost;
@@ -68,7 +68,7 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements, setContent
       const secondElementToSwap = allContentElements.find((el) => el.orderInBlogPost === secondElementOrderInBlogPost);
 
       if (!secondElementToSwap) {
-        throw new Error(`Cannot find element to swap with id of: ${targetElementId}`);
+        throw new Error(`Cannot find element to swap places, attempt to go out of range`);
       }
 
       // Swap order in blog post for both elements
@@ -104,6 +104,7 @@ const PostElements: React.FC<PostElementsProps> = ({ contentElements, setContent
               key={element.id}
               elementProps={element}
               id={element.id}
+              lastElementOrderInBlogPost={flatContentElements(contentElements).length - 1}
               handleChangeElementPositionButtonClick={handleChangeElementPositionButtonClick}
               handleElementDelete={handleElementDelete}
             />

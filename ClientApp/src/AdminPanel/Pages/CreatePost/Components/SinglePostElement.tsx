@@ -8,6 +8,7 @@ import { GoArrowUp as UpIcon, GoArrowDown as DownIcon } from "react-icons/go";
 interface SinglePostElementInterface {
   elementProps: IndexedGeneralContentElement;
   id: string;
+  lastElementOrderInBlogPost: number;
   // TODO: change any
   handleChangeElementPositionButtonClick: (e: any, direction: "up" | "down") => void;
   handleElementDelete: (e: any) => void;
@@ -16,6 +17,7 @@ interface SinglePostElementInterface {
 const SinglePostElement: React.FC<SinglePostElementInterface> = ({
   elementProps,
   id,
+  lastElementOrderInBlogPost,
   handleChangeElementPositionButtonClick,
   handleElementDelete,
 }) => {
@@ -29,10 +31,20 @@ const SinglePostElement: React.FC<SinglePostElementInterface> = ({
   return (
     <div id={id} className="d-flex align-items-start gap-1">
       <ButtonGroup vertical>
-        <Button id={id} onClick={(e) => handleChangeElementPositionButtonClick(e, "up")} className="border">
+        <Button
+          id={id}
+          onClick={(e) => handleChangeElementPositionButtonClick(e, "up")}
+          className="border"
+          disabled={elementProps.orderInBlogPost === 0}
+        >
           <UpIcon style={{ pointerEvents: "none" }} size="1.2rem" />
         </Button>
-        <Button id={id} onClick={(e) => handleChangeElementPositionButtonClick(e, "down")} className="border">
+        <Button
+          id={id}
+          onClick={(e) => handleChangeElementPositionButtonClick(e, "down")}
+          className="border"
+          disabled={elementProps.orderInBlogPost === lastElementOrderInBlogPost}
+        >
           <DownIcon style={{ pointerEvents: "none" }} size="1.2rem" />
         </Button>
       </ButtonGroup>
