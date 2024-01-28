@@ -1,7 +1,9 @@
 import { Container } from "reactstrap";
 import { BlogPostContentElementType, CodeBlock, ContentElements, ContentImage, Header } from "../../common/types";
 import flatContentElements from "../../common/helpers/flatContentElements";
-import { Highlight } from "prism-react-renderer";
+import SyntaxHighlighter from "react-syntax-highlighter";
+import { atomOneDark, darcula } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import languages from "react-syntax-highlighter/dist/esm/languages/hljs/javascript";
 
 interface GenerateBlogPostInterface {
   contentElements: ContentElements;
@@ -33,12 +35,16 @@ const GenerateBlogPost: React.FC<GenerateBlogPostInterface> = ({ contentElements
         }
       case BlogPostContentElementType.CODE_BLOCK:
         const language: CodeBlock["language"] = (element as CodeBlock).language;
-        //TODO: use library to format code
+        //TODO: Change names in database to correspond names in library for highlighting
 
+        /**
+         * {@link languages} to choose from
+         */
         return (
-          <Container className="d-flex flex-column gap-1 border">
-            <span>{language}</span>
-            <code>{element.content}</code>
+          <Container className="d-flex flex-column justify-content border p-0">
+            <SyntaxHighlighter language={"javascript"} style={atomOneDark}>
+              {element.content}
+            </SyntaxHighlighter>
           </Container>
         );
 
