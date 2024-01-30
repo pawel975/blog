@@ -1,9 +1,7 @@
 import { Container } from "reactstrap";
 import { BlogPostContentElementType, CodeBlock, ContentElements, ContentImage, Header } from "../../common/types";
 import flatContentElements from "../../common/helpers/flatContentElements";
-import SyntaxHighlighter from "react-syntax-highlighter";
-import { atomOneDark, darcula } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import languages from "react-syntax-highlighter/dist/esm/languages/hljs/javascript";
+import CustomSyntaxHighlighter from "./CustomSyntaxHighlighter";
 
 interface GenerateBlogPostInterface {
   contentElements: ContentElements;
@@ -37,14 +35,45 @@ const GenerateBlogPost: React.FC<GenerateBlogPostInterface> = ({ contentElements
         const language: CodeBlock["language"] = (element as CodeBlock).language;
         //TODO: Change names in database to correspond names in library for highlighting
 
-        /**
-         * {@link languages} to choose from
-         */
+        const code = `
+        import { IndexedGeneralContentElement, ContentElements } from "../types";
+        import unCapitalizeWord from "./unCapitalizeWord";
+        
+        const groupContentElements = (elements: IndexedGeneralContentElement[]): ContentElements => {
+          const groupedContentElements: ContentElements = {
+            paragraphs: [],
+            headers: [],
+            codeBlocks: [],
+            contentImages: [],
+          };
+          elements.forEach((element) => {
+            const elementType = unCapitalizeWord(element.type) + "s";
+        
+            groupedContentElements[elementType].push(element);
+          });
+          return groupedContentElements;
+        };
+        
+        export default groupContentElements;
+        
+        `;
+
+        const code2 = `<!DOCTYPE html>
+        <html>
+        <head>
+        <title>Page Title</title>
+        </head>
+        <body>
+        
+        <h1>This is a Heading</h1>
+        <p>This is a paragraph.</p>
+        
+        </body>
+        </html>`;
+
         return (
           <Container className="d-flex flex-column justify-content border p-0">
-            <SyntaxHighlighter language={"javascript"} style={atomOneDark}>
-              {element.content}
-            </SyntaxHighlighter>
+            <CustomSyntaxHighlighter code={code} language={language} />
           </Container>
         );
 
