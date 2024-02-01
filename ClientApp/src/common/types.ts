@@ -25,7 +25,7 @@ export interface Header extends ContentElement {
 
 // TODO: move headings validation on server side and extend possible languages support
 export interface CodeBlock extends ContentElement {
-  language: "js" | "cs" | "html" | "css";
+  language: "js" | "ts" | "cs" | "tsx" | "jsx" | "html" | "css";
 }
 
 export interface ContentImage extends ContentElement {

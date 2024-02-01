@@ -1,6 +1,11 @@
 import { useState } from "react";
-import { BlogPostContentElementType, CodeBlock, GeneralContentElement } from "../../../../common/types";
-import { ContentElements, ErrorMessages } from "../types";
+import {
+  BlogPostContentElementType,
+  CodeBlock,
+  ContentElements,
+  GeneralContentElement,
+} from "../../../../common/types";
+import { ErrorMessages } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 import getErrorsByFieldName from "../helpers/getErrorsByFieldName";
 
@@ -64,7 +69,7 @@ const CodeBlockElementForm: React.FC<CodeBlockElementFormProps> = ({
           className="mb-2"
           invalid={getErrorsByFieldName(submitFormErrors, "content").length > 0}
           id="content"
-          type="text"
+          type="textarea"
           name="content"
           value={state.content}
           onChange={(e) => setState((prevState) => ({ ...prevState, content: e.target.value }))}

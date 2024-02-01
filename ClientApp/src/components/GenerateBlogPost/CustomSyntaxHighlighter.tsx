@@ -1,5 +1,5 @@
 // Highlighters
-import { PrismLight as SyntaxHighlighterPrism } from "react-syntax-highlighter";
+import { PrismLight as SyntaxHighlighterPrism, SyntaxHighlighterProps } from "react-syntax-highlighter";
 import { Light as SyntaxHighlighterHljs } from "react-syntax-highlighter";
 
 // Prism languages
@@ -12,14 +12,19 @@ import typescript from "react-syntax-highlighter/dist/esm/languages/hljs/typescr
 import html from "react-syntax-highlighter/dist/esm/languages/hljs/htmlbars";
 import css from "react-syntax-highlighter/dist/esm/languages/hljs/css";
 // Styles
+// import HljsStyle from "react-syntax-highlighter/dist/esm/styles/hljs/hybrid";
+// import HljsStyle from "react-syntax-highlighter/dist/esm/styles/hljs/night-owl";
 import HljsStyle from "react-syntax-highlighter/dist/esm/styles/hljs/atom-one-dark";
-import PrismStyle from "react-syntax-highlighter/dist/esm/styles/prism/darcula";
+import PrismStyle from "react-syntax-highlighter/dist/esm/styles/prism/one-dark";
 
 // Other
-import { Alert } from "reactstrap";
+import "./CustomSyntaxHighlighter.css";
+import { Alert, Card, CardHeader, CardText } from "reactstrap";
+import { CodeBlock } from "../../common/types";
+import { ReactNode } from "react";
 
-const PrismLanguages = ["jsx", "tsx"];
-const HljsLanguages = ["cs", "html", "js", "ts", "css"];
+const PrismLanguages: CodeBlock["language"][] = ["jsx", "tsx"];
+const HljsLanguages: CodeBlock["language"][] = ["cs", "html", "js", "ts", "css"];
 
 // Prism languages registration
 SyntaxHighlighterPrism.registerLanguage("jsx", jsx);
@@ -32,25 +37,43 @@ SyntaxHighlighterHljs.registerLanguage("js", javascript);
 SyntaxHighlighterHljs.registerLanguage("ts", typescript);
 SyntaxHighlighterHljs.registerLanguage("css", css);
 
-interface CustomSyntaxHighlighterInterface {
-  code: string | string[];
-  language: string;
+interface CustomSyntaxHighlighterInterface extends SyntaxHighlighterProps {
+  language: CodeBlock["language"];
+  fileName: string;
 }
 
+const customStyles: React.CSSProperties = {
+  padding: "2rem",
+  border: "none",
+};
+
 const CustomSyntaxHighlighter: React.FC<CustomSyntaxHighlighterInterface> = (props) => {
-  const { code, language } = props;
+  const { children, language, fileName } = props;
+
+  const SyntaxWindowWrapper: React.FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
+    return (
+      <Card className="syntax-window-wrapper__header">
+        <CardHeader>{fileName}</CardHeader>
+        <CardText>{children}</CardText>
+      </Card>
+    );
+  };
 
   if (PrismLanguages.includes(language)) {
     return (
-      <SyntaxHighlighterPrism style={PrismStyle} {...props}>
-        {code}
-      </SyntaxHighlighterPrism>
+      <SyntaxWindowWrapper>
+        <SyntaxHighlighterPrism customStyle={customStyles} style={PrismStyle} {...props}>
+          {children}
+        </SyntaxHighlighterPrism>
+      </SyntaxWindowWrapper>
     );
   } else if (HljsLanguages.includes(language)) {
     return (
-      <SyntaxHighlighterHljs style={HljsStyle} {...props}>
-        {code}
-      </SyntaxHighlighterHljs>
+      <SyntaxWindowWrapper>
+        <SyntaxHighlighterHljs customStyle={customStyles} style={HljsStyle} {...props}>
+          {children}
+        </SyntaxHighlighterHljs>
+      </SyntaxWindowWrapper>
     );
   } else {
     return <Alert color="danger">Sorry cannot display code block</Alert>;

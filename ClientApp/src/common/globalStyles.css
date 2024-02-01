@@ -1,0 +1,22 @@
+:root {
+  /* background colors */
+  --clr-bg-primary: #27213c;
+  --clr-bg-secondary: rgba(0, 0, 0, 0.4);
+
+  /* text colors */
+  --clr-text-primary: #e1f2fe;
+
+  /* accent colors */
+  --clr-accent: #ea526f;
+}
+
+.blog-container {
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--clr-bg-primary);
+  color: var(--clr-text-primary);
+}
+
+.blog-header {
+  color: var(--clr-accent) !important;
+}

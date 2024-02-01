@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import "./custom.css";
 import NotFoundPage from "./components/NotFoundPage/NotFoundPage";
 import Feed from "./Blog/Pages/Feed/Feed";
 import Dashboard from "./AdminPanel/Pages/Dashboard/Dashboard";
