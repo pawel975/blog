@@ -38,7 +38,7 @@ const Feed: React.FC = () => {
 
   return (
     <Layout>
-      <header>
+      <header className="blog-header">
         <h1>Feed</h1>
       </header>
       <hr />

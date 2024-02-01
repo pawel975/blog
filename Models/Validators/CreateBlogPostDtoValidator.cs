@@ -5,6 +5,11 @@ namespace Blog.Models.Validators
 {
     public class CreateBlogPostDtoValidator : AbstractValidator<CreateBlogPostDto>
     {
+       private enum LanguageType
+        {
+           jsx, tsx,cs, html, js, ts, css
+
+    }
         public CreateBlogPostDtoValidator()
         {
             RuleFor(bp => bp.Title)
@@ -40,6 +45,7 @@ namespace Blog.Models.Validators
                 p.RuleFor(x => x.OrderInBlogPost).GreaterThan(-1);
                 p.RuleFor(x => x.Content).NotEmpty();
                 p.RuleFor(x => x.Language).NotEmpty();
+                p.RuleFor(x => x.Language).IsEnumName(typeof(LanguageType), caseSensitive: true);
             });
 
             RuleForEach(bp => bp.ContentImages).ChildRules(p =>

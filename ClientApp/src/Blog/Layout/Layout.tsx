@@ -8,7 +8,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div>
+    <div className="blog-container">
       <BlogNavMenu />
       <Container tag="main">{children}</Container>
     </div>
