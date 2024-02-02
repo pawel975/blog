@@ -43,7 +43,7 @@ const GenerateBlogPost: React.FC<GenerateBlogPostInterface> = ({ contentElements
       case BlogPostContentElementType.CONTENT_IMAGE:
         const altText: ContentImage["altText"] = (element as ContentImage).altText;
         return (
-          <div style={{ width: "100%" }}>
+          <div>
             <img style={{ width: "100%" }} src={element.content} alt={altText}></img>
           </div>
         );
@@ -51,6 +51,7 @@ const GenerateBlogPost: React.FC<GenerateBlogPostInterface> = ({ contentElements
         return "";
     }
   });
+
   return <Container className="d-flex flex-column gap-3">{blogPost}</Container>;
 };
 
