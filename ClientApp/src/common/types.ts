@@ -44,3 +44,14 @@ export interface ContentElements {
   // TODO: Not sure if i need to delete this
   [key: string]: any;
 }
+
+export interface BlogPostContent {
+  id: string;
+  title: string;
+  shortDescription: string;
+  primaryImageSrc: string;
+  paragraphs: Paragraph[];
+  headers: Header[];
+  codeBlocks: CodeBlock[];
+  contentImages: ContentImage[];
+}

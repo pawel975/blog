@@ -5,6 +5,7 @@ import Dashboard from "./AdminPanel/Pages/Dashboard/Dashboard";
 import Posts from "./AdminPanel/Pages/Posts/Posts";
 import CreatePost from "./AdminPanel/Pages/CreatePost/CreatePost";
 import EditPost from "./AdminPanel/Pages/EditPost/EditPost";
+import Post from "./Blog/Pages/Post/Post";
 
 const App = () => {
   return (
@@ -20,6 +21,13 @@ const App = () => {
 
         <Route path="feed">
           <Route index={true} element={<Feed />}></Route>
+        </Route>
+
+        <Route path="post">
+          <Route index={true} element={<Post />}></Route>
+          <Route path=":postId">
+            <Route index={true} element={<Post />}></Route>
+          </Route>
         </Route>
       </Route>
 

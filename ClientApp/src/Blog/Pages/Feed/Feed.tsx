@@ -1,38 +1,20 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../Layout/Layout";
-import GenerateBlogPost from "../../../components/GenerateBlogPost/GenerateBlogPost";
 import useApiData from "../../../hooks/useApiData";
-import { ContentElements } from "../../../common/types";
+import { BlogPostContent } from "../../../common/types";
 import { Container, Spinner } from "reactstrap";
+import BlogPostList from "../../Components/BlogPostList";
 
 const Feed: React.FC = () => {
   console.log("Blog component rendered");
 
   const { data, loading, error } = useApiData("api/blogPosts");
 
-  const [blogPosts, setBlogPosts] = useState<ContentElements[]>([
-    {
-      paragraphs: [],
-      headers: [],
-      codeBlocks: [],
-      contentImages: [],
-    },
-  ]);
+  const [blogPosts, setBlogPosts] = useState<BlogPostContent[]>();
 
   useEffect(() => {
     if (!loading && !error) {
-      const blogPosts = [...data].map((blogPost) => {
-        const { paragraphs, headers, codeBlocks, contentImages } = blogPost;
-
-        return {
-          paragraphs: paragraphs,
-          headers: headers,
-          codeBlocks: codeBlocks,
-          contentImages: contentImages,
-        };
-      });
-
-      setBlogPosts(blogPosts);
+      setBlogPosts(data);
     }
   }, [data, loading, error]);
 
@@ -45,11 +27,12 @@ const Feed: React.FC = () => {
       {loading ? (
         <Spinner />
       ) : (
-        blogPosts.map((bp) => (
+        blogPosts && (
           <Container className="d-flex flex-column gap-1 p-0">
-            <GenerateBlogPost contentElements={bp} />
+            <BlogPostList blogPosts={blogPosts} />
+            {/* <GenerateBlogPost contentElements={blogPosts[0]} /> */}
           </Container>
-        ))
+        )
       )}
     </Layout>
   );

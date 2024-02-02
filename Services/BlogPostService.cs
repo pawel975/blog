@@ -45,7 +45,12 @@ namespace Blog.Services
 
         public BlogPostDto GetBlogPostById(Guid id)
         {
-            var blogPost = _dbContext.BlogPosts.FirstOrDefault(bp => bp.Id == id);
+            var blogPost = _dbContext.BlogPosts          
+                .Include(bp => bp.Paragraphs)
+                .Include(bp => bp.Headers)
+                .Include(bp => bp.CodeBlocks)
+                .Include(bp => bp.ContentImages)
+                .FirstOrDefault(bp => bp.Id == id);
 
             return blogPost is null ? throw new NotFoundException("Blog post not found") : _mapper.Map<BlogPostDto>(blogPost);
         }
