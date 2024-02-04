@@ -1,0 +1,127 @@
+@import url("https://fonts.googleapis.com/css2?family=Protest+Strike&family=Raleway&display=swap");
+
+:root {
+  /* background colors */
+  --clr-bg-primary: #fff;
+  --clr-bg-secondary: #ffd400;
+  --clr-bg-negative: #2d232e;
+
+  /* text colors */
+  --clr-text-primary: #2d232e;
+  --clr-text-secondary: #ffd400;
+  --clr-text-light: #fff;
+
+  /* accent colors */
+  --clr-accent: #b9314f;
+
+  --ff-standard: "Raleway", sans-serif;
+  --ff-headings: "Protest Strike", sans-serif;
+}
+
+body {
+  color: var(--clr-text-primary);
+  width: 100%;
+  min-height: 100vh;
+  font-family: var(--ff-standard);
+  font-size: 1.125rem;
+  background-color: var(--clr-bg-primary);
+}
+
+.blog-container {
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--clr-bg-primary);
+  color: var(--clr-text-primary);
+}
+
+.blog-header {
+  font-family: var(--ff-headings);
+  color: var();
+}
+
+/* background utils */
+.own-bg-primary {
+  background-color: var(--clr-bg-primary);
+}
+
+.own-bg-secondary {
+  background-color: var(--clr-bg-secondary) !important;
+}
+
+.own-bg-negative {
+  background-color: var(--clr-bg-negative);
+}
+
+/* text utils */
+
+.own-text-primary {
+  color: var(--clr-text-primary);
+}
+
+.own-text-secondary {
+  color: var(--clr-text-secondary);
+}
+
+.own-text-light {
+  color: var(--clr-text-light);
+}
+
+.own-text-accent {
+  color: var(--clr-accent);
+}
+
+/* border utils */
+
+.own-border-primary {
+  border: 1px solid var(--clr-text-primary);
+}
+
+.own-border-secondary {
+  border: 1px solid var(--clr-text-secondary);
+}
+
+.own-border-light {
+  border: 1px solid var(--clr-text-secondary);
+}
+
+/* font size utils */
+
+.fs-900 {
+  font-size: 3rem;
+}
+.fs-800 {
+  font-size: 2rem;
+}
+.fs-700 {
+  font-size: 1.5rem;
+}
+.fs-600 {
+  font-size: 1.25rem;
+}
+.fs-500 {
+  font-size: 1.125rem;
+}
+.fs-400 {
+  font-size: 1rem;
+}
+.fs-300 {
+  font-size: 0.75rem;
+}
+.fs-200 {
+  font-size: 0.625rem;
+}
+.fs-100 {
+  font-size: 0.5rem;
+}
+
+/* Other utils */
+
+.emphasized-border {
+  box-shadow: 0.5rem 0.5rem 0rem var(--clr-bg-secondary);
+  border: 0.125rem solid var(--clr-bg-secondary) !important;
+  border-radius: 0;
+}
+
+.removed-underline {
+  text-decoration: none;
+}

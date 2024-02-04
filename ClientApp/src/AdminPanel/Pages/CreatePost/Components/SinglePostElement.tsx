@@ -1,7 +1,7 @@
 import { Button, ButtonGroup, Card, Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from "reactstrap";
-import shortenLongString from "../helpers/shortenLongString";
+import shortenLongString from "../utils/shortenLongString";
 import { IndexedGeneralContentElement } from "../../../../common/types";
-import capitalizeWord from "../../../../common/helpers/capitalizeWord";
+import capitalizeWord from "../../../../common/utils/capitalizeWord";
 import { useState } from "react";
 import { GoArrowUp as UpIcon, GoArrowDown as DownIcon } from "react-icons/go";
 

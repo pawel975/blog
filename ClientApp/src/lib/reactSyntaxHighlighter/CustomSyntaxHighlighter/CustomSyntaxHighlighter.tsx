@@ -12,15 +12,13 @@ import typescript from "react-syntax-highlighter/dist/esm/languages/hljs/typescr
 import html from "react-syntax-highlighter/dist/esm/languages/hljs/htmlbars";
 import css from "react-syntax-highlighter/dist/esm/languages/hljs/css";
 // Styles
-// import HljsStyle from "react-syntax-highlighter/dist/esm/styles/hljs/hybrid";
-// import HljsStyle from "react-syntax-highlighter/dist/esm/styles/hljs/night-owl";
-import HljsStyle from "react-syntax-highlighter/dist/esm/styles/hljs/atom-one-dark";
-import PrismStyle from "react-syntax-highlighter/dist/esm/styles/prism/one-dark";
+import HljsStyle from "react-syntax-highlighter/dist/esm/styles/hljs/a11y-dark";
+import PrismStyle from "react-syntax-highlighter/dist/esm/styles/prism/a11y-dark";
 
 // Other
 import "./CustomSyntaxHighlighter.css";
 import { Alert, Card, CardHeader, CardText } from "reactstrap";
-import { CodeBlock } from "../../common/types";
+import { CodeBlock } from "../../../common/types";
 import { ReactNode } from "react";
 
 const PrismLanguages: CodeBlock["language"][] = ["jsx", "tsx"];
@@ -45,6 +43,8 @@ interface CustomSyntaxHighlighterInterface extends SyntaxHighlighterProps {
 const customStyles: React.CSSProperties = {
   padding: "2rem",
   border: "none",
+  margin: 0,
+  borderRadius: 0,
 };
 
 const CustomSyntaxHighlighter: React.FC<CustomSyntaxHighlighterInterface> = (props) => {
@@ -52,7 +52,7 @@ const CustomSyntaxHighlighter: React.FC<CustomSyntaxHighlighterInterface> = (pro
 
   const SyntaxWindowWrapper: React.FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
     return (
-      <Card className="syntax-window-wrapper__header">
+      <Card className="syntax-window-wrapper__header rounded-0 border-0">
         <CardHeader>{fileName}</CardHeader>
         <CardText>{children}</CardText>
       </Card>

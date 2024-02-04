@@ -2,16 +2,16 @@ import { useParams } from "react-router-dom";
 import GenerateBlogPost from "../../../components/GenerateBlogPost/GenerateBlogPost";
 import useApiData from "../../../hooks/useApiData";
 import { useEffect, useState } from "react";
-import { BlogPostContent } from "../../../common/types";
 import { Container, Spinner } from "reactstrap";
-import Layout from "../../Layout/Layout";
+import BlogLayout from "../../Layout/BlogLayout";
+import { getBlogPost } from "../../../data/services/BlogPostService";
+import { BlogPost } from "../../../data/model/BlogPostModel";
 
 const Post: React.FC = () => {
   const { postId } = useParams();
 
-  const { data, loading, error } = useApiData(`api/blogPosts/${postId}`);
-
-  const [post, setPost] = useState<BlogPostContent>();
+  const { data, loading, error } = useApiData<BlogPost>(() => getBlogPost(postId!));
+  const [post, setPost] = useState<BlogPost | null>();
 
   useEffect(() => {
     if (!loading && !error) {
@@ -20,19 +20,11 @@ const Post: React.FC = () => {
   }, [data, error, loading]);
 
   return (
-    <Layout>
+    <BlogLayout>
       <Container>
-        {loading ? (
-          <Spinner />
-        ) : (
-          post && (
-            <Container className="d-flex flex-column gap-1 p-0">
-              <GenerateBlogPost contentElements={post}></GenerateBlogPost>
-            </Container>
-          )
-        )}
+        {loading ? <Spinner /> : post && <GenerateBlogPost contentElements={post}></GenerateBlogPost>}
       </Container>
-    </Layout>
+    </BlogLayout>
   );
 };
 

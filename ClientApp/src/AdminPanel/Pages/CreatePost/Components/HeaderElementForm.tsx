@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { BlogPostContentElementType, GeneralContentElement, Header } from "../../../../common/types";
-import { ContentElements, ErrorMessages } from "../types";
+import { BlogPostContentElementType, ContentElements, GeneralContentElement, Header } from "../../../../common/types";
+import { ErrorMessages } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
-import getErrorsByFieldName from "../helpers/getErrorsByFieldName";
+import getErrorsByFieldName from "../utils/getErrorsByFieldName";
 
 interface HeaderElementFormProps {
   setContentElements: Function;

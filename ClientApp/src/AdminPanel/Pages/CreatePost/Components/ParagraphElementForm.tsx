@@ -1,8 +1,13 @@
 import { useState } from "react";
 import { FormGroup, Label, Input, Button, Form, FormFeedback } from "reactstrap";
-import { BlogPostContentElementType, GeneralContentElement, Paragraph } from "../../../../common/types";
-import { ContentElements, ErrorMessages } from "../types";
-import getErrorsByFieldName from "../helpers/getErrorsByFieldName";
+import {
+  BlogPostContentElementType,
+  ContentElements,
+  GeneralContentElement,
+  Paragraph,
+} from "../../../../common/types";
+import { ErrorMessages } from "../types";
+import getErrorsByFieldName from "../utils/getErrorsByFieldName";
 
 interface ParagraphElementFormProps {
   setContentElements: Function;

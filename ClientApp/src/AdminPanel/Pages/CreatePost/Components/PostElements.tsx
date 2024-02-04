@@ -2,8 +2,8 @@ import { Alert, CardBody, Container } from "reactstrap";
 import { ContentElements, GeneralContentElement } from "../../../../common/types";
 import SinglePostElement from "./SinglePostElement";
 import { SetStateAction } from "react";
-import flatContentElements from "../../../../common/helpers/flatContentElements";
-import groupContentElements from "../../../../common/helpers/groupContentElements";
+import flatContentElements from "../../../../common/utils/flatContentElements";
+import groupContentElements from "../../../../common/utils/groupContentElements";
 
 interface PostElementsProps {
   contentElements: ContentElements;
