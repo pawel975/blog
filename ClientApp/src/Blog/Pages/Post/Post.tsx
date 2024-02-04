@@ -3,7 +3,7 @@ import GenerateBlogPost from "../../../components/GenerateBlogPost/GenerateBlogP
 import useApiData from "../../../hooks/useApiData";
 import { useEffect, useState } from "react";
 import { Container, Spinner } from "reactstrap";
-import Layout from "../../Layout/Layout";
+import BlogLayout from "../../Layout/BlogLayout";
 import { getBlogPost } from "../../../data/services/BlogPostService";
 import { BlogPost } from "../../../data/model/BlogPostModel";
 
@@ -20,11 +20,11 @@ const Post: React.FC = () => {
   }, [data, error, loading]);
 
   return (
-    <Layout>
+    <BlogLayout>
       <Container>
         {loading ? <Spinner /> : post && <GenerateBlogPost contentElements={post}></GenerateBlogPost>}
       </Container>
-    </Layout>
+    </BlogLayout>
   );
 };
 

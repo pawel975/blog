@@ -1,6 +1,6 @@
-import Layout from "../../Layout/Layout";
+import BlogLayout from "../../Layout/BlogLayout";
 
 const Home: React.FC = () => {
-  return <Layout>Home page for my blog</Layout>;
+  return <BlogLayout>Home page for my blog</BlogLayout>;
 };
 export default Home;

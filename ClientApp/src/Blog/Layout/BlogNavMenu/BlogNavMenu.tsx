@@ -18,12 +18,12 @@ const BlogNavMenu = () => {
         </NavbarBrand>
         <NavbarToggler onClick={toggleNavbar} className="mr-2" />
         <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!collapsed} navbar>
-          <ul className="navbar-nav flex-grow">
+          <ul className="navbar-nav flex-grow ">
             <NavItem className="blog-header d-flex">
-              <NavLink tag={Link} className="own-text-primary" to="/">
+              <NavLink tag={Link} to="/">
                 Home
               </NavLink>
-              <NavLink tag={Link} className="own-text-primary" to="/blog/posts">
+              <NavLink tag={Link} to="/blog/posts">
                 Posts
               </NavLink>
             </NavItem>

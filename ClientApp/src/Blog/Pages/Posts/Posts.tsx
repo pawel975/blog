@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Layout from "../../Layout/Layout";
+import BlogLayout from "../../Layout/BlogLayout";
 import useApiData from "../../../hooks/useApiData";
 import { Container, Spinner } from "reactstrap";
-import BlogPostList from "../../Components/BlogPostList";
+import BlogPostList from "../components/BlogPostList";
 import { getBlogPosts } from "../../../data/services/BlogPostService";
 import { BlogPost } from "../../../data/model/BlogPostModel";
+import PageHeader from "../components/PageHeader";
 
 const Feed: React.FC = () => {
   const { data, loading, error } = useApiData<BlogPost[]>(() => getBlogPosts());
@@ -17,11 +18,8 @@ const Feed: React.FC = () => {
   }, [data, loading, error]);
 
   return (
-    <Layout>
-      <header className="blog-header">
-        <h1>Feed</h1>
-      </header>
-      <hr />
+    <BlogLayout>
+      <PageHeader pageTitle="Posts" />
       {loading ? (
         <Spinner />
       ) : (
@@ -31,7 +29,7 @@ const Feed: React.FC = () => {
           </Container>
         )
       )}
-    </Layout>
+    </BlogLayout>
   );
 };
 
