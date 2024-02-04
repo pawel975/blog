@@ -1,7 +1,7 @@
 import { Container } from "reactstrap";
 import { BlogPostContentElementType, CodeBlock, ContentElements, ContentImage, Header } from "../../common/types";
 import flatContentElements from "../../common/utils/flatContentElements";
-import CustomSyntaxHighlighter from "./CustomSyntaxHighlighter";
+import CustomSyntaxHighlighter from "../../lib/reactSyntaxHighlighter/CustomSyntaxHighlighter/CustomSyntaxHighlighter";
 
 interface GenerateBlogPostInterface {
   contentElements: ContentElements;
@@ -57,7 +57,6 @@ const GenerateBlogPost: React.FC<GenerateBlogPostInterface> = ({ contentElements
         }
       case BlogPostContentElementType.CODE_BLOCK:
         const language: CodeBlock["language"] = (element as CodeBlock).language;
-        //TODO: Change names in database to correspond names in library for highlighting
         return (
           <CustomSyntaxHighlighter key={index} fileName="Example.js" language={language}>
             {element.content}
@@ -76,7 +75,7 @@ const GenerateBlogPost: React.FC<GenerateBlogPostInterface> = ({ contentElements
     }
   });
 
-  return <Container className="d-flex flex-column gap-3">{blogPost}</Container>;
+  return <Container className="d-flex flex-column gap-3 p-0">{blogPost}</Container>;
 };
 
 export default GenerateBlogPost;

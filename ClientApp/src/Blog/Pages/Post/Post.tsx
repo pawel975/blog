@@ -9,10 +9,8 @@ import { BlogPost } from "../../../data/model/BlogPostModel";
 
 const Post: React.FC = () => {
   const { postId } = useParams();
-  console.log("Post component rendered");
 
   const { data, loading, error } = useApiData<BlogPost>(() => getBlogPost(postId!));
-
   const [post, setPost] = useState<BlogPost | null>();
 
   useEffect(() => {
@@ -24,15 +22,7 @@ const Post: React.FC = () => {
   return (
     <Layout>
       <Container>
-        {loading ? (
-          <Spinner />
-        ) : (
-          post && (
-            <Container className="d-flex flex-column gap-1 p-0">
-              <GenerateBlogPost contentElements={post}></GenerateBlogPost>
-            </Container>
-          )
-        )}
+        {loading ? <Spinner /> : post && <GenerateBlogPost contentElements={post}></GenerateBlogPost>}
       </Container>
     </Layout>
   );

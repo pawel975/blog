@@ -1,13 +1,24 @@
+@import url("https://fonts.googleapis.com/css2?family=Protest+Strike&family=Raleway&display=swap");
+
 :root {
   /* background colors */
-  --clr-bg-primary: #27213c;
-  --clr-bg-secondary: rgba(0, 0, 0, 0.4);
+  --clr-bg-primary: #fff;
+  --clr-bg-secondary: #ffd400;
 
   /* text colors */
-  --clr-text-primary: #e1f2fe;
+  --clr-text-primary: #2d232e;
 
   /* accent colors */
-  --clr-accent: #ea526f;
+  --clr-accent: #b9314f;
+
+  --ff-standard: "Raleway", sans-serif;
+  --ff-headings: "Protest Strike", sans-serif;
+}
+
+body {
+  font-family: var(--ff-standard);
+  font-size: 1.125rem;
+  background-color: var(--clr-bg-primary);
 }
 
 .blog-container {
@@ -18,5 +29,62 @@
 }
 
 .blog-header {
-  color: var(--clr-accent) !important;
+  font-family: var(--ff-headings);
+}
+
+/* background utils */
+.own-bg-primary {
+  background-color: var(--clr-bg-primary);
+}
+
+.own-bg-secondary {
+  background-color: var(--clr-bg-secondary) !important;
+}
+
+/* text utils */
+
+.own-text-primary {
+  color: var(--clr-text-primary);
+}
+
+.own-text-accent {
+  color: var(--clr-accent);
+}
+
+/* font size utils */
+
+.fs-900 {
+  font-size: 3rem;
+}
+.fs-800 {
+  font-size: 2rem;
+}
+.fs-700 {
+  font-size: 1.5rem;
+}
+.fs-600 {
+  font-size: 1.25rem;
+}
+.fs-500 {
+  font-size: 1.125rem;
+}
+.fs-400 {
+  font-size: 1rem;
+}
+.fs-300 {
+  font-size: 0.75rem;
+}
+.fs-200 {
+  font-size: 0.625rem;
+}
+.fs-100 {
+  font-size: 0.5rem;
+}
+
+/* Other utils */
+
+.emphasized-border {
+  box-shadow: 0.5rem 0.5rem 0rem var(--clr-bg-secondary);
+  border: 0.125rem solid var(--clr-bg-secondary) !important;
+  border-radius: 0;
 }
