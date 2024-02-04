@@ -7,7 +7,7 @@ import {
 } from "../../../../common/types";
 import { ErrorMessages } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
-import getErrorsByFieldName from "../helpers/getErrorsByFieldName";
+import getErrorsByFieldName from "../utils/getErrorsByFieldName";
 
 interface CodeBlockElementFormProps {
   setContentElements: Function;

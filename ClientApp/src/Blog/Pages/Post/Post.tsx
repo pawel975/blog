@@ -2,16 +2,18 @@ import { useParams } from "react-router-dom";
 import GenerateBlogPost from "../../../components/GenerateBlogPost/GenerateBlogPost";
 import useApiData from "../../../hooks/useApiData";
 import { useEffect, useState } from "react";
-import { BlogPostContent } from "../../../common/types";
 import { Container, Spinner } from "reactstrap";
 import Layout from "../../Layout/Layout";
+import { getBlogPost } from "../../../data/services/BlogPostService";
+import { BlogPost } from "../../../data/model/BlogPostModel";
 
 const Post: React.FC = () => {
   const { postId } = useParams();
+  console.log("Post component rendered");
 
-  const { data, loading, error } = useApiData(`api/blogPosts/${postId}`);
+  const { data, loading, error } = useApiData<BlogPost>(() => getBlogPost(postId!));
 
-  const [post, setPost] = useState<BlogPostContent>();
+  const [post, setPost] = useState<BlogPost | null>();
 
   useEffect(() => {
     if (!loading && !error) {
