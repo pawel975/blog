@@ -1,14 +1,16 @@
 import { Container } from "reactstrap";
-import { BlogPostContentElementType, CodeBlock, ContentElements, ContentImage, Header } from "../../common/types";
+import { BlogPostContentElementType, CodeBlock, ContentImage, Header } from "../../common/types";
 import flatContentElements from "../../common/utils/flatContentElements";
 import CustomSyntaxHighlighter from "../../lib/reactSyntaxHighlighter/CustomSyntaxHighlighter/CustomSyntaxHighlighter";
+import { BlogPost } from "../../data/model/BlogPostModel";
+import formatTimeToShort from "../../common/utils/formatTimeToShort";
 
 interface GenerateBlogPostInterface {
-  contentElements: ContentElements;
+  BlogPost: BlogPost;
 }
 
-const GenerateBlogPost: React.FC<GenerateBlogPostInterface> = ({ contentElements }) => {
-  const blogPost = flatContentElements(contentElements).map((element, index) => {
+const GenerateBlogPost: React.FC<GenerateBlogPostInterface> = ({ BlogPost }) => {
+  const blogPost = flatContentElements(BlogPost).map((element, index) => {
     switch (element.type) {
       case BlogPostContentElementType.PARAGRAPH:
         return <p key={index}>{element.content}</p>;
@@ -58,7 +60,7 @@ const GenerateBlogPost: React.FC<GenerateBlogPostInterface> = ({ contentElements
       case BlogPostContentElementType.CODE_BLOCK:
         const language: CodeBlock["language"] = (element as CodeBlock).language;
         return (
-          <CustomSyntaxHighlighter key={index} fileName="Example.js" language={language}>
+          <CustomSyntaxHighlighter key={index} filetitle="Example.js" language={language}>
             {element.content}
           </CustomSyntaxHighlighter>
         );
@@ -75,7 +77,21 @@ const GenerateBlogPost: React.FC<GenerateBlogPostInterface> = ({ contentElements
     }
   });
 
-  return <Container className="d-flex flex-column gap-3 p-0">{blogPost}</Container>;
+  return (
+    <Container className="d-flex flex-column gap-3 p-0">
+      <div className="d-flex flex-column gap-3">
+        <div className="d-flex flex-column">
+          <h1 className="blog-header fs-900 own-text-accent">{BlogPost.title}</h1>
+          <span>
+            <strong>Paweł Kurek</strong>
+          </span>
+          <span className="fs-400">{formatTimeToShort(BlogPost.createdAt)}</span>
+        </div>
+        <p className="own-border-left-accent">{BlogPost.shortDescription}</p>
+      </div>
+      {blogPost}
+    </Container>
+  );
 };
 
 export default GenerateBlogPost;

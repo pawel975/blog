@@ -22,7 +22,7 @@ const BlogPostList: React.FC<BlogPostListInterface> = ({ blogPosts }) => {
     );
   });
 
-  return <Container className="d-flex p-0">{blogPostPreviewCards}</Container>;
+  return <Container className="d-flex p-0 flex-column gap-6 ">{blogPostPreviewCards}</Container>;
 };
 
 export default BlogPostList;

@@ -17,7 +17,7 @@ import PrismStyle from "react-syntax-highlighter/dist/esm/styles/prism/a11y-dark
 
 // Other
 import "./CustomSyntaxHighlighter.css";
-import { Alert, Card, CardHeader, CardText } from "reactstrap";
+import { Alert } from "reactstrap";
 import { CodeBlock } from "../../../common/types";
 import { ReactNode } from "react";
 
@@ -37,7 +37,7 @@ SyntaxHighlighterHljs.registerLanguage("css", css);
 
 interface CustomSyntaxHighlighterInterface extends SyntaxHighlighterProps {
   language: CodeBlock["language"];
-  fileName: string;
+  filetitle: string;
 }
 
 const customStyles: React.CSSProperties = {
@@ -48,14 +48,14 @@ const customStyles: React.CSSProperties = {
 };
 
 const CustomSyntaxHighlighter: React.FC<CustomSyntaxHighlighterInterface> = (props) => {
-  const { children, language, fileName } = props;
+  const { children, language, filetitle } = props;
 
   const SyntaxWindowWrapper: React.FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
     return (
-      <Card className="syntax-window-wrapper__header rounded-0 border-0">
-        <CardHeader>{fileName}</CardHeader>
-        <CardText>{children}</CardText>
-      </Card>
+      <div className="syntax-window-wrapper__header rounded-0 border-0">
+        <header className="p-2">{filetitle}</header>
+        <span>{children}</span>
+      </div>
     );
   };
 

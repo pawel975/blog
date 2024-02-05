@@ -21,9 +21,7 @@ const Post: React.FC = () => {
 
   return (
     <BlogLayout>
-      <Container>
-        {loading ? <Spinner /> : post && <GenerateBlogPost contentElements={post}></GenerateBlogPost>}
-      </Container>
+      <Container>{loading ? <Spinner /> : post && <GenerateBlogPost BlogPost={post}></GenerateBlogPost>}</Container>
     </BlogLayout>
   );
 };

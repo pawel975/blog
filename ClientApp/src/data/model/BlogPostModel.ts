@@ -5,6 +5,7 @@ export interface BlogPost {
   title: string;
   shortDescription: string;
   primaryImageSrc: string;
+  createdAt: string;
   paragraphs: Paragraph[];
   headers: Header[];
   codeBlocks: CodeBlock[];

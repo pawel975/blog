@@ -1,7 +1,8 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import NotFoundPage from "./components/NotFoundPage/NotFoundPage";
 import Dashboard from "./AdminPanel/Pages/Dashboard/Dashboard";
-import Posts from "./Blog/Pages/Posts/Posts";
+import PostsAtBlog from "./Blog/Pages/Posts/Posts";
+import PostsAtAdminPanel from "./AdminPanel/Pages/Posts/Posts";
 import CreatePost from "./AdminPanel/Pages/CreatePost/CreatePost";
 import EditPost from "./AdminPanel/Pages/EditPost/EditPost";
 import Post from "./Blog/Pages/Post/Post";
@@ -23,7 +24,7 @@ const App = () => {
           <Route index={true} element={<Home />}></Route>
         </Route>
         <Route path="posts">
-          <Route index={true} element={<Posts />}></Route>
+          <Route index={true} element={<PostsAtBlog />}></Route>
         </Route>
 
         <Route path="post">
@@ -44,7 +45,7 @@ const App = () => {
         </Route>
 
         <Route path="posts">
-          <Route index={true} element={<Posts />}></Route>
+          <Route index={true} element={<PostsAtAdminPanel />}></Route>
           <Route path=":postId">
             <Route path="edit">
               <Route index={true} element={<EditPost />}></Route>

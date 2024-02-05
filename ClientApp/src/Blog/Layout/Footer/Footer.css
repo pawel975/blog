@@ -1,0 +1,8 @@
+@media (max-width: 600px) {
+  .responsive-footer {
+    padding-inline: 1rem !important;
+    display: flex;
+    flex-direction: column !important;
+    gap: 3rem !important;
+  }
+}
