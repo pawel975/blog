@@ -1,5 +1,5 @@
 import { Button, ButtonGroup, Card, Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from "reactstrap";
-import shortenLongString from "../utils/shortenLongString";
+import shortenLongString from "../../../../common/utils/shortenLongString";
 import { IndexedGeneralContentElement } from "../../../../common/types";
 import capitalizeWord from "../../../../common/utils/capitalizeWord";
 import { useState } from "react";

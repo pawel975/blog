@@ -3,7 +3,7 @@ import ActionButtons from "../ActionButtons/ActionButtons";
 import { useNavigate } from "react-router-dom";
 import "./PostsTable.css";
 import isCellValueObject from "./utils/isCellValueObject";
-import shortenLongString from "../../../CreatePost/utils/shortenLongString";
+import shortenLongString from "../../../../../common/utils/shortenLongString";
 
 interface PostsTableInterface {
   posts: any[];

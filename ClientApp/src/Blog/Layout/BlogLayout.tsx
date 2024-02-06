@@ -9,9 +9,9 @@ interface BlogLayoutProps {
 
 const BlogLayout: React.FC<BlogLayoutProps> = ({ children }) => {
   return (
-    <div className="blog-container d-flex flex-column">
+    <div className="blog-container gap-5 d-flex flex-column">
       <BlogNavMenu />
-      <Container className="d-flex flex-column gap-4" tag="main">
+      <Container className="d-flex flex-column gap-3" tag="main">
         {children}
       </Container>
       <Footer />

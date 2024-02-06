@@ -18,7 +18,7 @@ const BlogNavMenu = () => {
         </NavbarBrand>
         <NavbarToggler onClick={toggleNavbar} className="mr-2" />
         <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!collapsed} navbar>
-          <ul className="navbar-nav flex-grow ">
+          <ul className="navbar-nav flex-grow fs-700 ">
             <NavItem className="blog-header d-flex">
               <NavLink tag={Link} to="/">
                 Home

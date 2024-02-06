@@ -17,9 +17,10 @@ import PrismStyle from "react-syntax-highlighter/dist/esm/styles/prism/a11y-dark
 
 // Other
 import "./CustomSyntaxHighlighter.css";
-import { Alert, Card, CardHeader, CardText } from "reactstrap";
+import { Alert, Tooltip, UncontrolledTooltip } from "reactstrap";
 import { CodeBlock } from "../../../common/types";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
+import { FaCopy as CopyIcon } from "react-icons/fa6";
 
 const PrismLanguages: CodeBlock["language"][] = ["jsx", "tsx"];
 const HljsLanguages: CodeBlock["language"][] = ["cs", "html", "js", "ts", "css"];
@@ -37,7 +38,7 @@ SyntaxHighlighterHljs.registerLanguage("css", css);
 
 interface CustomSyntaxHighlighterInterface extends SyntaxHighlighterProps {
   language: CodeBlock["language"];
-  fileName: string;
+  filetitle: string;
 }
 
 const customStyles: React.CSSProperties = {
@@ -48,14 +49,36 @@ const customStyles: React.CSSProperties = {
 };
 
 const CustomSyntaxHighlighter: React.FC<CustomSyntaxHighlighterInterface> = (props) => {
-  const { children, language, fileName } = props;
+  const [isCodeBlockHovered, setIsCodeBlockHovered] = useState<boolean>(false);
+
+  const { children, language, filetitle } = props;
+
+  const handleCopyBtnClick = (): void => {
+    navigator.clipboard.writeText(children as unknown as string).catch((err) => console.error(err));
+  };
 
   const SyntaxWindowWrapper: React.FC<{ children: ReactNode | ReactNode[] }> = ({ children }) => {
     return (
-      <Card className="syntax-window-wrapper__header rounded-0 border-0">
-        <CardHeader>{fileName}</CardHeader>
-        <CardText>{children}</CardText>
-      </Card>
+      <div
+        onMouseEnter={() => setIsCodeBlockHovered(true)}
+        onMouseLeave={() => setIsCodeBlockHovered(false)}
+        className="syntax-window-wrapper__header rounded-0 border-0"
+        style={{ position: "relative" }}
+      >
+        <header className="py-2 px-3 d-flex justify-content-between">
+          <span>{filetitle}</span>
+          <button onClick={handleCopyBtnClick} id="copy-code-btn" className="p-0 border-0 bg-transparent">
+            {isCodeBlockHovered && <CopyIcon />}
+          </button>
+
+          <UncontrolledTooltip fade={true} placement="left" autohide={false} target="copy-code-btn" trigger="click">
+            <span>
+              Copied<span className="text-info"> !</span>
+            </span>
+          </UncontrolledTooltip>
+        </header>
+        <span>{children}</span>
+      </div>
     );
   };
 

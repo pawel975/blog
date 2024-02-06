@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import BlogLayout from "../../Layout/BlogLayout";
 import useApiData from "../../../hooks/useApiData";
-import { Container, Spinner } from "reactstrap";
-import BlogPostList from "../components/BlogPostList";
+import BlogPostList from "../components/BlogPostList/BlogPostList";
 import { getBlogPosts } from "../../../data/services/BlogPostService";
 import { BlogPost } from "../../../data/model/BlogPostModel";
 import PageHeader from "../components/PageHeader";
+import CustomSpinner from "../../../lib/reactStrap/CustomSpinner";
 
-const Feed: React.FC = () => {
+const Posts: React.FC = () => {
   const { data, loading, error } = useApiData<BlogPost[]>(() => getBlogPosts());
   const [blogPosts, setBlogPosts] = useState<BlogPost[] | null>([]);
 
@@ -20,17 +20,9 @@ const Feed: React.FC = () => {
   return (
     <BlogLayout>
       <PageHeader pageTitle="Posts" />
-      {loading ? (
-        <Spinner />
-      ) : (
-        blogPosts && (
-          <Container className="d-flex flex-column gap-1 p-0">
-            <BlogPostList blogPosts={blogPosts} />
-          </Container>
-        )
-      )}
+      {loading ? <CustomSpinner sizeRem={1} /> : blogPosts && <BlogPostList blogPosts={blogPosts} />}
     </BlogLayout>
   );
 };
 
-export default Feed;
+export default Posts;
