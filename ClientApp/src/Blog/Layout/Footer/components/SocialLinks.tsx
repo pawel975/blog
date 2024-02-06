@@ -34,7 +34,7 @@ const SocialLinksTemplates: SocialLinkInterface[] = [
 
 const SocialLinks: React.FC = () => {
   return (
-    <Container className="d-flex flex-row gap-3 fs-700">
+    <Container className="d-flex flex-row gap-3 fs-800 p-0">
       {SocialLinksTemplates.map((linkTemplate) => (
         <a
           key={linkTemplate.id}

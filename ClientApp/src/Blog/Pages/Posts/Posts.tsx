@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import BlogLayout from "../../Layout/BlogLayout";
 import useApiData from "../../../hooks/useApiData";
-import BlogPostList from "../components/BlogPostList";
+import BlogPostList from "../components/BlogPostList/BlogPostList";
 import { getBlogPosts } from "../../../data/services/BlogPostService";
 import { BlogPost } from "../../../data/model/BlogPostModel";
 import PageHeader from "../components/PageHeader";

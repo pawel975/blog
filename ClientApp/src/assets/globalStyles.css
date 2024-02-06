@@ -27,6 +27,10 @@
   --fs-300: 0.75rem;
   --fs-200: 0.625rem;
   --fs-100: 0.5rem;
+
+  /* devices breakpoints */
+  --max-screen-mobile: max-width: 30rem;
+  --max-screen-tablet: max-width: 48rem;
 }
 
 body {
