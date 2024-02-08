@@ -17,7 +17,7 @@ import PrismStyle from "react-syntax-highlighter/dist/esm/styles/prism/a11y-dark
 
 // Other
 import "./CustomSyntaxHighlighter.css";
-import { Alert, Tooltip, UncontrolledTooltip } from "reactstrap";
+import { Alert, UncontrolledTooltip } from "reactstrap";
 import { CodeBlock } from "../../../common/types";
 import { ReactNode, useState } from "react";
 import { FaCopy as CopyIcon } from "react-icons/fa6";
@@ -53,6 +53,7 @@ const CustomSyntaxHighlighter: React.FC<CustomSyntaxHighlighterInterface> = (pro
 
   const { children, language, filetitle } = props;
 
+  //TODO: Connect it with tooltip
   const handleCopyBtnClick = (): void => {
     navigator.clipboard.writeText(children as unknown as string).catch((err) => console.error(err));
   };
