@@ -2,6 +2,7 @@
 using Blog.Entities;
 using Blog.Exceptions;
 using Blog.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -15,6 +16,7 @@ namespace Blog.Services
     {
         string GenerateJwt(LoginUserDto dto);
         void RegisterUser(RegisterUserDto dto);
+        string ValidateToken(string token);
     }
 
     public class AccountService : IAccountService
@@ -83,6 +85,12 @@ namespace Blog.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             
             return tokenHandler.WriteToken(token);
+        }
+
+        public string ValidateToken(string token)
+        {
+            // TODO: read role from token
+            return "";
         }
     }
 

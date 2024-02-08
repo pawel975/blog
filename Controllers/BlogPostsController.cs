@@ -9,11 +9,13 @@ using Blog.Entities;
 using Blog.Services;
 using Blog.Models;
 using Blog.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Blog.Controllers
 {
     [Route("api/blogPosts")]
     [ApiController]
+    [Authorize(Roles = "admin")]
     public class BlogPostsController : ControllerBase
     {
         private readonly IBlogPostService _blogPostService;
@@ -23,6 +25,7 @@ namespace Blog.Controllers
             _blogPostService = blogPostService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult<IEnumerable<BlogPostDto>> GetAll()
         {
@@ -31,6 +34,7 @@ namespace Blog.Controllers
             return Ok(blogPosts);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public ActionResult<BlogPostDto> Get([FromRoute] Guid id)
         {
