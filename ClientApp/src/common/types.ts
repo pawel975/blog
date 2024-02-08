@@ -12,6 +12,8 @@ export enum BlogPostContentElementType {
 export interface ContentElement {
   content: string;
   orderInBlogPost: number | null;
+  type: string;
+  id: string;
 }
 
 export interface Paragraph extends ContentElement {}
@@ -29,3 +31,7 @@ export interface CodeBlock extends ContentElement {
 export interface ContentImage extends ContentElement {
   altText: string;
 }
+
+export type GeneralContentElement = Paragraph | Header | CodeBlock | ContentImage;
+
+export type IndexedGeneralContentElement = GeneralContentElement & { [property: string]: any };

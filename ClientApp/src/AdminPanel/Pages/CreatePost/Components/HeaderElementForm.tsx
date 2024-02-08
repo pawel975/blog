@@ -1,41 +1,63 @@
-import { useState } from "react";
-import { CodeBlock, ContentImage, Header, Paragraph } from "../../../../common/types";
-import { ContentElements } from "../types";
+import { useEffect, useState } from "react";
+import { BlogPostContentElementType, GeneralContentElement, Header } from "../../../../common/types";
+import { ContentElements, ErrorMessages } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
+import getErrorsByFieldName from "../helpers/getErrorsByFieldName";
 
 interface HeaderElementFormProps {
-  headersErrors: string[];
   setContentElements: Function;
-  setElementOrderAsLastOne: (
-    element: Paragraph | Header | CodeBlock | ContentImage
-  ) => Paragraph | Header | CodeBlock | ContentImage;
+  setElementOrderAsLastOne: (element: GeneralContentElement) => GeneralContentElement;
+}
+
+interface HeaderError {
+  errorType: "content" | "level";
+  message: string;
 }
 
 const initHeaderState: Header = {
   content: "",
   level: "h1",
   orderInBlogPost: null,
+  type: BlogPostContentElementType.HEADER,
+  id: "",
 };
 
 const headingLevels: Header["level"][] = ["h1", "h2", "h3", "h4", "h5", "h6"];
 
-const HeaderElementForm: React.FC<HeaderElementFormProps> = ({
-  headersErrors,
-  setContentElements,
-  setElementOrderAsLastOne,
-}) => {
+const HeaderElementForm: React.FC<HeaderElementFormProps> = ({ setContentElements, setElementOrderAsLastOne }) => {
   const [headerState, setHeaderState] = useState<Header>(initHeaderState);
+  const [submitFormErrors, setSubmitFormErrors] = useState<HeaderError[]>([]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+
+    // Clear errors
+    setSubmitFormErrors(submitFormErrors.splice(0));
+
+    if (headerState.content.length === 0) {
+      setSubmitFormErrors([...submitFormErrors, { errorType: "content", message: ErrorMessages.ContentRequired }]);
+      return;
+    }
+
+    setHeaderState((prevState) => ({
+      ...prevState,
+      id: crypto.randomUUID(),
+    }));
 
     setContentElements((prevState: ContentElements) => ({
       ...prevState,
       headers: [...prevState.headers, setElementOrderAsLastOne(headerState)],
     }));
 
-    // if (headersErrors.length === 0) setHeaderState(initHeaderState);
+    setHeaderState(initHeaderState);
   };
+
+  useEffect(() => {
+    setHeaderState((prevState) => ({
+      ...prevState,
+      id: crypto.randomUUID(),
+    }));
+  }, []);
 
   const allHeadingLevelOptions = headingLevels.map((lvl) => (
     <option key={lvl} value={lvl}>
@@ -49,15 +71,16 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({
         <Label for="content">Content</Label>
         <Input
           className="mb-2"
-          invalid={Boolean(headersErrors.length > 0)}
+          invalid={getErrorsByFieldName(submitFormErrors, "content").length > 0}
           id="content"
           type="text"
           name="content"
           value={headerState.content}
           onChange={(e) => setHeaderState((prevState) => ({ ...prevState, content: e.target.value }))}
         />
-        {headersErrors.map((errorMsg, index) => (
-          <FormFeedback key={index}>{errorMsg}</FormFeedback>
+
+        {getErrorsByFieldName(submitFormErrors, "content").map((err, index) => (
+          <FormFeedback key={index}>{err.message}</FormFeedback>
         ))}
       </FormGroup>
 
@@ -65,7 +88,7 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({
         <Label for="level">Heading level</Label>
         <Input
           className="mb-2"
-          invalid={Boolean(headersErrors.length > 0)}
+          invalid={getErrorsByFieldName(submitFormErrors, "level").length > 0}
           id="level"
           type="select"
           name="level"
@@ -74,10 +97,6 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({
         >
           {allHeadingLevelOptions}
         </Input>
-
-        {headersErrors.map((errorMsg, index) => (
-          <FormFeedback key={index}>{errorMsg}</FormFeedback>
-        ))}
       </FormGroup>
       <Button color="info">Add element</Button>
     </Form>
