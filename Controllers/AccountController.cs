@@ -32,7 +32,7 @@ namespace Blog.Controllers
             return Ok(token);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("validateToken")]
         public ActionResult ValidateToken([FromBody] string token)
         {

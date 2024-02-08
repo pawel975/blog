@@ -15,7 +15,7 @@ namespace Blog.Controllers
 {
     [Route("api/blogPosts")]
     [ApiController]
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "Admin")]
     public class BlogPostsController : ControllerBase
     {
         private readonly IBlogPostService _blogPostService;
