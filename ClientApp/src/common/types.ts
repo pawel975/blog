@@ -25,7 +25,7 @@ export interface Header extends ContentElement {
 
 // TODO: move headings validation on server side and extend possible languages support
 export interface CodeBlock extends ContentElement {
-  language: "js" | "cs" | "html" | "css";
+  language: "js" | "ts" | "cs" | "tsx" | "jsx" | "html" | "css";
 }
 
 export interface ContentImage extends ContentElement {
@@ -35,3 +35,12 @@ export interface ContentImage extends ContentElement {
 export type GeneralContentElement = Paragraph | Header | CodeBlock | ContentImage;
 
 export type IndexedGeneralContentElement = GeneralContentElement & { [property: string]: any };
+
+export interface ContentElements {
+  paragraphs: Paragraph[];
+  headers: Header[];
+  codeBlocks: CodeBlock[];
+  contentImages: ContentImage[];
+  // TODO: Not sure if i need to delete this
+  [key: string]: any;
+}

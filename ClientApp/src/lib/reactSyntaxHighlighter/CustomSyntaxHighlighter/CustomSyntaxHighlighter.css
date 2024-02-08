@@ -1,0 +1,4 @@
+.syntax-window-wrapper__header {
+  background-color: var(--clr-bg-secondary);
+  color: var(--clr-text-primary);
+}

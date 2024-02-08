@@ -4,6 +4,8 @@ import Layout from "../../Layout/Layout";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import useApiData from "../../../hooks/useApiData";
+import { getBlogPost } from "../../../data/services/BlogPostService";
+import { BlogPost } from "../../../data/model/BlogPostModel";
 
 interface ErrorsObject {
   Title: string[];
@@ -17,7 +19,7 @@ const EditPost: React.FC = () => {
   const navigate = useNavigate();
   const { postId } = useParams();
   // Get value of edit post
-  const { data, loading, error } = useApiData(`api/blogPosts/${postId}`);
+  const { data, loading, error } = useApiData<BlogPost>(() => getBlogPost(postId!));
 
   const [title, setTitle] = useState<string | undefined>("");
   const [shortDescription, setShortDescription] = useState<string | undefined>("");
@@ -99,9 +101,9 @@ const EditPost: React.FC = () => {
           case "primaryImageSrc":
             setPrimaryImageSrc(data[key]);
             break;
-          case "blogPostContent":
-            setBlogPostContent(data[key]);
-            break;
+          //   case "blogPostContent":
+          //     setBlogPostContent(data[key]);
+          //     break;
           default:
             if (key !== "id") console.error(`No action for key of '${key}'`);
             break;

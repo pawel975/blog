@@ -1,11 +1,12 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import "./custom.css";
 import NotFoundPage from "./components/NotFoundPage/NotFoundPage";
-import Feed from "./Blog/Pages/Feed/Feed";
 import Dashboard from "./AdminPanel/Pages/Dashboard/Dashboard";
-import Posts from "./AdminPanel/Pages/Posts/Posts";
+import PostsAtBlog from "./Blog/Pages/Posts/Posts";
+import PostsAtAdminPanel from "./AdminPanel/Pages/Posts/Posts";
 import CreatePost from "./AdminPanel/Pages/CreatePost/CreatePost";
 import EditPost from "./AdminPanel/Pages/EditPost/EditPost";
+import Post from "./Blog/Pages/Post/Post";
+import Home from "./Blog/Pages/Home/Home";
 
 const App = () => {
   return (
@@ -17,10 +18,20 @@ const App = () => {
       {/* Routes for blog */}
       <Route path="blog">
         <Route path="*" element={<NotFoundPage homePage="/blog" />} />
-        <Route index={true} path="/blog" element={<Navigate to="/blog/feed" />}></Route>
+        <Route index={true} path="/blog" element={<Navigate to="/blog/home" />}></Route>
 
-        <Route path="feed">
-          <Route index={true} element={<Feed />}></Route>
+        <Route path="home">
+          <Route index={true} element={<Home />}></Route>
+        </Route>
+        <Route path="posts">
+          <Route index={true} element={<PostsAtBlog />}></Route>
+        </Route>
+
+        <Route path="post">
+          <Route index={true} element={<Post />}></Route>
+          <Route path=":postId">
+            <Route index={true} element={<Post />}></Route>
+          </Route>
         </Route>
       </Route>
 
@@ -34,7 +45,7 @@ const App = () => {
         </Route>
 
         <Route path="posts">
-          <Route index={true} element={<Posts />}></Route>
+          <Route index={true} element={<PostsAtAdminPanel />}></Route>
           <Route path=":postId">
             <Route path="edit">
               <Route index={true} element={<EditPost />}></Route>

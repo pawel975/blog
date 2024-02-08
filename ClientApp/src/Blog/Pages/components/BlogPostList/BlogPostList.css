@@ -1,0 +1,38 @@
+:root {
+  /* devices breakpoints */
+  --max-screen-mobile: 30rem;
+  --max-screen-tablet: 48rem;
+}
+
+.blog-post-list__card {
+  width: clamp(30rem, 100%, 50rem);
+  height: clamp(15rem, 100%, 30rem);
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  justify-content: center;
+  line-height: 1.2;
+
+  @media (max-width: 48rem) {
+    margin: auto;
+    flex-direction: column;
+    width: 80%;
+    /* height: auto; */
+    justify-content: baseline;
+    overflow: visible;
+  }
+}
+
+.blog-post-list__img {
+  margin: auto;
+  width: 50%;
+
+  @media (max-width: 48rem) {
+    width: 100%;
+    margin: 0%;
+  }
+}
+
+.blog-post-list__description p {
+  line-height: 1.5;
+}

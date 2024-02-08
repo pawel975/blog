@@ -2,8 +2,8 @@ import { Alert, Table } from "reactstrap";
 import ActionButtons from "../ActionButtons/ActionButtons";
 import { useNavigate } from "react-router-dom";
 import "./PostsTable.css";
-import isCellValueObject from "./helpers/isCellValueObject";
-import shortenLongString from "../../../CreatePost/helpers/shortenLongString";
+import isCellValueObject from "./utils/isCellValueObject";
+import shortenLongString from "../../../../../common/utils/shortenLongString";
 
 interface PostsTableInterface {
   posts: any[];

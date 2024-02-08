@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { BlogPostContentElementType, GeneralContentElement, Header } from "../../../../common/types";
-import { ContentElements, ErrorMessages } from "../types";
+import { useState } from "react";
+import { BlogPostContentElementType, ContentElements, GeneralContentElement, Header } from "../../../../common/types";
+import { ErrorMessages } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
-import getErrorsByFieldName from "../helpers/getErrorsByFieldName";
+import getErrorsByFieldName from "../utils/getErrorsByFieldName";
 
 interface HeaderElementFormProps {
   setContentElements: Function;
@@ -14,18 +14,18 @@ interface HeaderError {
   message: string;
 }
 
-const initHeaderState: Header = {
-  content: "",
-  level: "h1",
-  orderInBlogPost: null,
-  type: BlogPostContentElementType.HEADER,
-  id: "",
-};
-
 const headingLevels: Header["level"][] = ["h1", "h2", "h3", "h4", "h5", "h6"];
 
 const HeaderElementForm: React.FC<HeaderElementFormProps> = ({ setContentElements, setElementOrderAsLastOne }) => {
-  const [headerState, setHeaderState] = useState<Header>(initHeaderState);
+  const initstate: Header = {
+    content: "",
+    level: "h1",
+    orderInBlogPost: null,
+    type: BlogPostContentElementType.HEADER,
+    id: crypto.randomUUID(),
+  };
+
+  const [state, setState] = useState<Header>(initstate);
   const [submitFormErrors, setSubmitFormErrors] = useState<HeaderError[]>([]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -34,30 +34,18 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({ setContentElement
     // Clear errors
     setSubmitFormErrors(submitFormErrors.splice(0));
 
-    if (headerState.content.length === 0) {
+    if (state.content.length === 0) {
       setSubmitFormErrors([...submitFormErrors, { errorType: "content", message: ErrorMessages.ContentRequired }]);
       return;
     }
 
-    setHeaderState((prevState) => ({
-      ...prevState,
-      id: crypto.randomUUID(),
-    }));
-
     setContentElements((prevState: ContentElements) => ({
       ...prevState,
-      headers: [...prevState.headers, setElementOrderAsLastOne(headerState)],
+      headers: [...prevState.headers, setElementOrderAsLastOne(state)],
     }));
 
-    setHeaderState(initHeaderState);
+    setState(initstate);
   };
-
-  useEffect(() => {
-    setHeaderState((prevState) => ({
-      ...prevState,
-      id: crypto.randomUUID(),
-    }));
-  }, []);
 
   const allHeadingLevelOptions = headingLevels.map((lvl) => (
     <option key={lvl} value={lvl}>
@@ -75,8 +63,8 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({ setContentElement
           id="content"
           type="text"
           name="content"
-          value={headerState.content}
-          onChange={(e) => setHeaderState((prevState) => ({ ...prevState, content: e.target.value }))}
+          value={state.content}
+          onChange={(e) => setState((prevState) => ({ ...prevState, content: e.target.value }))}
         />
 
         {getErrorsByFieldName(submitFormErrors, "content").map((err, index) => (
@@ -92,8 +80,8 @@ const HeaderElementForm: React.FC<HeaderElementFormProps> = ({ setContentElement
           id="level"
           type="select"
           name="level"
-          value={headerState.level}
-          onChange={(e) => setHeaderState((prevState) => ({ ...prevState, level: e.target.value as Header["level"] }))}
+          value={state.level}
+          onChange={(e) => setState((prevState) => ({ ...prevState, level: e.target.value as Header["level"] }))}
         >
           {allHeadingLevelOptions}
         </Input>

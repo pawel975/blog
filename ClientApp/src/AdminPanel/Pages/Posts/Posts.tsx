@@ -4,14 +4,16 @@ import PostsTable from "./Components/PostsTable/PostsTable";
 import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
 import useApiData from "../../../hooks/useApiData";
 import { useEffect, useState } from "react";
+import { getBlogPosts } from "../../../data/services/BlogPostService";
+import { BlogPost } from "../../../data/model/BlogPostModel";
 
 const Posts: React.FC = () => {
-  const { data, loading, error } = useApiData("api/blogPosts");
+  const { data, loading, error } = useApiData<BlogPost[]>(() => getBlogPosts());
 
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<BlogPost[]>([]);
 
   useEffect(() => {
-    if (!loading && !error) setPosts(data);
+    if (!loading && !error && data) setPosts(data);
   }, [data, loading, error]);
 
   return (

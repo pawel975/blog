@@ -3,12 +3,12 @@ import axios from "axios";
 import Layout from "../../Layout/Layout";
 import { Button, Container, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
 import { useNavigate } from "react-router-dom";
-import { CodeBlock, ContentImage, Header, Paragraph } from "../../../common/types";
-import AddElementForm from "./Components/AddElementForm";
-import parseContentElementsNestedErrors from "./helpers/parseContentElementsNestedErrors";
-import { ContentElements, ErrorsObject } from "./types";
-import PostElements from "./Components/PostElements";
-import CreatePostErrors from "./Components/CreatePostErrors";
+import { CodeBlock, ContentElements, ContentImage, Header, Paragraph } from "../../../common/types";
+import AddElementForm from "./components/AddElementForm";
+import parseContentElementsNestedErrors from "./utils/parseContentElementsNestedErrors";
+import { ErrorsObject } from "./types";
+import PostElements from "./components/PostElements";
+import CreatePostErrors from "./components/CreatePostErrors";
 
 interface FormData {
   title: string;

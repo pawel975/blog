@@ -1,7 +1,7 @@
 import { Button, ButtonGroup, Card, Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from "reactstrap";
-import shortenLongString from "../helpers/shortenLongString";
+import shortenLongString from "../../../../common/utils/shortenLongString";
 import { IndexedGeneralContentElement } from "../../../../common/types";
-import capitalizeWord from "../../../../common/helpers/capitalizeWord";
+import capitalizeWord from "../../../../common/utils/capitalizeWord";
 import { useState } from "react";
 import { GoArrowUp as UpIcon, GoArrowDown as DownIcon } from "react-icons/go";
 
@@ -24,7 +24,9 @@ const SinglePostElement: React.FC<SinglePostElementInterface> = ({
   const { type } = elementProps;
   const [areOptionsOpen, setAreOptionsOpen] = useState<boolean>(false);
   const toggleOptions = () => setAreOptionsOpen(!areOptionsOpen);
-  const elementPropsNames = Object.keys(elementProps).filter((name) => !["type"].includes(name));
+  const elementPropsNames = Object.keys(elementProps).filter(
+    (name) => !["type", "id", "orderInBlogPost"].includes(name)
+  );
 
   return (
     <div id={id} className="d-flex align-items-start gap-1">

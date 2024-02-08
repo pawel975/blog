@@ -1,9 +1,9 @@
 import { Alert, CardBody, Container } from "reactstrap";
-import { ContentElements } from "../types";
-import { ContentElement, GeneralContentElement, IndexedGeneralContentElement } from "../../../../common/types";
+import { ContentElements, GeneralContentElement } from "../../../../common/types";
 import SinglePostElement from "./SinglePostElement";
 import { SetStateAction } from "react";
-import unCapitalizeWord from "../../../../common/helpers/unCapitalizeWord";
+import flatContentElements from "../../../../common/utils/flatContentElements";
+import groupContentElements from "../../../../common/utils/groupContentElements";
 
 interface PostElementsProps {
   contentElements: ContentElements;
@@ -11,40 +11,6 @@ interface PostElementsProps {
 }
 
 const PostElements: React.FC<PostElementsProps> = ({ contentElements, setContentElements }) => {
-  const sortElementsByOrderInBlogPost = (elements: GeneralContentElement[]): ContentElement[] => {
-    return [...elements].sort((a, b) => String(a.orderInBlogPost!).localeCompare(String(b.orderInBlogPost)));
-  };
-
-  const flatContentElements = (contentElements: ContentElements): GeneralContentElement[] => {
-    const contentElementsTypes = Object.keys(contentElements);
-    const flattenContentElementsArray: GeneralContentElement[] = [];
-
-    contentElementsTypes.forEach((type) => {
-      flattenContentElementsArray.push(...contentElements[type]);
-    });
-
-    return sortElementsByOrderInBlogPost(flattenContentElementsArray);
-  };
-
-  const groupContentElements = (elements: IndexedGeneralContentElement[]): ContentElements => {
-    const groupedContentElements: ContentElements = {
-      paragraphs: [],
-      headers: [],
-      codeBlocks: [],
-      contentImages: [],
-    };
-    elements.forEach((element) => {
-      const elementType = unCapitalizeWord(element.type) + "s";
-
-      if (!groupedContentElements.hasOwnProperty(elementType)) {
-        console.error(`Cannot find property of - ${elementType}, in ContentElements`);
-      }
-
-      groupedContentElements[elementType].push(element);
-    });
-    return groupedContentElements;
-  };
-
   const updateOrderOfContentElements = (elements: GeneralContentElement[]): GeneralContentElement[] => {
     const updateOrderElements = elements.map((element, index) => {
       element.orderInBlogPost = index;

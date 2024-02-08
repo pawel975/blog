@@ -1,8 +1,13 @@
-import { useEffect, useState } from "react";
-import { BlogPostContentElementType, CodeBlock, GeneralContentElement } from "../../../../common/types";
-import { ContentElements, ErrorMessages } from "../types";
+import { useState } from "react";
+import {
+  BlogPostContentElementType,
+  CodeBlock,
+  ContentElements,
+  GeneralContentElement,
+} from "../../../../common/types";
+import { ErrorMessages } from "../types";
 import { Button, Form, FormFeedback, FormGroup, Input, Label } from "reactstrap";
-import getErrorsByFieldName from "../helpers/getErrorsByFieldName";
+import getErrorsByFieldName from "../utils/getErrorsByFieldName";
 
 interface CodeBlockElementFormProps {
   setContentElements: Function;
@@ -14,21 +19,21 @@ interface CodeBlockError {
   message: string;
 }
 
-const initCodeBlockState: CodeBlock = {
-  content: "",
-  language: "js",
-  orderInBlogPost: null,
-  type: BlogPostContentElementType.CODE_BLOCK,
-  id: "",
-};
-
 const codeBlockLanguages: CodeBlock["language"][] = ["js", "cs", "html", "css"];
 
 const CodeBlockElementForm: React.FC<CodeBlockElementFormProps> = ({
   setContentElements,
   setElementOrderAsLastOne,
 }) => {
-  const [codeBlockState, setCodeBlockState] = useState<CodeBlock>(initCodeBlockState);
+  const initState: CodeBlock = {
+    content: "",
+    language: "js",
+    orderInBlogPost: null,
+    type: BlogPostContentElementType.CODE_BLOCK,
+    id: crypto.randomUUID(),
+  };
+
+  const [state, setState] = useState<CodeBlock>(initState);
   const [submitFormErrors, setSubmitFormErrors] = useState<CodeBlockError[]>([]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -37,28 +42,18 @@ const CodeBlockElementForm: React.FC<CodeBlockElementFormProps> = ({
     // Clear errors
     setSubmitFormErrors(submitFormErrors.splice(0));
 
-    if (codeBlockState.content.length === 0) {
+    if (state.content.length === 0) {
       setSubmitFormErrors([...submitFormErrors, { errorType: "content", message: ErrorMessages.ContentRequired }]);
       return;
     }
 
-    setCodeBlockState((prevState) => ({
-      ...prevState,
-      id: crypto.randomUUID(),
-    }));
-
     setContentElements((prevState: ContentElements) => ({
       ...prevState,
-      codeBlocks: [...prevState.codeBlocks, setElementOrderAsLastOne(codeBlockState)],
+      codeBlocks: [...prevState.codeBlocks, setElementOrderAsLastOne(state)],
     }));
-  };
 
-  useEffect(() => {
-    setCodeBlockState((prevState) => ({
-      ...prevState,
-      id: crypto.randomUUID(),
-    }));
-  }, []);
+    setState(initState);
+  };
 
   const allCodeBlockLanguages = codeBlockLanguages.map((lang) => (
     <option key={lang} value={lang}>
@@ -74,10 +69,10 @@ const CodeBlockElementForm: React.FC<CodeBlockElementFormProps> = ({
           className="mb-2"
           invalid={getErrorsByFieldName(submitFormErrors, "content").length > 0}
           id="content"
-          type="text"
+          type="textarea"
           name="content"
-          value={codeBlockState.content}
-          onChange={(e) => setCodeBlockState((prevState) => ({ ...prevState, content: e.target.value }))}
+          value={state.content}
+          onChange={(e) => setState((prevState) => ({ ...prevState, content: e.target.value }))}
         />
         {getErrorsByFieldName(submitFormErrors, "content").map((err, index) => (
           <FormFeedback key={index}>{err.message}</FormFeedback>
@@ -92,9 +87,9 @@ const CodeBlockElementForm: React.FC<CodeBlockElementFormProps> = ({
           id="language"
           type="select"
           name="language"
-          value={codeBlockState.language}
+          value={state.language}
           onChange={(e) =>
-            setCodeBlockState((prevState) => ({ ...prevState, language: e.target.value as CodeBlock["language"] }))
+            setState((prevState) => ({ ...prevState, language: e.target.value as CodeBlock["language"] }))
           }
         >
           {allCodeBlockLanguages}

@@ -1,12 +1,11 @@
 import { Button, ButtonGroup, Card, CardBody, Collapse, Container, Form, FormGroup, Label } from "reactstrap";
-import { BlogPostContentElementType, GeneralContentElement } from "../../../../common/types";
+import { BlogPostContentElementType, ContentElements, GeneralContentElement } from "../../../../common/types";
 import { useState } from "react";
 import CodeBlockElementForm from "./CodeBlockElementForm";
 import ContentImageElementForm from "./ContentImageElementForm";
 import HeaderElementForm from "./HeaderElementForm";
 import ParagraphElementForm from "./ParagraphElementForm";
 import FormLayout from "./FormLayout";
-import { ContentElements } from "../types";
 
 interface AddElementFormProps {
   contentElements: ContentElements;
