@@ -1,5 +1,6 @@
 ﻿using Blog.Models;
 using Blog.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Controllers
@@ -29,6 +30,15 @@ namespace Blog.Controllers
             string token = _accountService.GenerateJwt(dto);
 
             return Ok(token);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("validateToken")]
+        public ActionResult ValidateToken([FromBody] string token)
+        {
+            // TODO: It shouldn't be only role maybe, it's just to validate role
+            var role = _accountService.ValidateToken(token);
+            return Ok(role);
         }
     }
 }

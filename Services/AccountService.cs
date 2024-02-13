@@ -2,9 +2,14 @@
 using Blog.Entities;
 using Blog.Exceptions;
 using Blog.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
+using Paseto.Builder;
+using Paseto;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -15,6 +20,7 @@ namespace Blog.Services
     {
         string GenerateJwt(LoginUserDto dto);
         void RegisterUser(RegisterUserDto dto);
+        string ValidateToken(string token);
     }
 
     public class AccountService : IAccountService
@@ -43,6 +49,8 @@ namespace Blog.Services
             _dbContext.SaveChanges();
 
         }
+
+        //TODO: Change token auth to session auth
         public string GenerateJwt(LoginUserDto dto)
         {
             var user = _dbContext.Users
@@ -81,8 +89,14 @@ namespace Blog.Services
                 signingCredentials: cred);
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            
-            return tokenHandler.WriteToken(token);
+
+            return tokenHandler.WriteToken(token);         
+        }
+
+        public string ValidateToken(string token)
+        {
+            // TODO: read role from token
+            return "";
         }
     }
 
