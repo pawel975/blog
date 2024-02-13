@@ -1,8 +1,8 @@
 import { Container } from "reactstrap";
 import { BlogPostContentElementType, CodeBlock, ContentImage, Header } from "../../common/types";
-import flatContentElements from "../../common/utils/flatContentElements";
 import CustomSyntaxHighlighter from "../../lib/reactSyntaxHighlighter/CustomSyntaxHighlighter/CustomSyntaxHighlighter";
 import { BlogPost } from "../../data/model/BlogPostModel";
+import flatContentElements from "../../common/utils/flatContentElements";
 import formatTimeToShort from "../../common/utils/formatTimeToShort";
 
 interface GenerateBlogPostInterface {

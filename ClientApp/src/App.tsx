@@ -7,6 +7,7 @@ import CreatePost from "./AdminPanel/Pages/CreatePost/CreatePost";
 import EditPost from "./AdminPanel/Pages/EditPost/EditPost";
 import Post from "./Blog/Pages/Post/Post";
 import Home from "./Blog/Pages/Home/Home";
+import Login from "./AdminPanel/Pages/Login/Login";
 
 const App = () => {
   return (
@@ -40,6 +41,9 @@ const App = () => {
         <Route path="*" element={<NotFoundPage homePage="/admin-panel" />} />
         <Route index={true} path="/admin-panel" element={<Navigate to="/admin-panel/dashboard" />}></Route>
 
+        <Route path="login">
+          <Route index={true} element={<Login />}></Route>
+        </Route>
         <Route path="dashboard">
           <Route index={true} element={<Dashboard />}></Route>
         </Route>
