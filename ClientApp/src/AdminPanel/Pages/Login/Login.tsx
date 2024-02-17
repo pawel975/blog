@@ -14,10 +14,8 @@ const Login: React.FC = () => {
       Password: password,
     };
 
-    // TODO: save token got from login and save it to session storage or httponly cookie
     await login(loginData)
-      // TODO: Instead of printing response perform logic to save token into
-      .then((res) => console.log(res))
+      .then((res) => console.log())
       //TODO: Show invalid username and password info in form
       .catch((err) => err);
   };

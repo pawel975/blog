@@ -13,14 +13,14 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Humanizer;
 
 namespace Blog.Services
 {
     public interface IAccountService
     {
-        string GenerateJwt(LoginUserDto dto);
+        void GenerateSession(LoginUserDto dto, ISession session);
         void RegisterUser(RegisterUserDto dto);
-        string ValidateToken(string token);
     }
 
     public class AccountService : IAccountService
@@ -38,7 +38,6 @@ namespace Blog.Services
             _authenticationSettings = authenticationSettings;
         }
 
-
         public void RegisterUser(RegisterUserDto dto)
         {
             User newUser = _mapper.Map<User>(dto);
@@ -51,16 +50,54 @@ namespace Blog.Services
         }
 
         //TODO: Change token auth to session auth
-        public string GenerateJwt(LoginUserDto dto)
+        //public string GenerateJwt(LoginUserDto dto)
+        //{
+        //    var user = _dbContext.Users
+        //        .Include(u => u.Role)
+        //        .FirstOrDefault(u => u.Email == dto.Email);
+
+        //    if (user == null)
+        //    {
+        //        throw new BadRequestException("Invalid username or password");
+        //    }
+
+        //    var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
+
+        //    if (result == PasswordVerificationResult.Failed)
+        //    {
+        //        throw new BadRequestException("Invalid username or password");
+        //    }
+
+        //    var claims = new List<Claim>()
+        //    {
+        //        new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        //        new(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
+        //        new(ClaimTypes.Role, user.Role.Name),
+        //    };
+
+        //    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));
+        //    var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        //    var expires = DateTime.Now.AddDays(_authenticationSettings.JwtExpireDays);
+
+        //    var token = new JwtSecurityToken(
+        //        _authenticationSettings.JwtIssuer,
+        //        _authenticationSettings.JwtIssuer,
+        //        claims,
+        //        expires: expires,
+        //        signingCredentials: cred);
+
+        //    var tokenHandler = new JwtSecurityTokenHandler();
+
+        //    return tokenHandler.WriteToken(token);
+        //}
+
+        // TODO: Probably should change this service name on more descriptive
+        public void GenerateSession(LoginUserDto dto, ISession session)
         {
+
             var user = _dbContext.Users
                 .Include(u => u.Role)
-                .FirstOrDefault(u => u.Email == dto.Email);
-
-            if (user == null)
-            {
-                throw new BadRequestException("Invalid username or password");
-            }
+                .FirstOrDefault(u => u.Email == dto.Email) ?? throw new BadRequestException("Invalid username or password");
 
             var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
 
@@ -69,35 +106,11 @@ namespace Blog.Services
                 throw new BadRequestException("Invalid username or password");
             }
 
-            var claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
-                new Claim(ClaimTypes.Role, user.Role.Name),
-                //new Claim("DateOfBirth", user.DateOfBirth.ToString("yyyy-MM-dd")),
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));
-            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddDays(_authenticationSettings.JwtExpireDays);
-
-            var token = new JwtSecurityToken(
-                _authenticationSettings.JwtIssuer,
-                _authenticationSettings.JwtIssuer,
-                claims,
-                expires: expires,
-                signingCredentials: cred);
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            return tokenHandler.WriteToken(token);         
+            session.SetString("firstName", user.FirstName);
+            session.SetString("lastName", user.LastName);
+            session.SetString("role", user.Role.Name);
         }
 
-        public string ValidateToken(string token)
-        {
-            // TODO: read role from token
-            return "";
-        }
     }
 
 }

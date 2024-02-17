@@ -1,7 +1,9 @@
 ﻿using Blog.Models;
 using Blog.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Blog.Controllers
 {
@@ -27,18 +29,9 @@ namespace Blog.Controllers
         [HttpPost("login")]
         public ActionResult Login([FromBody] LoginUserDto dto)
         {
-            string token = _accountService.GenerateJwt(dto);
+           _accountService.GenerateSession(dto, HttpContext.Session);
 
-            return Ok(token);
-        }
-
-        [Authorize(Roles = "Admin")]
-        [HttpPost("validateToken")]
-        public ActionResult ValidateToken([FromBody] string token)
-        {
-            // TODO: It shouldn't be only role maybe, it's just to validate role
-            var role = _accountService.ValidateToken(token);
-            return Ok(role);
+            return Ok();
         }
     }
 }
