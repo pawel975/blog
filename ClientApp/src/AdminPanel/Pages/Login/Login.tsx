@@ -15,7 +15,7 @@ const Login: React.FC = () => {
     };
 
     await login(loginData)
-      .then((res) => console.log())
+      .then((res) => console.log(res))
       //TODO: Show invalid username and password info in form
       .catch((err) => err);
   };

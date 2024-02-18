@@ -107,8 +107,24 @@ namespace Blog.Services
             }
 
             session.SetString("firstName", user.FirstName);
-            session.SetString("lastName", user.LastName);
-            session.SetString("role", user.Role.Name);
+
+            Session sessionToDatabase = new()
+            {
+                SessionId = session.Id,
+                CreatedAt = DateTime.Now,
+                ExpiredAt = DateTime.Now.AddMinutes(1),
+                Role = user.Role,
+                User = user
+            };
+
+            _dbContext.Sessions.Add(sessionToDatabase);
+            _dbContext.SaveChanges();
+        }
+
+        // TODO: Check if session is active - it will be used to check if user is logged in and can access resource
+        public bool ValidateSessionCookie()
+        {
+
         }
 
     }
