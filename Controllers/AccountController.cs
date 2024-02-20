@@ -34,5 +34,13 @@ namespace Blog.Controllers
             return Ok();
         }
 
+        [HttpPost("logout")]
+        public ActionResult Logout()
+        {
+            _accountService.Logout(HttpContext.Session);
+
+            return Ok("User successfully logged out");
+        }
+
     }
 }

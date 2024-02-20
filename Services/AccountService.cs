@@ -14,12 +14,14 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Humanizer;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Blog.Services
 {
     public interface IAccountService
     {
         void GenerateSession(LoginUserDto dto, ISession session);
+        void Logout(ISession session);
         void RegisterUser(RegisterUserDto dto);
     }
 
@@ -106,25 +108,42 @@ namespace Blog.Services
                 throw new BadRequestException("Invalid username or password");
             }
 
-            session.SetString("firstName", user.FirstName);
+            // Looks if there is session in database for this user
+            bool isUserSessionPresent = _dbContext.Sessions.Any(s => s.User == user);
 
-            Session sessionToDatabase = new()
+            if (!isUserSessionPresent)
             {
-                SessionId = session.Id,
-                CreatedAt = DateTime.Now,
-                ExpiredAt = DateTime.Now.AddMinutes(1),
-                Role = user.Role,
-                User = user
-            };
+                session.SetString("firstName", user.FirstName);
+                session.SetString("lastName", user.LastName);
+                session.SetString("userId", user.Id.ToString());
 
-            _dbContext.Sessions.Add(sessionToDatabase);
-            _dbContext.SaveChanges();
+                Session sessionToDatabase = new()
+                {
+                    SessionId = session.Id,
+                    CreatedAt = DateTime.Now,
+                    ExpiredAt = DateTime.Now.AddMinutes(15),
+                    Role = user.Role,
+                    User = user
+                };
+
+                _dbContext.Sessions.Add(sessionToDatabase);
+                _dbContext.SaveChanges();
+            }
         }
 
-        // TODO: Check if session is active - it will be used to check if user is logged in and can access resource
-        public bool ValidateSessionCookie()
+        public void Logout(ISession session)
         {
+            var userId = session.GetString("userId");
 
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id.ToString() == userId) 
+                ?? throw new NotFoundException("Cannot found user in database");
+            var userSession = _dbContext.Sessions.FirstOrDefault(s => s.User == user) 
+                ?? throw new NotFoundException("Cannot found corresponding session for given user in database");
+
+            _dbContext.Sessions.Remove(userSession);
+            _dbContext.SaveChanges();
+
+            session.Clear();
         }
 
     }
