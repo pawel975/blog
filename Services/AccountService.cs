@@ -21,7 +21,8 @@ namespace Blog.Services
     public interface IAccountService
     {
         void GenerateSession(LoginUserDto dto, ISession session);
-        void Logout(ISession session);
+        bool IsUserAdmin(ISession session);
+        void Logout(HttpContext httpContext);
         void RegisterUser(RegisterUserDto dto);
     }
 
@@ -131,19 +132,42 @@ namespace Blog.Services
             }
         }
 
-        public void Logout(ISession session)
+        public void Logout(HttpContext httpContext)
         {
-            var userId = session.GetString("userId");
+            var userId = httpContext.Session.GetString("userId");
 
+            // Delete session from database
             var user = _dbContext.Users.FirstOrDefault(u => u.Id.ToString() == userId) 
-                ?? throw new NotFoundException("Cannot found user in database");
+                ?? throw new NotFoundException("Cannot find user in database");
             var userSession = _dbContext.Sessions.FirstOrDefault(s => s.User == user) 
-                ?? throw new NotFoundException("Cannot found corresponding session for given user in database");
+                ?? throw new NotFoundException("Cannot find corresponding session for given user in database");
 
             _dbContext.Sessions.Remove(userSession);
             _dbContext.SaveChanges();
 
-            session.Clear();
+            // Destroy session cookie 
+            httpContext.Response.Cookies.Append("sessionID", "", new CookieOptions
+            {
+                Expires = DateTime.UtcNow.AddDays(-1),
+                HttpOnly = true,
+                Secure = true,
+                IsEssential = true
+            });
+
+            httpContext.Session.Clear();
+        }
+
+        public bool IsUserAdmin(ISession session)
+        {
+            var userId = session.GetString("userId");
+
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id.ToString() == userId)
+                ?? throw new NotFoundException("Cannot find user in database");
+            var userSession = _dbContext.Sessions.FirstOrDefault(s => s.User == user)
+                ?? throw new NotFoundException("Cannot find corresponding session for given user in database");
+
+            return userSession.Role.Name == "Admin";
+
         }
 
     }

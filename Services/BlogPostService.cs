@@ -68,9 +68,8 @@ namespace Blog.Services
 
         public void Update(Guid blogPostId, UpdateBlogPostDto dto)
         {
-            var blogPost = _dbContext.BlogPosts.FirstOrDefault(bp => bp.Id == blogPostId);
-
-            if (blogPost is null) throw new NotFoundException("Blog post not found");
+            var blogPost = _dbContext.BlogPosts.FirstOrDefault(bp => bp.Id == blogPostId) 
+                ?? throw new NotFoundException("Blog post not found");
 
             Type dtoType = dto.GetType();
 
@@ -95,9 +94,8 @@ namespace Blog.Services
 
         public void Delete(Guid blogPostId)
         {
-            var blogPost = _dbContext.BlogPosts.FirstOrDefault(bp => bp.Id == blogPostId);
-
-            if (blogPost is null) throw new NotFoundException("Blog post not found");
+            var blogPost = _dbContext.BlogPosts.FirstOrDefault(bp => bp.Id == blogPostId) 
+                ?? throw new NotFoundException("Blog post not found");
 
             _dbContext.BlogPosts.Remove(blogPost);
             _dbContext.SaveChanges();

@@ -37,9 +37,17 @@ namespace Blog.Controllers
         [HttpPost("logout")]
         public ActionResult Logout()
         {
-            _accountService.Logout(HttpContext.Session);
+            _accountService.Logout(HttpContext);
 
             return Ok("User successfully logged out");
+        }
+
+        [HttpPost("verifyAdmin")]
+        public ActionResult VerifyAdmin()
+        {
+            _accountService.IsUserAdmin(HttpContext.Session);
+
+            return Ok(true);
         }
 
     }
