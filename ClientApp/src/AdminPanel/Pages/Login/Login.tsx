@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, Card, CardBody, CardHeader, Container, Form, FormGroup, Input, Label } from "reactstrap";
 import { login } from "../../../data/services/AccountService";
 import { LoginData } from "../../../data/model/LoginModel";
+import axios from "axios";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -14,10 +15,8 @@ const Login: React.FC = () => {
       Password: password,
     };
 
-    // TODO: save token got from login and save it to session storage or httponly cookie
     await login(loginData)
-      // TODO: Instead of printing response perform logic to save token into
-      .then((res) => console.log(res))
+      .then((res) => console.log("You logged in successfully"))
       //TODO: Show invalid username and password info in form
       .catch((err) => err);
   };
@@ -40,6 +39,16 @@ const Login: React.FC = () => {
             </FormGroup>
             <Button type="submit" className="m-auto px-4 border">
               Login
+            </Button>
+            <Button
+              onClick={async () => {
+                await axios
+                  .post("api/account/logout")
+                  .then((res) => console.log(res, "logout"))
+                  .catch((err) => console.error(err));
+              }}
+            >
+              DELETE THIS BTN - Logout
             </Button>
           </Form>
         </CardBody>

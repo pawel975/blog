@@ -51,9 +51,12 @@ builder.Services.AddAuthentication(option =>
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
+    options.Cookie.Name = "sessionID";
     options.IdleTimeout = TimeSpan.FromSeconds(30);
+    options.Cookie.MaxAge = TimeSpan.FromMinutes(15); // TODO: Change to highier value
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 
 // Middlewares
